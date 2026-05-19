@@ -4,6 +4,10 @@ import pluginReact from "eslint-plugin-react";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
+  {
+    ignores: ["dist/**", "node_modules/**", "build/**"],
+  },
+
   js.configs.recommended,
   pluginReact.configs.flat.recommended,
 
