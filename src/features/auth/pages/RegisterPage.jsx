@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { signUp } from "../services";
 
 export default function RegisterPage() {
 
@@ -7,6 +8,7 @@ export default function RegisterPage() {
     const [lastName, setlastName] = useState('');
     const [email, setEmail] = useState('');
     const [empress, setEmpress] = useState('');
+
     const isFormInvalid =
         name.trim() === "" ||
         lastName.trim() === "" ||
@@ -14,11 +16,7 @@ export default function RegisterPage() {
         empress.trim() === "";
 
 
-
-
-
-
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         const formData = new FormData(e.target);
@@ -26,7 +24,7 @@ export default function RegisterPage() {
         const data1 = Object.fromEntries(formData)
 
         if (data1.password !== data1.confirmPassword) {
-            console.log('pasword invalido')
+            console.log('pasword invalido')//<---------- Insertar notificacion aqui!!!!!!
             return
         }
 
@@ -36,7 +34,7 @@ export default function RegisterPage() {
             }
         }
 
-        console.log(data1)
+        await signUp(data1)
     }
 
     function validateEmail(e) {
@@ -55,7 +53,6 @@ export default function RegisterPage() {
 
     return (
         <>
-            <h1> EN LOGIN PAGE</h1>
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
@@ -164,7 +161,7 @@ export default function RegisterPage() {
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
                                 disabled:bg-indigo-300 disabled:houver:bg-indigo-300 disabled:cursor-not-allowed"
                             >
-                                Log in
+                                Registrarme
                             </button>
                         </div>
                     </form>
