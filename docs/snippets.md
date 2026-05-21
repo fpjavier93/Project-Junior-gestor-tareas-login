@@ -14,3 +14,36 @@ console.log('email invalido')
 return
 } 
 console.log(email)
+
+
+Los grupos MÁS importantes
+
+Texto
+text-
+font-
+leading-
+tracking-
+
+Espaciado
+p-
+m-
+gap-
+space-y-
+
+Flexbox
+flex
+justify-
+items-
+flex-col
+
+Tamaños
+w-
+h-
+max-w-
+min-h-
+
+Bordes y colores
+bg-
+border-
+rounded-
+shadow-

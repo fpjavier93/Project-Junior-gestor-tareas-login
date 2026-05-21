@@ -1,209 +1,75 @@
-✅ DÍA 1 — UI + estructura visual
-Objetivo real
+Lado izquierdo
 
-👉 Construir las pantallas SIN backend.
+Tiene:
 
-🔥 Qué deberías hacer
-Crear páginas:
-src/pages/
+texto pequeño DASHBOARD
+título grande
+subtítulo
+Lado derecho
 
-Ejemplo:
+Tiene:
 
-LoginPage.jsx
-RegisterPage.jsx
-DashboardPage.jsx
-🔥 Diseñar el formulario YA
+botón "Ver todas"
+botón "+ Nueva tarea"
 
-Sí.
-Ahora mismo.
+Aquí probablemente usarías:
 
-Porque:
+div header
+    div info
+    div actions
 
-practicas React
-practicas Tailwind
-practicas props
-practicas componentes
-🔥 Tu objetivo del día 1
+Y el header tendría:
 
-NO funcionalidad.
+display: flex
+justify-between
 
-SOLO:
 
-diseño
-estructura
-inputs
-botones
-layout
-✅ Ejemplo
-LoginPage
-email input
-password input
-botón login
-link a register
-✅ También crea componentes reutilizables
-src/components/
+3. Tarjetas de estadísticas
 
-Ejemplo:
+La parte:
 
-Input.jsx
-Button.jsx
-Card.jsx
-🧠 Esto es IMPORTANTÍSIMO
+TOTAL
+5
 
-Aprender React ≠ solo lógica.
+PENDIENTES
+3
 
-También debes aprender:
+COMPLETADAS
+2
 
-composición
-reutilización
-estructura visual
-🚀 DÍA 2 — Formularios controlados
+SÍ, aquí normalmente hay:
 
-Aquí empiezas React real.
+un contenedor grande
+y dentro varias cards separadas
 
-🔥 Objetivo
+Algo así mentalmente:
 
-Que los inputs guarden datos en estado.
+StatsSection
+ ├── StatCard
+ ├── StatCard
+ └── StatCard
 
-Ejemplo mental
-const [email, setEmail] = useState('')
-🔥 Practica:
-onChange
-value
-estado
-varios inputs
-🚀 Luego:
+Cada card:
 
-Construye un objeto usuario:
+es un div
+tiene borde
+padding
+título pequeño
+número grande
 
-{
-  email,
-  password
-}
-🔥 MUY importante
+Consejo importante:
 
-Todavía:
-❌ NO Supabase
-❌ NO backend
-❌ NO fetch
+No copies y pegues 3 veces el mismo JSX.
 
-🚀 DÍA 3 — Validaciones
+Piensa:
 
-Ahora sí empieza la lógica útil.
+“Esto parece reutilizable”
 
-Practica:
-campos vacíos
-password corta
-email inválido
-mensajes de error
-🔥 Aquí aprenderás muchísimo React
+Entonces probablemente deberías tener:
 
-Porque usarás:
+un componente StatCard
 
-estados
-renders condicionales
-eventos
-Ejemplo:
-{error && <p>Error...</p>}
-🚀 DÍA 4 — Simular login
+que recibe:
 
-Todavía SIN backend.
-
-Idea:
-
-Cuando hagan submit:
-
-console.log(usuario)
-
-o:
-
-setUser(usuario)
-🔥 Incluso puedes fakear login:
-if(email === 'test@test.com')
-🧠 ¿Por qué?
-
-Porque así aprendes:
-
-flujo
-estado
-navegación
-componentes
-
-ANTES de meter backend.
-
-🚀 DÍA 5 — Organización profesional
-
-Ahora empieza a separar lógica.
-
-Ejemplo
-src/
- ├── components/
- ├── pages/
- ├── services/
- ├── hooks/
- ├── context/
- ├── helpers/
-🔥 También puedes crear:
-docs/
-
-Y guardar:
-
-notas
-modelos
-snippets
-estructura
-
-Como hablamos antes 😄
-
-🧠 Consejo MUY importante para ti
-
-NO intentes entender todo el roadmap antes de empezar.
-
-Porque cosas como:
-
-AuthContext
-accessToken
-RLS
-policies
-
-todavía no tienen contexto mental para ti.
-
-Y eso es normal.
-
-🔥 Tu orden correcto AHORA es:
-1️⃣ UI
-
-👇
-
-2️⃣ Formularios
-
-👇
-
-3️⃣ Estado
-
-👇
-
-4️⃣ Validaciones
-
-👇
-
-5️⃣ Componentes reutilizables
-
-👇
-
-6️⃣ Navegación
-
-👇
-
-7️⃣ Backend/auth
-🚀 Lo más importante
-
-Tu objetivo ahora NO es:
-
-“hacer una app profesional”
-
-Tu objetivo es:
-
-“entender React mientras construyo algo real”
-
-Y el roadmap que planteaste está MUY bien para eso 😄
+título
+valor
