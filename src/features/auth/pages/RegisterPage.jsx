@@ -53,14 +53,14 @@ export default function RegisterPage() {
 
     return (
         <>
-            <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="flex flex-col justify-center min-h-full px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         alt="Your Company"
                         src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                        className="mx-auto h-10 w-auto"
+                        className="w-auto h-10 mx-auto"
                     />
-                    <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+                    <h2 className="mt-10 font-bold tracking-tight text-center text-gray-900 text-2xl/9">
                         Inscribete para comenzar ahora
                     </h2>
                 </div>
@@ -68,7 +68,7 @@ export default function RegisterPage() {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
-                            <label htmlFor="nombre" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="nombre" className="block font-medium text-gray-900 text-sm/6">
                                 Nombre(s)
                             </label>
                             <div className="mt-2">
@@ -86,7 +86,7 @@ export default function RegisterPage() {
 
                         <div>
                             <div className="items-center justify-between">
-                                <label htmlFor="apellidos" className="block text-sm/6 font-medium text-gray-900">
+                                <label htmlFor="apellidos" className="block font-medium text-gray-900 text-sm/6">
                                     Apellidos
                                 </label>
                                 <div className="mt-2">
@@ -104,7 +104,7 @@ export default function RegisterPage() {
                         </div>
 
                         <div className="items-center justify-between">
-                            <label htmlFor="email" className="mt-2 block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="email" className="block mt-2 font-medium text-gray-900 text-sm/6">
                                 Email
                             </label>
                             <div className="mt-2">
@@ -120,7 +120,7 @@ export default function RegisterPage() {
                         </div>
 
                         <div className="items-center justify-between">
-                            <label htmlFor="empresa" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="empresa" className="block font-medium text-gray-900 text-sm/6">
                                 Empresa
                             </label>
                             <div className="mt-2">
@@ -133,7 +133,7 @@ export default function RegisterPage() {
                         </div>
 
                         <div className="items-center justify-between">
-                            <label htmlFor="empresa" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="empresa" className="block font-medium text-gray-900 text-sm/6">
                                 Password
                             </label>
 
@@ -145,7 +145,7 @@ export default function RegisterPage() {
                         </div>
 
                         <div className="items-center justify-between">
-                            <label htmlFor="empresa" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="empresa" className="block font-medium text-gray-900 text-sm/6">
                                 Confirmar Password
                             </label>
                             <div className="mt-2">
@@ -166,7 +166,7 @@ export default function RegisterPage() {
                         </div>
                     </form>
 
-                    <p className="mt-10 text-center text-sm/6 text-gray-500">
+                    <p className="mt-10 text-center text-gray-500 text-sm/6">
                         Ya tienes suario?{' '}
                         <Link
                             to="/"

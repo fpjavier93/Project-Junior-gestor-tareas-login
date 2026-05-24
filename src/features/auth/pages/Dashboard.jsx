@@ -36,11 +36,8 @@ const tareasRecientes = [
 let doneTaskCount = 0;
 let undoneTask = tareasRecientes.length
 
-
-
-
 function countDoneTask() {
-     doneTaskCount = 0;
+    doneTaskCount = 0;
     for (const tarea of tareasRecientes) {
         if (tarea.completada) {
             doneTaskCount++;
@@ -98,9 +95,9 @@ function Dashboard() {
 
                     <div className="w-full h-3 my-2 bg-gray-200 rounded-full">
                         <div className={`h-3 rounded-full my-2
-                        ${progres < 30 ? "bg-red-300" : 
-                        progres < 70 ? "bg-orange-500" : 
-                        progres < 99 ?"bg-orange-300": "bg-green-500"}
+                        ${progres < 30 ? "bg-red-300" :
+                                progres < 70 ? "bg-orange-500" :
+                                    progres < 99 ? "bg-orange-300" : "bg-green-500"}
                         
                         `}
                             style={{ width: `${progres}%` }}
@@ -116,11 +113,11 @@ function Dashboard() {
 
                         <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer">Ver todas →</button>
                     </div>
-                   
 
-                        {tareasRecientes.map(tarea => {
-                            return <div key={tarea.id}>
-                                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-300">
+
+                    {tareasRecientes.map(tarea => {
+                        return <div key={tarea.id}>
+                            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-300">
                                 <div className="flex items-center gap-3">
                                     <span className="w-2 h-2 bg-gray-300 rounded-full"></span>
                                     <div>
@@ -129,17 +126,11 @@ function Dashboard() {
                                     </div>
 
                                 </div>
-                                <span className="px-2 py-1 text-sm font-medium text-indigo-500 bg-gray-200 border rounded-full py">{tarea.completada == true? tarea.estado = "Completada" : tarea.estado = "Pendiente"}</span>
-                                </div>
+                                <span className="px-2 py-1 text-sm font-medium text-indigo-500 bg-gray-200 border rounded-full py">{tarea.completada == true ? tarea.estado = "Completada" : tarea.estado = "Pendiente"}</span>
                             </div>
-                        })
-                        }
-
-
-
-                    
-
-
+                        </div>
+                    })
+                    }
                 </section>
             </div>
         </main>
