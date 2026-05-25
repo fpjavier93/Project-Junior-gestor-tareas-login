@@ -18,7 +18,7 @@ export const signUp = async ({ apellidos, email, empresa, nombre, password }) =>
         }
       }
     });
-    console.log(data);
+    console.log("data.user", data.user);
     if (error) throw error;
 
     return {
@@ -45,7 +45,7 @@ export const signIn = async (email, password) => {
     });
 
     if (error) throw error;
-
+    console.log("data.user", data.user);
     return {
       success: true,
       data: data.user,
