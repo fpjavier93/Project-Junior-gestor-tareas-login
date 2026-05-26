@@ -12,3 +12,10 @@
   created_at: '2026-04-14T10:00:00.000Z',
   updated_at: '2026-04-14T10:00:00.000Z'
 }
+
+
+data.user.id
+data.user.email
+data.user.user_metadata.nombre
+data.user.user_metadata.apellidos
+data.user.user_metadata.empresa

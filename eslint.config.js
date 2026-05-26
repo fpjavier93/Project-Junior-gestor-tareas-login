@@ -32,7 +32,16 @@ export default defineConfig([
     rules: {
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
-      "react/jsx-pascal-case": "error"
+      "react/jsx-pascal-case": "error",
+      "no-unused-vars": [
+        "warn",
+        {
+          args: "after-used",
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
 ]);

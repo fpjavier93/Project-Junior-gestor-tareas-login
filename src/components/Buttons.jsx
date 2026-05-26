@@ -1,5 +1,6 @@
 
-function Blue({ name, onClick = undefined, type = "button" }) {
+
+function Blue({ name, onClick = undefined, type }) {
     return (
         <button className="inline-flex items-center px-4 py-2 text-white bg-indigo-500 border border-gray-300 rounded w-fit hover:cursor-pointer hover:bg-indigo-600"
             type={type}
@@ -11,10 +12,9 @@ function Blue({ name, onClick = undefined, type = "button" }) {
 
 }
 
-function White({ name, onClick, type = "button" }) {
+function White({ name, onClick }) {
     return (
         <button className="inline-flex items-center px-4 py-2 text-black bg-white border border-gray-300 rounded w-fit hover:cursor-pointer hover:bg-gray-50"
-            type={type}
             onClick={onClick}
 
         >{name}</button>
@@ -23,5 +23,15 @@ function White({ name, onClick, type = "button" }) {
 
 }
 
-export { Blue, White };
+function LogOut({ onclick }) {
+    return (
+        <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
+            onClick={onclick}
+        >
+            Log-Out
+        </button>
+    )
+}
+
+export { Blue, White, LogOut };
 

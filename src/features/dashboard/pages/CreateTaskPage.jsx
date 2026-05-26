@@ -1,11 +1,25 @@
 import { data, Form, useNavigate } from "react-router-dom";
-import { Blue, White } from "../../../components/Buttons";
+import { Blue, White, LogOut } from "../../../components/Buttons";
+import getUserID from "../services/CreateTaskServices";
+import { getCurrentUser } from "../../auth/services";
+import { useEffect } from "react";
+import { handlesignOut } from "../services/DashboardServices";
+
 let Task = [];
 
 function CreateTaskPage() {
     const navigate = useNavigate();
 
-    function handleSubmit(e) {
+    useEffect(() => {
+        console.log('iniciando verificacion');
+        async function handleCurrentUser() {
+            const currentUser = await getCurrentUser();
+            console.log(currentUser);
+        }
+        handleCurrentUser();
+    }, [])
+
+    async function handleSubmit(e) {
         e.preventDefault();
 
         const formData = new FormData(e.target);
@@ -18,7 +32,7 @@ function CreateTaskPage() {
 
         const newDataTask = {
             id: crypto.randomUUID(),
-            user_id: "(insertar usuario)",
+            user_id: await getUserID(),
             ...dataTask,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
@@ -27,10 +41,10 @@ function CreateTaskPage() {
         Task.push(newDataTask);
         console.log(Task)
 
+
         e.target.reset()
 
     }
-
 
 
     return (
@@ -91,22 +105,14 @@ function CreateTaskPage() {
 
                         </div>
 
-
-
                     </div>
-
-
                 </form>
-
-
-
-
             </div>
-
-
-
-
-
+            <div className="flex justify-center py-10">
+                <LogOut
+                    onclick={() => handlesignOut(navigate)}
+                />
+            </div>
         </div>
     )
 }

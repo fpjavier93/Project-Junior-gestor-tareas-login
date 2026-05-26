@@ -1,5 +1,6 @@
 import { data } from 'react-router-dom';
 import { supabase } from '../../../../utils/supabase.ts';
+import { Navigate } from 'react-router-dom';
 
 /**
  * Servicio de Autenticación con Supabase
@@ -18,7 +19,7 @@ export const signUp = async ({ apellidos, email, empresa, nombre, password }) =>
         }
       }
     });
-    console.log("data.user", data.user);
+
     if (error) throw error;
 
     return {
@@ -62,11 +63,11 @@ export const signIn = async (email, password) => {
 
 // ============ LOGOUT ============
 export const signOut = async () => {
+
   try {
     const { error } = await supabase.auth.signOut();
 
     if (error) throw error;
-
     return {
       success: true,
       message: 'Sesión cerrada correctamente',
@@ -77,6 +78,7 @@ export const signOut = async () => {
       error: error.message,
     };
   }
+
 };
 
 // ============ OBTENER USUARIO ACTUAL ============

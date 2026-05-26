@@ -9,6 +9,6 @@ export const router = createBrowserRouter([
     { path: "/", element: <LoginPage /> },
     { path: "/dashboard", element: <Dashboard /> },
     { path: "/register", element: <RegisterPage /> },
-    { path: "/login", element: <LoginPage /> },
+    { path: "/createTaskPage", element: <CreateTaskPage /> },
 
 ])

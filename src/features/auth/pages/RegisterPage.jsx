@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom"
 import { useState } from "react";
 import { signUp } from "../services";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
-
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [lastName, setlastName] = useState('');
     const [email, setEmail] = useState('');
@@ -34,7 +35,10 @@ export default function RegisterPage() {
             }
         }
 
-        await signUp(data1)
+        const response = await signUp(data1)
+        if (response.success) {
+            navigate("/");
+        }
     }
 
     function validateEmail(e) {
