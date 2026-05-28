@@ -33,5 +33,17 @@ function LogOut({ onclick }) {
     )
 }
 
-export { Blue, White, LogOut };
 
+
+function Inicio({ onclick }) {
+    return (
+        <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
+            onClick={onclick}
+        >
+            Volver a inicio
+        </button>
+    )
+}
+
+
+export { Blue, White, LogOut, Inicio };

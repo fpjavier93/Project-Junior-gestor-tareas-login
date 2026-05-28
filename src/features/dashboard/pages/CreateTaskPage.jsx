@@ -1,26 +1,29 @@
-import { data, Form, useNavigate } from "react-router-dom";
-import { Blue, White, LogOut } from "../../../components/Buttons";
-import getUserID from "../services/CreateTaskServices";
+import { useNavigate } from "react-router-dom";
+import { Blue, White, LogOut, Inicio } from "../../../components/Buttons";
+import getUserID, { createTask } from "../services/CreateTaskServices";
 import { getCurrentUser } from "../../auth/services";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { handlesignOut } from "../services/DashboardServices";
 
-let Task = [];
-
 function CreateTaskPage() {
+
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState("");
 
     useEffect(() => {
-        console.log('iniciando verificacion');
+
         async function handleCurrentUser() {
-            const currentUser = await getCurrentUser();
-            console.log(currentUser);
+            await getCurrentUser();
+
         }
         handleCurrentUser();
     }, [])
 
     async function handleSubmit(e) {
         e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitError("");
 
         const formData = new FormData(e.target);
         const dataTask = Object.fromEntries([...formData.entries()].map(([key, value]) => {
@@ -31,18 +34,21 @@ function CreateTaskPage() {
         }))
 
         const newDataTask = {
-            id: crypto.randomUUID(),
             user_id: await getUserID(),
-            ...dataTask,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-
+            ...dataTask
         };
-        Task.push(newDataTask);
-        console.log(Task)
 
+        try {
+            await createTask(newDataTask);
 
-        e.target.reset()
+            e.target.reset()
+
+        } catch {
+            setSubmitError("No se pudo crear la tarea. Intentalo de nuevo.");
+        } finally {
+            setIsSubmitting(false);
+        }
+
 
     }
 
@@ -55,10 +61,15 @@ function CreateTaskPage() {
 
                     <h2 className="text-gray-500">Crea una tarea y define su contenido</h2>
                 </div>
+
                 <div className="flex items-center gap-2">
                 </div>
             </header>
-
+            <div className="flex justify-end">
+                <Inicio
+                    onclick={() => navigate("/Dashboard")}
+                />
+            </div>
             <div className="p-4 my-6 bg-white border border-gray-300 rounded shadow">
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -90,6 +101,9 @@ function CreateTaskPage() {
                             </div>
 
                             <div className="pt-4 my-5 border-t border-gray-200"></div>
+                            {submitError && (
+                                <p className="text-sm text-red-600">{submitError}</p>
+                            )}
                             <div className="flex justify-end gap-3">
                                 <White
                                     name="Cancelar"
@@ -97,7 +111,7 @@ function CreateTaskPage() {
                                 />
 
                                 <Blue
-                                    name='Crear tarea'
+                                    name={isSubmitting ? "Creando..." : "Crear tarea"}
                                     type="submit"
 
                                 />

@@ -1,52 +1,44 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Card } from "../../../components/Card";
 import { Blue, White, LogOut } from "../../../components/Buttons";
-import generarTareasAleatorias from "../utils/DashboardUtils";
 import { useEffect, useState } from "react";
-import { getUsername, handlesignOut } from "../services/DashboardServices";
+import { getTasksUserData, getUserDataId, handlesignOut } from "../services/DashboardServices";
 import { getCurrentUser } from "../../auth/services";
-
-
 
 function Dashboard() {
 
     const navigate = useNavigate();
-    const [tasks, setTasks] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [userTasks, setuserTasks] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [userName, setUserName] = useState("");
+
 
     useEffect(() => {
 
         const handleTasks = async () => {
 
-            const user = await getUsername();
-            setUserName(user)
+            setLoading(true);
+            const CurrentUser = await getCurrentUser();
+            setUserName(CurrentUser.user.user_metadata.nombre);
 
-            const data = await generarTareasAleatorias(10)
-            setLoading(false)
+            const userId = await getUserDataId()
+            const getuserTasks = await getTasksUserData(userId);
+            setuserTasks(getuserTasks);
 
-            setTasks(data)
+            setTimeout(() => setLoading(false), 1000)
         }
         handleTasks()
 
     }, [])
 
-    useEffect(() => {
-        console.log('iniciando verificacion');
-        async function handleCurrentUser() {
-            const currentUser = await getCurrentUser();
-            console.log(currentUser);
-        }
-        handleCurrentUser();
-    }, [])
+
+    const doneTask = userTasks.filter((t) => t.completada).length;
 
 
+    let progres = 0;
 
-    console.log(tasks)
+    progres = (doneTask * 100) / userTasks.length;
 
-    const doneTask = tasks.filter((t) => t.completada).length
-
-    const progres = (doneTask * 100) / tasks.length;
 
 
     if (loading) return <div>Loading</div>
@@ -64,10 +56,6 @@ function Dashboard() {
                         <h2 className="text-gray-500">Aqui esta el resumen de tus tareas</h2>
                     </div>
                     <div className="flex items-center gap-2">
-                        <White
-                            name={`Ver todas`}
-                            onClick={null}
-                        />
                         <Blue
                             onClick={() => navigate("/createTaskPage")}
                             name={`+ Nueva Tarea`}
@@ -79,11 +67,11 @@ function Dashboard() {
                 <div className="flex flex-col gap-4">
                     <Card
                         name='TOTAL'
-                        value={tasks.length}
+                        value={userTasks.length}
                     />
                     <Card
                         name='PENDIENTES'
-                        value={(tasks.length - doneTask)}
+                        value={(userTasks.length - doneTask)}
                     />
                     <Card
                         name='COMPLETADAS'
@@ -93,7 +81,7 @@ function Dashboard() {
 
                 <div className="p-4 my-6 bg-white border border-gray-300 rounded shadow">
                     <p className="mb-2 text-gray-500">PROGRESO GENERAL</p>
-                    <p className="text-4xl font-bold">{progres.toFixed(2)} %</p>
+                    <p className="text-4xl font-bold">{Number.isNaN(progres) ? progres = 0 : progres.toFixed(2)} %</p>
 
                     <div className="w-full h-3 my-2 bg-gray-200 rounded-full">
                         <div className={`h-3 rounded-full my-2
@@ -113,27 +101,28 @@ function Dashboard() {
                             Tareas Recientes
                         </h2>
 
-                        <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer">Ver todas →</button>
+                        <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
+                            onClick={() => navigate("/allTasksPage")}
+                        >Ver todas →</button>
                     </div>
 
 
-                    {tasks.map(tarea => {
+                    {userTasks.map(tarea => {
 
                         return <div key={tarea.id}>
                             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-300">
                                 <div className="flex items-center gap-3">
                                     <span className="w-2 h-2 bg-gray-300 rounded-full"></span>
                                     <div>
-                                        <h3 className="text-sm font-medium text-neutral-900">{tarea.titulo}</h3>
-                                        <p className="text-sm text-gray-500">{tarea.descripcion}</p>
+                                        <h3 className="text-sm font-medium text-neutral-900">{tarea.title}</h3>
+                                        <p className="text-sm text-gray-500">{tarea.description}</p>
                                     </div>
                                 </div>
                                 <span className="px-2 py-1 text-sm font-medium text-indigo-500 bg-gray-200 border rounded-full py">{tarea.completada == true ? tarea.estado = "Completada" : tarea.estado = "Pendiente"}</span>
                             </div>
                         </div>
-
                     }
-                    ).slice(0, 2)
+                    ).slice(0, 3)
                     }
                 </section>
 

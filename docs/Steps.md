@@ -1,75 +1,12 @@
-Lado izquierdo
+Usa normalmente:
+npx supabase start
+Si alguna vez vuelve a fallar por unhealthy, corre una vez:
+npx supabase start --ignore-health-check
+Espera 1-2 minutos y verifica:
+docker ps
+npx supabase status
+Para apagar sin borrar datos:
+npx supabase stop
+No uses --debug solo en PowerShell; siempre va junto al comando:
 
-Tiene:
-
-texto pequeño DASHBOARD
-título grande
-subtítulo
-Lado derecho
-
-Tiene:
-
-botón "Ver todas"
-botón "+ Nueva tarea"
-
-Aquí probablemente usarías:
-
-div header
-    div info
-    div actions
-
-Y el header tendría:
-
-display: flex
-justify-between
-
-
-3. Tarjetas de estadísticas
-
-La parte:
-
-TOTAL
-5
-
-PENDIENTES
-3
-
-COMPLETADAS
-2
-
-SÍ, aquí normalmente hay:
-
-un contenedor grande
-y dentro varias cards separadas
-
-Algo así mentalmente:
-
-StatsSection
- ├── StatCard
- ├── StatCard
- └── StatCard
-
-Cada card:
-
-es un div
-tiene borde
-padding
-título pequeño
-número grande
-
-Consejo importante:
-
-No copies y pegues 3 veces el mismo JSX.
-
-Piensa:
-
-“Esto parece reutilizable”
-
-Entonces probablemente deberías tener:
-
-un componente StatCard
-
-que recibe:
-
-título
-valor
+npx supabase start --debug 
