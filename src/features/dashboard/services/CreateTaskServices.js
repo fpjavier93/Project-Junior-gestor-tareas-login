@@ -14,7 +14,7 @@ async function getUserID() {
 
 }
 
-export async function createTask(task) {
+async function createTask(task) {
     const { data, error } = await supabase
         .from("tasks")
         .insert(task)
@@ -29,4 +29,31 @@ export async function createTask(task) {
     return data;
 }
 
-export default getUserID;
+async function updateTask(task) {
+
+
+    const { data, error } = await supabase
+
+        .from("tasks")
+
+        .update(task)
+
+        .eq("id", task.id)
+
+        .select()
+
+        .single();
+
+    if (error) {
+
+        console.log("Error al actualizar la tarea", error.message);
+
+        throw error;
+
+    }
+    console.log(data);
+    return data;
+
+}
+
+export { getUserID, updateTask, createTask };
