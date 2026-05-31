@@ -29,19 +29,23 @@ async function handlesignOut(navigate) {
 
 
 
-async function getTasksUserData(userID) {
+async function getTasksUserData(userID, status) {
 
-    console.log('ejecutando getTasksUserData');
-    console.log("Mostrando user ID " + userID);
-
-    const { data, error } = await supabase
+    let query = supabase //consulta a la BD
         .from("tasks")
         .select("*")
-        .eq("user_id", userID);
+        .eq("user_id", userID)
+
+    if (status) {
+        query = query.eq("status", status);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         console.log('Ocurrio un error al traer las tareas')
     }
+
     return data;
 
 }

@@ -1,5 +1,5 @@
 import { data } from 'react-router-dom';
-import { supabase } from '../../../../utils/supabase.ts';
+import { supabase } from '../../../../utils/supabase';
 import { Navigate } from 'react-router-dom';
 
 /**

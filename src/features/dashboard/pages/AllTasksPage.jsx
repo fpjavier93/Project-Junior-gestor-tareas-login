@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
 import { getTasksUserData } from "../services/DashboardServices";
 import { getCurrentUser } from "../../auth/services";
-
+import { updateStatusTask, eraseDbTask } from "../services/AllTaskPageServices";
+import { Inicio } from "../../../components/Buttons";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { editTask } from "../services/AllTaskPageServices";
 
 function AllTasksPage() {
 
     const [loading, setLoading] = useState(true);
     const [userTasks, setuserTasks] = useState([]);
-    const [isCheked, setIsCheked] = useState(false);
+    const [select, setSelect] = useState("todas");
+    const navigate = useNavigate();
+
+
+
 
     useEffect(() => {
 
@@ -16,20 +24,87 @@ function AllTasksPage() {
             const currentUser = await getCurrentUser();
 
             const getUserTasks = await getTasksUserData(currentUser.user.id);
+
+
             setuserTasks(getUserTasks);
-            console.log(userTasks)
+
             setTimeout(() => setLoading(false), 1000)
         }
 
         handleUserTask();
     }, [])
 
-    console.log(userTasks)
+    function checkStatus(status) {
 
-    function handleisCheked(status) {
+        return status === "completed"
+    }
+
+    async function handleisCheked(task) {
+
+        await updateStatusTask(task.id, { status: task.status === "completed" ? "pending" : "completed" })
+
+        const currentUser = await getCurrentUser();
+        const updatedTasks = await getTasksUserData(currentUser.user.id)
+
+        setuserTasks(updatedTasks);
+    }
+
+    async function eraseTask(task_id) {
+
+        const result = await Swal.fire({
+            title: "¿Eliminar tarea?",
+            text: "Esta acción no se puede deshacer.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#6b7280",
+        });
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        await eraseDbTask(task_id);
+
+        const currentUser = await getCurrentUser();
+        const updateTasks = await getTasksUserData(currentUser.user.id)
+
+        setuserTasks(updateTasks);
+    }
 
 
 
+
+    async function handleEditTask(task) {
+
+        const updatedTask = await editTask(task);
+        setuserTasks(updatedTask);
+    }
+
+
+
+
+    async function handleSelect(value) {
+
+        setSelect(value);
+
+        const currentUser = await getCurrentUser();
+        let tasks;
+
+        if (value == "todas") {
+            tasks = await getTasksUserData(currentUser.user.id)
+        }
+        if (value == "pending") {
+            tasks = await getTasksUserData(currentUser.user.id, value)
+
+        }
+        if (value == "completed") {
+            tasks = await getTasksUserData(currentUser.user.id, value)
+        }
+
+        setuserTasks(tasks);
 
     }
 
@@ -37,7 +112,6 @@ function AllTasksPage() {
     if (loading) {
         return <div>LOADING</div>
     }
-
 
     function handleShowTasks() {
 
@@ -50,15 +124,21 @@ function AllTasksPage() {
                     <div className="flex flex-col">
                         <div className="flex justify-between px-5 py-4 text-4xl font-bold border-b border-gray-300">
                             {task.title}
-                            <div>
+                            <div className="flex flex-col items-end gap-2">
                                 <label className="inline-flex items-center cursor-pointer">
                                     <input type="checkbox" value="" className="sr-only peer"
-
-                                        onChange={() => handleisCheked(task.status)}
+                                        checked={checkStatus(task.status)}
+                                        onChange={() => handleisCheked(task)}
                                     />
                                     <div className="relative w-9 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
-                                    <span className="text-sm font-medium select-none ms-3 text-heading">{isCheked ? "Completado" : "Incompletoooo"}</span>
+                                    <span className="text-sm font-medium select-none ms-3 text-heading">Completada</span>
                                 </label>
+                                <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
+                                    onClick={() => handleEditTask(task)}
+                                >editar tarea</button>
+                                <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
+                                    onClick={() => eraseTask(task.id)}
+                                >eliminar tarea</button>
                             </div>
                         </div>
                         <div className="px-5 py-4 border-b border-gray-300">
@@ -66,13 +146,11 @@ function AllTasksPage() {
                         </div>
                     </div>
                 </div>
-
             </div>
 
         });
-        console.log(showTasks)
-        return showTasks
 
+        return showTasks
     }
 
     return (
@@ -85,6 +163,29 @@ function AllTasksPage() {
                         <h2 className="text-gray-500">Aqui puedes cambiar el status de tus tareas o eliminarlas</h2>
                     </div>
                 </header>
+
+                <div className="flex justify-end">
+                    <div className="flex justify-end mx-7">
+                        {/* <input className="bg-white"
+                            value={""} /> */}
+                        <div className="mx-1 text-sm font-medium text-indigo-500">Mostrar Tareas:</div>
+                        <div className="text-sm font-medium text-black">
+                            <select className="bg-white"
+                                id="estado"
+                                value={select}
+                                onChange={(e) => handleSelect(e.target.value)}
+                            >
+                                <option value={"todas"}>Todas las tareas</option>
+                                <option value={"completed"}>Completadas</option>
+                                <option value={"pending"}>Pendientes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <Inicio
+                        onclick={() => navigate("/Dashboard")}
+                    />
+                </div>
 
                 <section className="mt-6 overflow-hidden bg-white border border-gray-300 rounded shadow">
                     {handleShowTasks()}

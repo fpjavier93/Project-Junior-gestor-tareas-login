@@ -13,6 +13,7 @@ function Dashboard() {
     const [userName, setUserName] = useState("");
 
 
+
     useEffect(() => {
 
         const handleTasks = async () => {
@@ -29,15 +30,14 @@ function Dashboard() {
         }
         handleTasks()
 
-    }, [])
+    }, []);
 
-
-    const doneTask = userTasks.filter((t) => t.completada).length;
+    const updateDoneTask = userTasks.filter((t) => t.status == "completed").length;
 
 
     let progres = 0;
 
-    progres = (doneTask * 100) / userTasks.length;
+    progres = (updateDoneTask * 100) / userTasks.length;
 
 
 
@@ -71,11 +71,11 @@ function Dashboard() {
                     />
                     <Card
                         name='PENDIENTES'
-                        value={(userTasks.length - doneTask)}
+                        value={(userTasks.length - updateDoneTask)}
                     />
                     <Card
                         name='COMPLETADAS'
-                        value={doneTask}
+                        value={updateDoneTask}
                     />
                 </div>
 
@@ -107,18 +107,18 @@ function Dashboard() {
                     </div>
 
 
-                    {userTasks.map(tarea => {
+                    {userTasks.map(task => {
 
-                        return <div key={tarea.id}>
+                        return <div key={task.id}>
                             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-300">
                                 <div className="flex items-center gap-3">
                                     <span className="w-2 h-2 bg-gray-300 rounded-full"></span>
                                     <div>
-                                        <h3 className="text-sm font-medium text-neutral-900">{tarea.title}</h3>
-                                        <p className="text-sm text-gray-500">{tarea.description}</p>
+                                        <h3 className="text-sm font-medium text-neutral-900">{task.title}</h3>
+                                        <p className="text-sm text-gray-500">{task.description}</p>
                                     </div>
                                 </div>
-                                <span className="px-2 py-1 text-sm font-medium text-indigo-500 bg-gray-200 border rounded-full py">{tarea.completada == true ? tarea.estado = "Completada" : tarea.estado = "Pendiente"}</span>
+                                <span className="px-2 py-1 text-sm font-medium text-indigo-500 bg-gray-200 border rounded-full py">{task.status == "completed" ? "Completada" : "Pendiente"}</span>
                             </div>
                         </div>
                     }

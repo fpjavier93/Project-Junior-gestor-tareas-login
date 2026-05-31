@@ -5,6 +5,7 @@ import RegisterPage from "../features/auth/pages/RegisterPage";
 import Dashboard from "../features/dashboard/pages/Dashboard";
 import CreateTaskPage from "../features/dashboard/pages/CreateTaskPage"
 import AllTasksPage from "../features/dashboard/pages/AllTasksPage"
+import EditTaskPage from "../features/dashboard/pages/EditTaskPage ";
 
 export const router = createBrowserRouter([
     { path: "/", element: <LoginPage /> },
@@ -12,5 +13,6 @@ export const router = createBrowserRouter([
     { path: "/register", element: <RegisterPage /> },
     { path: "/createTaskPage", element: <CreateTaskPage /> },
     { path: "/allTasksPage", element: <AllTasksPage /> },
+    { path: "/editTasksPage", element: <EditTaskPage /> },
 
 ])
