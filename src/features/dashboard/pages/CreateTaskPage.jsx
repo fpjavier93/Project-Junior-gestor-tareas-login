@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Blue, White, LogOut, Inicio } from "../../../components/Buttons";
-import getUserID, { createTask } from "../services/CreateTaskServices";
+import getUserID from "../services/CreateTaskServices";
 import { getCurrentUser } from "../../auth/services";
 import { useEffect, useState } from "react";
 import { handlesignOut } from "../services/DashboardServices";
+import { createTask } from "../services/tasksApi";
+
 
 function CreateTaskPage() {
 
@@ -11,14 +13,15 @@ function CreateTaskPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState("");
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        async function handleCurrentUser() {
-            await getCurrentUser();
+    //     async function handleCurrentUser() {
+    //         await getCurrentUser();
 
-        }
-        handleCurrentUser();
-    }, [])
+    //     }
+    //     handleCurrentUser();
+
+    // }, [])
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -26,6 +29,7 @@ function CreateTaskPage() {
         setSubmitError("");
 
         const formData = new FormData(e.target);
+
         const dataTask = Object.fromEntries([...formData.entries()].map(([key, value]) => {
             return [key,
                 typeof value == "string" ? value.trim() : value
@@ -38,9 +42,9 @@ function CreateTaskPage() {
             ...dataTask
         };
 
+
         try {
             await createTask(newDataTask);
-
             e.target.reset()
 
         } catch {
@@ -48,7 +52,6 @@ function CreateTaskPage() {
         } finally {
             setIsSubmitting(false);
         }
-
 
     }
 
@@ -113,12 +116,9 @@ function CreateTaskPage() {
                                 <Blue
                                     name={isSubmitting ? "Creando..." : "Crear tarea"}
                                     type="submit"
-
                                 />
                             </div>
-
                         </div>
-
                     </div>
                 </form>
             </div>

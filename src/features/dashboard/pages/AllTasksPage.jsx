@@ -5,7 +5,7 @@ import { updateStatusTask, eraseDbTask } from "../services/AllTaskPageServices";
 import { Inicio } from "../../../components/Buttons";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { editTask } from "../services/AllTaskPageServices";
+import { editTask, getTasks } from "../services/tasksApi";
 
 function AllTasksPage() {
 
@@ -76,11 +76,53 @@ function AllTasksPage() {
 
 
 
-
     async function handleEditTask(task) {
 
-        const updatedTask = await editTask(task);
-        setuserTasks(updatedTask);
+        const result = await Swal.fire({
+            title: "Editar tarea",
+            html: `
+                    <input id="task-title" class="swal2-input" value="${task.title}" placeholder="Título">
+                    <textarea id="task-description" class="swal2-textarea" placeholder="Descripción">${task.description}</textarea>
+                `,
+            showCancelButton: true,
+            confirmButtonText: "Guardar",
+            cancelButtonText: "Cancelar",
+            preConfirm: () => {
+                const titleInput = document.getElementById("task-title");
+                const descriptionInput = document.getElementById("task-description");
+                const title = titleInput instanceof HTMLInputElement ? titleInput.value : "";
+                const description = descriptionInput instanceof HTMLTextAreaElement ? descriptionInput.value : "";
+
+                if (!title) {
+                    Swal.showValidationMessage("EL titulo no puede esta vacio");
+                    return;
+                }
+
+                return { title, description };
+            },
+        });
+
+        console.log(result.value)
+
+        if (result.isDismissed) {
+            return
+        }
+
+        try {
+
+            await editTask(task.id, result.value);
+            const updatedTask = await getTasks();
+
+            setuserTasks(updatedTask);
+
+        } catch (error) {
+
+            return error
+        }
+
+
+
+
     }
 
 

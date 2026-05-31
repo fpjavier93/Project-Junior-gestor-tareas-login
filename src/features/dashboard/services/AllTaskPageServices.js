@@ -83,4 +83,4 @@ async function editTask(task) {
 }
 
 
-export { updateStatusTask, eraseDbTask, editTask };
+export { updateStatusTask, eraseDbTask, };

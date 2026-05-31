@@ -20,7 +20,6 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      console.log(email)
       const result = await signIn(email, password);
 
       if (result.success) {
@@ -45,27 +44,27 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex flex-col justify-center min-h-full px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             alt="Your Company"
             src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
+            className="w-auto h-10 mx-auto"
           />
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+          <h2 className="mt-10 font-bold tracking-tight text-center text-gray-900 text-2xl/9">
             Sign in to your account
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+            <div className="p-4 mb-4 border border-red-200 rounded-md bg-red-50">
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
 
           {successMessage && (
-            <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
+            <div className="p-4 mb-4 border border-green-200 rounded-md bg-green-50">
               <p className="text-sm text-green-700">{successMessage}</p>
             </div>
           )}
@@ -74,7 +73,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm/6 font-medium text-gray-900"
+                className="block font-medium text-gray-900 text-sm/6"
               >
                 Correo Email
               </label>
@@ -97,7 +96,7 @@ export default function LoginPage() {
               <div className="items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  className="block font-medium text-gray-900 text-sm/6"
                 >
                   Password
                 </label>
@@ -116,7 +115,7 @@ export default function LoginPage() {
                 />
               </div>
 
-              <div className="text-sm mt-2 text-right">
+              <div className="mt-2 text-sm text-right">
                 <a
                   href="#"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
@@ -137,7 +136,7 @@ export default function LoginPage() {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
+          <p className="mt-10 text-center text-gray-500 text-sm/6">
             No estas registrado?{" "}
             <Link
               to="/register"

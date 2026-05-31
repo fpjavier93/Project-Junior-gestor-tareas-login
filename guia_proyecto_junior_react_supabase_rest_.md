@@ -86,26 +86,26 @@ Al finalizar el proyecto, el estudiante debe tener una aplicación que permita:
 ## Funcionalidades obligatorias (MVP)
   
 ### Autenticación
-- [ ] Registro con email y contraseña
-- [ ] Login con email y contraseña
-- [ ] Logout
+- [x] Registro con email y contraseña
+- [x] Login con email y contraseña
+- [x] Logout
 - [ ] Mantener sesión iniciada al recargar
 - [ ] Rutas protegidas
   
 ### Dashboard
-- [ ] Tarjeta con total de tareas
-- [ ] Tarjeta con tareas pendientes
-- [ ] Tarjeta con tareas completadas
+- [x] Tarjeta con total de tareas
+- [x] Tarjeta con tareas pendientes
+- [x] Tarjeta con tareas completadas
   
 ### Tareas
-- [ ] Listar tareas del usuario autenticado
-- [ ] Crear tarea
-- [ ] Editar tarea
-- [ ] Cambiar estado de tarea (pending/completed)
-- [ ] Eliminar tarea
-- [ ] Ver detalle de una tarea
+- [x] Listar tareas del usuario autenticado
+- [x] Crear tarea
+- [x] Editar tarea
+- [x] Cambiar estado de tarea (pending/completed)
+- [x] Eliminar tarea
+- [x] Ver detalle de una tarea
 - [ ] Buscar por título
-- [ ] Filtrar por estado
+- [x] Filtrar por estado
   
 ### UX/UI
 - [ ] Loading states
