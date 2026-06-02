@@ -13,17 +13,10 @@ function CreateTaskPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState("");
 
-    // useEffect(() => {
 
-    //     async function handleCurrentUser() {
-    //         await getCurrentUser();
-
-    //     }
-    //     handleCurrentUser();
-
-    // }, [])
 
     async function handleSubmit(e) {
+
         e.preventDefault();
         setIsSubmitting(true);
         setSubmitError("");
@@ -49,8 +42,11 @@ function CreateTaskPage() {
 
         } catch {
             setSubmitError("No se pudo crear la tarea. Intentalo de nuevo.");
+
         } finally {
+
             setIsSubmitting(false);
+
         }
 
     }
@@ -114,6 +110,7 @@ function CreateTaskPage() {
                                 />
 
                                 <Blue
+                                    disabled={isSubmitting ? true : false}
                                     name={isSubmitting ? "Creando..." : "Crear tarea"}
                                     type="submit"
                                 />

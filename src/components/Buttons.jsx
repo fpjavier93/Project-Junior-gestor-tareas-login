@@ -1,8 +1,9 @@
 
 
-function Blue({ name, onClick = undefined, type }) {
+function Blue({ name, onClick = undefined, type, disabled }) {
     return (
-        <button className="inline-flex items-center px-4 py-2 text-white bg-indigo-500 border border-gray-300 rounded w-fit hover:cursor-pointer hover:bg-indigo-600"
+        <button className="inline-flex items-center px-4 py-2 text-white bg-indigo-500 border border-gray-300 rounded w-fit hover:cursor-pointer hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed disabled:hover:bg-indigo-300"
+            disabled={disabled}
             type={type}
             onClick={onClick}
 

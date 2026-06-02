@@ -24,7 +24,8 @@ useAuth permite leer ese estado.
 ProtectedRoute decide si una página se muestra o redirige.
 
 
-Añadir búsqueda por título.
+--Añadir búsqueda por título.
+
 Mejorar loading/error/empty states.
 Corregir edición como página o dejar claro que editas por modal.
 Preparar README y deploy.

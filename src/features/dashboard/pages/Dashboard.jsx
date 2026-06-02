@@ -6,6 +6,7 @@ import { getUserDataId, handlesignOut } from "../services/DashboardServices";
 import { getCurrentUser } from "../../auth/services";
 import ProgressBarDashboard from "../../../components/ProgressBarDashboard";
 import { getTasks } from "../services/tasksApi";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 function Dashboard() {
 
@@ -30,9 +31,11 @@ function Dashboard() {
 
 
             } catch (error) {
+
                 console.error("Error cargando dashboard:", error);
+
             } finally {
-                setTimeout(() => setLoading(false), 1000) //practicar loading visual (luego crear un loading)
+                setLoading(false) //practicar loading visual (luego crear un loading)
             }
         }
 
@@ -44,7 +47,12 @@ function Dashboard() {
 
     const progres = userTasks.length > 0 ? (updateDoneTask * 100) / userTasks.length : 0;
 
-    if (loading) return <div>Loading</div>
+
+
+    if (loading) return <LoadingSpinner />
+
+
+
 
     return (
         <main className="dashboard">

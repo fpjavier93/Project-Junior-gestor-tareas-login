@@ -3,6 +3,8 @@ import { Inicio } from "../../../components/Buttons";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { editTask, eraseTasks, getTasks } from "../services/tasksApi";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 
 function AllTasksPage() {
@@ -10,22 +12,32 @@ function AllTasksPage() {
     const [loading, setLoading] = useState(true);
     const [userTasks, setuserTasks] = useState([]);
     const [select, setSelect] = useState("todas");
+    const [searching, setSearching] = useState("");
+    const [error, setError] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
 
-        const handleUserTask = async () => {
+        handleUserTask();
+    }, [])
+
+
+    const handleUserTask = async () => {
+
+        try {
 
             const getUserTasks = await getTasks();
 
-
             setuserTasks(getUserTasks);
-
-            setTimeout(() => setLoading(false), 1000)
+        }
+        catch (error) {
+            setError(true)
+        }
+        finally {
+            setLoading(false);
         }
 
-        handleUserTask();
-    }, [])
+    }
 
     function checkStatus(status) {
 
@@ -66,8 +78,6 @@ function AllTasksPage() {
         setuserTasks(updateTasks);
     }
 
-
-
     async function handleEditTask(task) {
 
         const result = await Swal.fire({
@@ -94,12 +104,9 @@ function AllTasksPage() {
             },
         });
 
-        console.log(result.value)
-
         if (result.isDismissed) {
             return
         }
-
         try {
 
             await editTask(task.id, result.value);
@@ -109,12 +116,8 @@ function AllTasksPage() {
 
         } catch (error) {
 
-            return error
+            setError("No se pudo cargar el listado de tareas")
         }
-
-
-
-
     }
 
     async function handleSelect(value) {
@@ -135,12 +138,18 @@ function AllTasksPage() {
         }
 
         setuserTasks(tasks);
-
     }
 
 
     if (loading) {
-        return <div>LOADING</div>
+        return <LoadingSpinner />
+    }
+
+    if (error) {
+        return <ErrorMessage error={"Error al cargar la lista de Tareas"}
+            onTryAgain={handleUserTask}
+            onCancel={() => navigate("/dashboard")}
+        />
     }
 
     function handleShowTasks() {
@@ -183,6 +192,22 @@ function AllTasksPage() {
         return showTasks
     }
 
+
+    async function handleSearch(value) {
+
+        setSearching(value)
+        let tasks = [];
+
+        tasks = await getTasks(select === "todas" ? undefined : select);
+
+        const filterTasks = tasks.filter((task) => {
+            return task.title.toLowerCase().includes(value.toLowerCase())
+        })
+
+        setuserTasks(filterTasks)
+    }
+
+
     return (
         <main className="allTasskPage">
             <div className="max-w-4xl px-4 mx-auto">
@@ -194,27 +219,35 @@ function AllTasksPage() {
                     </div>
                 </header>
 
-                <div className="flex justify-end">
-                    <div className="flex justify-end mx-7">
-                        {/* <input className="bg-white"
-                            value={""} /> */}
-                        <div className="mx-1 text-sm font-medium text-indigo-500">Mostrar Tareas:</div>
-                        <div className="text-sm font-medium text-black">
-                            <select className="bg-white"
-                                id="estado"
-                                value={select}
-                                onChange={(e) => handleSelect(e.target.value)}
-                            >
-                                <option value={"todas"}>Todas las tareas</option>
-                                <option value={"completed"}>Completadas</option>
-                                <option value={"pending"}>Pendientes</option>
-                            </select>
-                        </div>
-                    </div>
+                <div className="flex justify-between">
+                    <div className="flex">
+                        <p className="font-bold">Buscar:</p>
+                        <input className="bg-white"
+                            value={searching}
+                            onChange={(e) => handleSearch(e.target.value)}
+                        />
 
-                    <Inicio
-                        onclick={() => navigate("/Dashboard")}
-                    />
+                    </div>
+                    <div className="flex">
+                        <div className="flex justify-end mx-7">
+                            <div className="mx-1 text-sm font-medium text-indigo-500">Mostrar Tareas:</div>
+                            <div className="text-sm font-medium text-black">
+                                <select className="bg-white"
+                                    id="estado"
+                                    value={select}
+                                    onChange={(e) => handleSelect(e.target.value)}
+                                >
+                                    <option value={"todas"}>Todas las tareas</option>
+                                    <option value={"completed"}>Completadas</option>
+                                    <option value={"pending"}>Pendientes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <Inicio
+                            onclick={() => navigate("/Dashboard")}
+                        />
+                    </div>
                 </div>
 
                 <section className="mt-6 overflow-hidden bg-white border border-gray-300 rounded shadow">

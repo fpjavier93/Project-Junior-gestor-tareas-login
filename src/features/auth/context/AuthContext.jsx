@@ -4,6 +4,7 @@ import { getSession, onAuthStateChange } from "../services";
 
 const AuthContext = createContext();
 
+
 export function AuthProvider({ children }) {
     const [session, setSession] = useState(null);
     const [user, setUser] = useState(null);
@@ -50,6 +51,8 @@ export function AuthProvider({ children }) {
         </AuthContext.Provider>
     );
 }
+
+
 
 export function useAuth() {
     return useContext(AuthContext);
