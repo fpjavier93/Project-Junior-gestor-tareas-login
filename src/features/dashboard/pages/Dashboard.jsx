@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "../../../components/Card";
 import { Blue, LogOut } from "../../../components/Buttons";
 import { useEffect, useState } from "react";
-import { getTasksUserData, getUserDataId, handlesignOut } from "../services/DashboardServices";
+import { getUserDataId, handlesignOut } from "../services/DashboardServices";
 import { getCurrentUser } from "../../auth/services";
 import ProgressBarDashboard from "../../../components/ProgressBarDashboard";
 import { getTasks } from "../services/tasksApi";

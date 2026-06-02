@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import ProtectedRoute from "../features/auth/components/ProtectedRoute";
 
 import LoginPage from "../features/auth/pages/LoginPage";
 import RegisterPage from "../features/auth/pages/RegisterPage";
@@ -9,10 +10,10 @@ import EditTaskPage from "../features/dashboard/pages/EditTaskPage";
 
 export const router = createBrowserRouter([
     { path: "/", element: <LoginPage /> },
-    { path: "/dashboard", element: <Dashboard /> },
     { path: "/register", element: <RegisterPage /> },
-    { path: "/createTaskPage", element: <CreateTaskPage /> },
-    { path: "/allTasksPage", element: <AllTasksPage /> },
-    { path: "/editTasksPage", element: <EditTaskPage /> },
 
+    { path: "/dashboard", element: (<ProtectedRoute><Dashboard /></ProtectedRoute>) },
+    { path: "/createTaskPage", element: (<ProtectedRoute><CreateTaskPage /></ProtectedRoute>) },
+    { path: "/allTasksPage", element: (<ProtectedRoute><AllTasksPage /></ProtectedRoute>) },
+    { path: "/editTasksPage", element: (<ProtectedRoute><EditTaskPage /></ProtectedRoute>) },
 ])

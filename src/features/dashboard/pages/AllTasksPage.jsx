@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { getTasksUserData } from "../services/DashboardServices";
-import { getCurrentUser } from "../../auth/services";
-import { updateStatusTask, eraseDbTask } from "../services/AllTaskPageServices";
 import { Inicio } from "../../../components/Buttons";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { editTask, getTasks } from "../services/tasksApi";
+import { editTask, eraseTasks, getTasks } from "../services/tasksApi";
+
 
 function AllTasksPage() {
 
@@ -14,16 +12,11 @@ function AllTasksPage() {
     const [select, setSelect] = useState("todas");
     const navigate = useNavigate();
 
-
-
-
     useEffect(() => {
 
         const handleUserTask = async () => {
 
-            const currentUser = await getCurrentUser();
-
-            const getUserTasks = await getTasksUserData(currentUser.user.id);
+            const getUserTasks = await getTasks();
 
 
             setuserTasks(getUserTasks);
@@ -41,15 +34,14 @@ function AllTasksPage() {
 
     async function handleisCheked(task) {
 
-        await updateStatusTask(task.id, { status: task.status === "completed" ? "pending" : "completed" })
+        await editTask(task.id, { status: task.status === "completed" ? "pending" : "completed" })
 
-        const currentUser = await getCurrentUser();
-        const updatedTasks = await getTasksUserData(currentUser.user.id)
+        const updatedTasks = await getTasks(select === "todas" ? undefined : select)
 
         setuserTasks(updatedTasks);
     }
 
-    async function eraseTask(task_id) {
+    async function handleEeraseTask(task_id) {
 
         const result = await Swal.fire({
             title: "¿Eliminar tarea?",
@@ -66,10 +58,10 @@ function AllTasksPage() {
             return;
         }
 
-        await eraseDbTask(task_id);
+        await eraseTasks(task_id);
 
-        const currentUser = await getCurrentUser();
-        const updateTasks = await getTasksUserData(currentUser.user.id)
+
+        const updateTasks = await getTasks()
 
         setuserTasks(updateTasks);
     }
@@ -125,25 +117,21 @@ function AllTasksPage() {
 
     }
 
-
-
-
     async function handleSelect(value) {
 
         setSelect(value);
 
-        const currentUser = await getCurrentUser();
         let tasks;
 
         if (value == "todas") {
-            tasks = await getTasksUserData(currentUser.user.id)
+            tasks = await getTasks()
         }
         if (value == "pending") {
-            tasks = await getTasksUserData(currentUser.user.id, value)
+            tasks = await getTasks(value)
 
         }
         if (value == "completed") {
-            tasks = await getTasksUserData(currentUser.user.id, value)
+            tasks = await getTasks(value)
         }
 
         setuserTasks(tasks);
@@ -179,7 +167,7 @@ function AllTasksPage() {
                                     onClick={() => handleEditTask(task)}
                                 >editar tarea</button>
                                 <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
-                                    onClick={() => eraseTask(task.id)}
+                                    onClick={() => handleEeraseTask(task.id)}
                                 >eliminar tarea</button>
                             </div>
                         </div>
