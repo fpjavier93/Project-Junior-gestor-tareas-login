@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { useState } from "react";
 import { signUp } from "../services";
 import { useNavigate } from "react-router-dom";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 export default function RegisterPage() {
     const navigate = useNavigate();
@@ -9,6 +10,9 @@ export default function RegisterPage() {
     const [lastName, setlastName] = useState('');
     const [email, setEmail] = useState('');
     const [empress, setEmpress] = useState('');
+    const [error, setError] = useState(false);
+    const [passIsInvalid, setPassIsInvalid] = useState(false);
+    const [isSubmiting, setIsSubmiting] = useState(false);
 
     const isFormInvalid =
         name.trim() === "" ||
@@ -18,28 +22,51 @@ export default function RegisterPage() {
 
 
     async function handleSubmit(e) {
+
+        setIsSubmiting(true)
+
         e.preventDefault();
 
         const formData = new FormData(e.target);
 
-        const data1 = Object.fromEntries(formData)
+        const dataFormValue = Object.fromEntries(formData)
 
-        if (data1.password !== data1.confirmPassword) {
-            console.log('pasword invalido')//<---------- Insertar notificacion aqui!!!!!!
+        if (dataFormValue.password !== dataFormValue.confirmPassword) {
+            if (passIsInvalid) {
+                setIsSubmiting(false)
+                return
+            }
+            setPassIsInvalid(true);
+            setTimeout(() => [setPassIsInvalid(false), setIsSubmiting(false)], 2000);
             return
         }
 
-        for (const key in data1) {
-            if (typeof data1[key] === "string") {
-                data1[key] = data1[key].trim()
+
+        for (const key in dataFormValue) {
+            if (typeof dataFormValue[key] === "string") {
+                dataFormValue[key] = dataFormValue[key].trim()
             }
         }
 
-        const response = await signUp(data1)
-        if (response.success) {
-            navigate("/");
+
+        try {
+            const response = await signUp(dataFormValue)
+            if (response.success) {
+                navigate("/");
+                return;
+            }
+
+            setError(true);
+
+        } catch {
+            setError(true);
+
+        } finally {
+            setIsSubmiting(false)
         }
     }
+
+
 
     function validateEmail(e) {
         const email = e.target.value.trim();
@@ -47,12 +74,18 @@ export default function RegisterPage() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
-            console.log('email invalido')
+
             return
         }
-        console.log(email)
+    }
 
 
+    if (error) {
+        return <div>
+            <ErrorMessage error={"No se logró la inscripcion"}
+                onTryAgain={() => setError(false)}
+            />
+        </div>
     }
 
     return (
@@ -137,7 +170,7 @@ export default function RegisterPage() {
                         </div>
 
                         <div className="items-center justify-between">
-                            <label htmlFor="empresa" className="block font-medium text-gray-900 text-sm/6">
+                            <label htmlFor="password" className="block font-medium text-gray-900 text-sm/6">
                                 Password
                             </label>
 
@@ -145,27 +178,26 @@ export default function RegisterPage() {
                                 <input id="password" name="password" type="password" required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
-
                         </div>
 
                         <div className="items-center justify-between">
-                            <label htmlFor="empresa" className="block font-medium text-gray-900 text-sm/6">
+                            <label htmlFor="confirmPassword" className="block font-medium text-gray-900 text-sm/6">
                                 Confirmar Password
                             </label>
                             <div className="mt-2">
-                                <input id="confirmPassword" name="confirmPassword" type="confirmPassword" required
+                                <input id="confirmPassword" name="confirmPassword" type="password" required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
-
+                            {passIsInvalid && <div className="my-2 font-light text-center text-red-700 bg-red-200 border-0 rounded">No coinciden los passwords</div>}
                         </div>
                         <div>
                             <button
-                                disabled={isFormInvalid}
+                                disabled={isFormInvalid || isSubmiting}
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
                                 disabled:bg-indigo-300 disabled:houver:bg-indigo-300 disabled:cursor-not-allowed"
                             >
-                                Registrarme
+                                {isSubmiting ? "Registrando..." : "Registrarse"}
                             </button>
                         </div>
                     </form>

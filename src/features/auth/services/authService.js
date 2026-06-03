@@ -1,6 +1,4 @@
-import { data } from 'react-router-dom';
 import { supabase } from '../../../../utils/supabase';
-import { Navigate } from 'react-router-dom';
 
 /**
  * Servicio de Autenticación con Supabase
@@ -28,7 +26,7 @@ export const signUp = async ({ apellidos, email, empresa, nombre, password }) =>
       message: 'Registro exitoso. Por favor verifica tu email.',
     };
   } catch (error) {
-    console.log(error)
+
     return {
       success: false,
       error: error.message,

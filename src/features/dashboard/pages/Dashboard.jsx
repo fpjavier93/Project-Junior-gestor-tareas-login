@@ -2,11 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "../../../components/Card";
 import { Blue, LogOut } from "../../../components/Buttons";
 import { useEffect, useState } from "react";
-import { getUserDataId, handlesignOut } from "../services/DashboardServices";
+import { handlesignOut as handleSignOut } from "../services/DashboardServices";
 import { getCurrentUser } from "../../auth/services";
 import ProgressBarDashboard from "../../../components/ProgressBarDashboard";
 import { getTasks } from "../services/tasksApi";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 function Dashboard() {
 
@@ -14,34 +15,36 @@ function Dashboard() {
     const [userTasks, setuserTasks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [userName, setUserName] = useState("");
+    const [error, setError] = useState(false);
 
     useEffect(() => {
-
-        const handleTasks = async () => {
-            try {
-
-                setLoading(true);
-
-                const currentUser = await getCurrentUser();
-                setUserName(currentUser.user.user_metadata.nombre);
-
-                const getuserTasks = await getTasks();
-                setuserTasks(getuserTasks);
-
-
-
-            } catch (error) {
-
-                console.error("Error cargando dashboard:", error);
-
-            } finally {
-                setLoading(false) //practicar loading visual (luego crear un loading)
-            }
-        }
-
+        setError(false);
         handleTasks()
 
     }, []);
+
+    const handleTasks = async () => {
+
+        try {
+
+            setLoading(true);
+
+            const currentUser = await getCurrentUser();
+            setUserName(currentUser.user.user_metadata.nombre);
+
+            const getuserTasks = await getTasks();
+            setuserTasks(getuserTasks);
+
+
+
+        } catch {
+
+            setError(true);
+
+        } finally {
+            setLoading(false) //practicar loading visual (luego crear un loading)
+        }
+    }
 
     const updateDoneTask = userTasks.filter((t) => t.status == "completed").length;
 
@@ -51,7 +54,11 @@ function Dashboard() {
 
     if (loading) return <LoadingSpinner />
 
-
+    if (error) {
+        return <ErrorMessage error={"Error al cargar la pagina"}
+            onTryAgain={handleTasks}
+            onCancel={() => handleSignOut(navigate)} />
+    }
 
 
     return (
@@ -125,7 +132,7 @@ function Dashboard() {
 
                 <div className="flex justify-center py-10">
                     <LogOut
-                        onclick={() => handlesignOut(navigate)}
+                        onclick={() => handleSignOut(navigate)}
                     />
                 </div>
 

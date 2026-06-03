@@ -13,7 +13,11 @@ function AllTasksPage() {
     const [userTasks, setuserTasks] = useState([]);
     const [select, setSelect] = useState("todas");
     const [searching, setSearching] = useState("");
-    const [error, setError] = useState(false);
+    const [error, setError] = useState({ status: false, type: 0 });
+    const [iseditingID, setIsEditingID] = useState(null);
+    const [isdeletingID, setIsDeletingID] = useState(null);
+
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,14 +28,16 @@ function AllTasksPage() {
 
     const handleUserTask = async () => {
 
+        setError({ status: false, type: 0 })
+
         try {
 
             const getUserTasks = await getTasks();
 
             setuserTasks(getUserTasks);
         }
-        catch (error) {
-            setError(true)
+        catch {
+            setError({ status: true, type: 1 })
         }
         finally {
             setLoading(false);
@@ -46,14 +52,24 @@ function AllTasksPage() {
 
     async function handleisCheked(task) {
 
-        await editTask(task.id, { status: task.status === "completed" ? "pending" : "completed" })
+        try {
 
-        const updatedTasks = await getTasks(select === "todas" ? undefined : select)
+            await editTask(task.id, { status: task.status === "completed" ? "pending" : "completed" })
 
-        setuserTasks(updatedTasks);
+            const updatedTasks = await getTasks(select === "todas" ? undefined : select)
+
+            setuserTasks(updatedTasks);
+
+        } catch {
+            setError({ status: true, type: 3 })
+        }
+
+
     }
 
     async function handleEeraseTask(task_id) {
+
+        setIsDeletingID(task_id)
 
         const result = await Swal.fire({
             title: "¿Eliminar tarea?",
@@ -67,18 +83,29 @@ function AllTasksPage() {
         });
 
         if (!result.isConfirmed) {
+
+            setIsDeletingID(null)
             return;
         }
 
-        await eraseTasks(task_id);
+        try {
 
+            await eraseTasks(task_id);
+            const updateTasks = await getTasks()
+            setuserTasks(updateTasks);
 
-        const updateTasks = await getTasks()
+        } catch {
+            setError({ status: true, type: 4 })
+        } finally {
 
-        setuserTasks(updateTasks);
+            setIsDeletingID(null);
+        }
+
     }
 
     async function handleEditTask(task) {
+
+        setIsEditingID(task.id);
 
         const result = await Swal.fire({
             title: "Editar tarea",
@@ -105,18 +132,25 @@ function AllTasksPage() {
         });
 
         if (result.isDismissed) {
+            setIsEditingID(null)
             return
         }
+
         try {
 
             await editTask(task.id, result.value);
+
             const updatedTask = await getTasks();
 
             setuserTasks(updatedTask);
 
-        } catch (error) {
+        } catch {
 
-            setError("No se pudo cargar el listado de tareas")
+            setError({ status: true, type: 2 })
+
+        } finally {
+
+            setIsEditingID(null)
         }
     }
 
@@ -126,18 +160,28 @@ function AllTasksPage() {
 
         let tasks;
 
-        if (value == "todas") {
-            tasks = await getTasks()
-        }
-        if (value == "pending") {
-            tasks = await getTasks(value)
+        try {
 
-        }
-        if (value == "completed") {
-            tasks = await getTasks(value)
+            if (value == "todas") {
+
+                tasks = await getTasks()
+            }
+            if (value == "pending") {
+
+                tasks = await getTasks(value)
+
+            }
+            if (value == "completed") {
+
+                tasks = await getTasks(value)
+            }
+
+            setuserTasks(tasks);
+        } catch {
+            setError({ status: true, type: 1 })
+            setSelect("todas")
         }
 
-        setuserTasks(tasks);
     }
 
 
@@ -145,20 +189,44 @@ function AllTasksPage() {
         return <LoadingSpinner />
     }
 
-    if (error) {
+    if (error.status == true && error.type == 1) {
         return <ErrorMessage error={"Error al cargar la lista de Tareas"}
             onTryAgain={handleUserTask}
-            onCancel={() => navigate("/dashboard")}
+            onCancel={() => navigate("/dashboard")} />
+    }
+
+    if (error.status == true && error.type == 2) {
+        return <ErrorMessage error={"Error al editar la tarea"}
+            onTryAgain={handleUserTask}
         />
     }
 
+    if (error.status == true && error.type == 3) {
+        return <ErrorMessage error={"Error al completar la tarea"}
+            onTryAgain={handleUserTask}
+        />
+    }
+
+    if (error.status == true && error.type == 4) {
+        return <ErrorMessage error={"Error al eliminar la tarea"}
+            onTryAgain={handleUserTask}
+        />
+    }
+
+
+
     function handleShowTasks() {
 
-        const showTasks = userTasks.map((task) => {
+        if (userTasks.length === 0 && searching.length !== 0) {
+            return showEmptyTasks("No se encontraron tareas")
+        }
+        if (userTasks.length === 0) {
+            return showEmptyTasks("No existen tareas")
+        }
 
+        const showTasks = userTasks.map((task) => {
             return <div
                 key={task.id}>
-
                 <div>
                     <div className="flex flex-col">
                         <div className="flex justify-between px-5 py-4 text-4xl font-bold border-b border-gray-300">
@@ -170,14 +238,16 @@ function AllTasksPage() {
                                         onChange={() => handleisCheked(task)}
                                     />
                                     <div className="relative w-9 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
-                                    <span className="text-sm font-medium select-none ms-3 text-heading">Completada</span>
+                                    <span className={`text-sm font-medium  select-none ms-3 text-heading ${task.status == "pending" ? "text-gray-300" : "text-black font-bold"}`}>Completada</span>
                                 </label>
                                 <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
                                     onClick={() => handleEditTask(task)}
-                                >editar tarea</button>
+                                    disabled={iseditingID === task.id}
+                                >{iseditingID === task.id ? "editando..." : "editar tarea"}</button>
                                 <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
                                     onClick={() => handleEeraseTask(task.id)}
-                                >eliminar tarea</button>
+                                    disabled={isdeletingID === task.id}
+                                >{isdeletingID === task.id ? "eliminando tarea..." : "eliminar tarea"}</button>
                             </div>
                         </div>
                         <div className="px-5 py-4 border-b border-gray-300">
@@ -188,23 +258,44 @@ function AllTasksPage() {
             </div>
 
         });
-
-        return showTasks
+        return showTasks;
     }
 
 
+
+
+    function showEmptyTasks(message) {
+        return (
+            <div>
+                <div className="flex flex-col">
+                    <div className="flex justify-center px-5 py-4 text-4xl font-bold border-b border-gray-300">
+                        <p>{message}</p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     async function handleSearch(value) {
 
-        setSearching(value)
-        let tasks = [];
+        try {
 
-        tasks = await getTasks(select === "todas" ? undefined : select);
+            setSearching(value)
+            let tasks = [];
 
-        const filterTasks = tasks.filter((task) => {
-            return task.title.toLowerCase().includes(value.toLowerCase())
-        })
+            tasks = await getTasks(select === "todas" ? undefined : select);
 
-        setuserTasks(filterTasks)
+            const filterTasks = tasks.filter((task) => {
+                return task.title.toLowerCase().includes(value.toLowerCase())
+            })
+
+            setuserTasks(filterTasks)
+
+        } catch {
+
+            setError({ status: true, type: 1 })
+
+        }
     }
 
 
@@ -220,7 +311,7 @@ function AllTasksPage() {
                 </header>
 
                 <div className="flex justify-between">
-                    <div className="flex">
+                    <div className="flex gap-1">
                         <p className="font-bold">Buscar:</p>
                         <input className="bg-white"
                             value={searching}
@@ -257,5 +348,6 @@ function AllTasksPage() {
         </main>
     )
 }
+
 
 export default AllTasksPage;

@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Blue, White, LogOut, Inicio } from "../../../components/Buttons";
 import getUserID from "../services/CreateTaskServices";
-import { getCurrentUser } from "../../auth/services";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { handlesignOut } from "../services/DashboardServices";
 import { createTask } from "../services/tasksApi";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 
 function CreateTaskPage() {
@@ -12,13 +12,13 @@ function CreateTaskPage() {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState("");
+    const [error, setError] = useState(false)
 
 
 
     async function handleSubmit(e) {
-
-        e.preventDefault();
         setIsSubmitting(true);
+        e.preventDefault();
         setSubmitError("");
 
         const formData = new FormData(e.target);
@@ -35,20 +35,26 @@ function CreateTaskPage() {
             ...dataTask
         };
 
-
         try {
             await createTask(newDataTask);
             e.target.reset()
 
         } catch {
-            setSubmitError("No se pudo crear la tarea. Intentalo de nuevo.");
+
+            setError(true)
 
         } finally {
 
             setIsSubmitting(false);
-
         }
+    }
 
+
+    if (error) {
+        return <ErrorMessage error={"No se pudo crear la tarea"}
+            onTryAgain={() => setError(false)}
+            onCancel={() => navigate("/dashboard")}
+        />
     }
 
 
