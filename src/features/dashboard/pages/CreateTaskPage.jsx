@@ -125,11 +125,6 @@ function CreateTaskPage() {
                     </div>
                 </form>
             </div>
-            <div className="flex justify-center py-10">
-                <LogOut
-                    onclick={() => handlesignOut(navigate)}
-                />
-            </div>
         </div>
     )
 }

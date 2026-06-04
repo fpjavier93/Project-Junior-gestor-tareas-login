@@ -26,7 +26,7 @@ function White({ name, onClick }) {
 
 function LogOut({ onclick }) {
     return (
-        <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
+        <button className="text-sm font-medium text-white hover:underline hover:cursor-pointer"
             onClick={onclick}
         >
             Log-Out

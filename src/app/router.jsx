@@ -6,14 +6,24 @@ import RegisterPage from "../features/auth/pages/RegisterPage";
 import Dashboard from "../features/dashboard/pages/Dashboard";
 import CreateTaskPage from "../features/dashboard/pages/CreateTaskPage"
 import AllTasksPage from "../features/dashboard/pages/AllTasksPage"
+import DashboardLayout from "../layouts/DashboardLayout";
 
 
 export const router = createBrowserRouter([
     { path: "/", element: <LoginPage /> },
     { path: "/register", element: <RegisterPage /> },
 
-    { path: "/dashboard", element: (<ProtectedRoute><Dashboard /></ProtectedRoute>) },
-    { path: "/createTaskPage", element: (<ProtectedRoute><CreateTaskPage /></ProtectedRoute>) },
-    { path: "/allTasksPage", element: (<ProtectedRoute><AllTasksPage /></ProtectedRoute>) },
-
-])
+    {
+        path: "/dashboard",
+        element: (
+            <ProtectedRoute>
+                <DashboardLayout />
+            </ProtectedRoute>
+        ),
+        children: [
+            { index: true, element: <Dashboard /> },
+            { path: "create-task", element: <CreateTaskPage /> },
+            { path: "tasks", element: <AllTasksPage /> },
+        ],
+    },
+]);

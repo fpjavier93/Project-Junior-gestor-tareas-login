@@ -4,7 +4,6 @@ async function getUserID() {
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
-        console.log('Error al recibir datos')
         return;
     }
 

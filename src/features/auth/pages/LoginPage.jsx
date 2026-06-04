@@ -34,7 +34,7 @@ export default function LoginPage() {
       }
     } catch (err) {
       setError("Error inesperado al iniciar sesión");
-      console.error(err);
+
     } finally {
       setLoading(false);
     }

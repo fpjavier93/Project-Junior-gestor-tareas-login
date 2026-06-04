@@ -74,7 +74,7 @@ function Dashboard() {
 
                     <div className="flex items-center gap-2">
                         <Blue
-                            onClick={() => navigate("/createTaskPage")}
+                            onClick={() => navigate("/dashboard/create-task")}
                             name={`+ Nueva Tarea`}
                             type={null}
                         />
@@ -105,7 +105,7 @@ function Dashboard() {
                         </h2>
 
                         <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
-                            onClick={() => navigate("/allTasksPage")}
+                            onClick={() => navigate("/dashboard/tasks")}
                         >Ver todas →</button>
                     </div>
 
@@ -130,11 +130,6 @@ function Dashboard() {
                     }
                 </section>
 
-                <div className="flex justify-center py-10">
-                    <LogOut
-                        onclick={() => handleSignOut(navigate)}
-                    />
-                </div>
 
             </div>
         </main>

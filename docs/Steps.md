@@ -11,36 +11,15 @@ No uses --debug solo en PowerShell; siempre va junto al comando:
 
 npx supabase start --debug 
 
-Prioridad Recomendada
 
---Crear src/lib/apiClient.js e instalar axios.
---Rehacer CRUD de tareas con REST API, no supabase.from().
+Layouts, Drawers, SideMenu, Menu, Rutas anidadas
 
---Crear AuthContext y ProtectedRoute:
+Qué Debes Aprender En Menu
 
-AuthContext guarda el estado global de autenticación.
-AuthProvider envuelve la app.
-useAuth permite leer ese estado.
-ProtectedRoute decide si una página se muestra o redirige.
+Principalmente estos conceptos:
 
-
---Añadir búsqueda por título.
-
-Mejorar loading/error/empty states.
-
-[x] Loading con spinner
-[x] ErrorMessage reutilizable
-[x] Error al cargar AllTasksPage
-[x] Error al editar
-[x] Error al completar
-[x] Error al eliminar
-[x] Error en Dashboard
-[x] Empty state cuando no hay tareas
-[x] Empty state cuando la búsqueda no encuentra nada
-[x] Empty state cuando el filtro no tiene resultados
-[x] Loading/disabled en acciones pequeñas
-
-[x] Edición resuelta por modal en AllTasksPage; no hay ruta/página separada de edición.
-
-[x] README preparado.
-[ ] Deploy.
+Diferencia entre botón normal y link de navegación.
+Cuándo usar Link.
+Cuándo usar NavLink.
+Cómo marcar una ruta como activa.
+Cómo evitar repetir navegación en cada página.
