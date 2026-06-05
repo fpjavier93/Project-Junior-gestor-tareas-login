@@ -72,13 +72,6 @@ function Dashboard() {
                         <h2 className="text-gray-500">Aqui esta el resumen de tus tareas</h2>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <Blue
-                            onClick={() => navigate("/dashboard/create-task")}
-                            name={`+ Nueva Tarea`}
-                            type={null}
-                        />
-                    </div>
                 </header>
 
                 <div className="flex flex-col gap-4">
@@ -98,8 +91,9 @@ function Dashboard() {
 
                 <ProgressBarDashboard progres={progres} />
 
-                <section className="mt-6 overflow-hidden bg-white border border-gray-300 rounded shadow">
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-300">
+                <section className="mt-6 overflow-hidden bg-white rounded shadow">
+
+                    <div className="flex items-center justify-between px-5 py-4 bg-indigo-200">
                         <h2 className="font-semibold text-neutral-900">
                             Tareas Recientes
                         </h2>
@@ -110,12 +104,14 @@ function Dashboard() {
                     </div>
 
 
-                    {userTasks.map(task => {
+                    {userTasks.map((task, index) => {
 
                         return <div key={task.id}>
-                            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-300">
+
+
+                            <div className={`flex items-center justify-between px-5 py-4 ${(index + 1) % 2 ? "bg-indigo-100" : "bg-indigo-200"} `}>
                                 <div className="flex items-center gap-3">
-                                    <span className="w-2 h-2 bg-gray-300 rounded-full"></span>
+                                    <span className="w-2 h-2 bg-indigo-400 rounded-full"></span>
                                     <div>
                                         <h3 className="text-sm font-medium text-neutral-900">{task.title}</h3>
 
@@ -126,7 +122,7 @@ function Dashboard() {
                             </div>
                         </div>
                     }
-                    ).slice(0, 3)
+                    ).slice(0, 6)
                     }
                 </section>
 

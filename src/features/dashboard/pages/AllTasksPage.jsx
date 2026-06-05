@@ -224,12 +224,12 @@ function AllTasksPage() {
             return showEmptyTasks("No existen tareas")
         }
 
-        const showTasks = userTasks.map((task) => {
+        const showTasks = userTasks.map((task, index) => {
             return <div
                 key={task.id}>
                 <div>
                     <div className="flex flex-col">
-                        <div className="flex justify-between px-5 py-4 text-4xl font-bold border-b border-gray-300">
+                        <div className="flex justify-between px-5 py-4 text-4xl font-bold bg-indigo-200 border-b border-gray-300">
                             {task.title}
                             <div className="flex flex-col items-end gap-2">
                                 <label className="inline-flex items-center cursor-pointer">
@@ -238,7 +238,7 @@ function AllTasksPage() {
                                         onChange={() => handleisCheked(task)}
                                     />
                                     <div className="relative w-9 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
-                                    <span className={`text-sm font-medium  select-none ms-3 text-heading ${task.status == "pending" ? "text-gray-300" : "text-black font-bold"}`}>Completada</span>
+                                    <span className={`text-sm font-medium  select-none ms-3 text-heading ${task.status == "pending" ? "text-gray-400" : "text-black font-bold"}`}>Completada</span>
                                 </label>
                                 <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
                                     onClick={() => handleEditTask(task)}
@@ -250,7 +250,7 @@ function AllTasksPage() {
                                 >{isdeletingID === task.id ? "eliminando tarea..." : "eliminar tarea"}</button>
                             </div>
                         </div>
-                        <div className="px-5 py-4 border-b border-gray-300">
+                        <div className="px-5 py-4 bg-indigo-100 border-b border-gray-300">
                             {task.description}
                         </div>
                     </div>
@@ -301,14 +301,7 @@ function AllTasksPage() {
 
     return (
         <main className="allTasskPage">
-            <div className="max-w-4xl px-4 mx-auto">
-                <header className="flex justify-between py-10">
-                    <div>
-                        <h1 className="text-2xl font-bold text-black">Todas tus taeas</h1>
-
-                        <h2 className="text-gray-500">Aqui puedes cambiar el status de tus tareas o eliminarlas</h2>
-                    </div>
-                </header>
+            <div className="max-w-4xl px-4 mx-auto overflow-hidden">
 
                 <div className="flex justify-between">
                     <div className="flex gap-1">
@@ -334,10 +327,6 @@ function AllTasksPage() {
                                 </select>
                             </div>
                         </div>
-
-                        <Inicio
-                            onclick={() => navigate("/Dashboard")}
-                        />
                     </div>
                 </div>
 

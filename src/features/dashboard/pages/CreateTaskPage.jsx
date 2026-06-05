@@ -59,23 +59,9 @@ function CreateTaskPage() {
 
 
     return (
-        <div className="max-w-4xl px-4 mx-auto">
-            <header className="flex justify-between py-10">
-                <div>
-                    <h1 className="text-2xl font-bold text-black">NUEVA TAREA</h1>
+        <div className="max-w-4xl max-h-screen py-1 mx-auto px-auto">
 
-                    <h2 className="text-gray-500">Crea una tarea y define su contenido</h2>
-                </div>
-
-                <div className="flex items-center gap-2">
-                </div>
-            </header>
-            <div className="flex justify-end">
-                <Inicio
-                    onclick={() => navigate("/Dashboard")}
-                />
-            </div>
-            <div className="p-4 my-6 bg-white border border-gray-300 rounded shadow">
+            <div className="p-4 bg-indigo-200 border border-gray-300 rounded shadow my-18">
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
@@ -88,7 +74,7 @@ function CreateTaskPage() {
                                 name="title"
                                 type="title"
                                 required
-                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                             />
                         </div>
                         <div className="py-5">
@@ -101,7 +87,7 @@ function CreateTaskPage() {
                                     name="description"
                                     required
                                     rows={5}
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                             </div>
 
