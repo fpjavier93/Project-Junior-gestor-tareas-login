@@ -7,6 +7,7 @@ async function getUserDataId() {
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
+        throw Error
     }
 
     const userName = data.user.id;

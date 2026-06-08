@@ -44,7 +44,7 @@ export const signIn = async (email, password) => {
     });
 
     if (error) throw error;
-    console.log("data.user", data.user);
+
     return {
       success: true,
       data: data.user,

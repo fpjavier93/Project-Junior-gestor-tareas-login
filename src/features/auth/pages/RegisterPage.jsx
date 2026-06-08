@@ -9,7 +9,7 @@ export default function RegisterPage() {
     const [name, setName] = useState('');
     const [lastName, setlastName] = useState('');
     const [email, setEmail] = useState('');
-    const [empress, setEmpress] = useState('');
+    const [company, setCompany] = useState('');
     const [error, setError] = useState(false);
     const [passIsInvalid, setPassIsInvalid] = useState(false);
     const [isSubmiting, setIsSubmiting] = useState(false);
@@ -18,7 +18,7 @@ export default function RegisterPage() {
         name.trim() === "" ||
         lastName.trim() === "" ||
         email.trim() === "" ||
-        empress.trim() === "";
+        company.trim() === "";
 
 
     async function handleSubmit(e) {
@@ -162,8 +162,8 @@ export default function RegisterPage() {
                             </label>
                             <div className="mt-2">
                                 <input
-                                    onChange={e => setEmpress(e.target.value)}
-                                    value={empress} id="empresa" name="empresa" type="empresa" required
+                                    onChange={e => setCompany(e.target.value)}
+                                    value={company} id="empresa" name="empresa" type="empresa" required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
 
@@ -195,7 +195,7 @@ export default function RegisterPage() {
                                 disabled={isFormInvalid || isSubmiting}
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
-                                disabled:bg-indigo-300 disabled:houver:bg-indigo-300 disabled:cursor-not-allowed"
+                                disabled:bg-indigo-300 disabled:hover:bg-indigo-300 disabled:cursor-not-allowed"
                             >
                                 {isSubmiting ? "Registrando..." : "Registrarse"}
                             </button>

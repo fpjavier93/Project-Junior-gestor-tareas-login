@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
         session,
         user,
         loading,
-        isAuthenticated: Boolean(user),
+        isAuthenticated: Boolean(user), //Boolean pregunta: si dentro de user hay algo devuelve true, si no hay nada, devuelve false,
     };
 
     return (

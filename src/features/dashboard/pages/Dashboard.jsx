@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Card } from "../../../components/Card";
-import { Blue, LogOut } from "../../../components/Buttons";
 import { useEffect, useState } from "react";
 import { handlesignOut as handleSignOut } from "../services/DashboardServices";
 import { getCurrentUser } from "../../auth/services";
 import ProgressBarDashboard from "../../../components/ProgressBarDashboard";
-import { getTasks } from "../services/tasksApi";
+import { getTasks } from "../services/tasksApiServices";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
 

@@ -13,5 +13,4 @@ async function getUserID() {
 
 }
 
-
 export default getUserID;

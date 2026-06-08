@@ -10,6 +10,3 @@ export default function getMenuLinkClassName(isActive) {
     )
 };
 
-function handleDrewer(isDrewer,) {
-
-}

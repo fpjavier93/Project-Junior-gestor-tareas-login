@@ -32,7 +32,8 @@ export default function LoginPage() {
       } else {
         setError(result.error || "Error al iniciar sesión");
       }
-    } catch (err) {
+    } catch {
+
       setError("Error inesperado al iniciar sesión");
 
     } finally {

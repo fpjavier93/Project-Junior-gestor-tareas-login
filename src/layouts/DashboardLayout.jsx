@@ -27,7 +27,7 @@ function DashboardLayout() {
                     <div className="flex py-2">
                         <button
                             type="button"
-                            onClick={handleisDrawerOpen}
+                            onClick={handleToggleDrawer}
                             className="px-3 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700"
                         > {isDrawerOpen ? "Cerrar" : "Menu"}
 
@@ -74,7 +74,7 @@ function DashboardLayout() {
 
     );
 
-    function handleisDrawerOpen() {
+    function handleToggleDrawer() {
         setIsDrawerOpen((currentValue) => !currentValue)
     }
 

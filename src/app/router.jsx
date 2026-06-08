@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from "../features/auth/components/ProtectedRoute";
-
 import LoginPage from "../features/auth/pages/LoginPage";
 import RegisterPage from "../features/auth/pages/RegisterPage";
 import Dashboard from "../features/dashboard/pages/Dashboard";
