@@ -11,7 +11,7 @@ import ErrorMessage from "../../../components/ErrorMessage";
 function Dashboard() {
 
     const navigate = useNavigate();
-    const [userTasks, setuserTasks] = useState([]);
+    const [userTasks, setUserTasks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [userName, setUserName] = useState("");
     const [error, setError] = useState(false);
@@ -31,8 +31,8 @@ function Dashboard() {
             const currentUser = await getCurrentUser();
             setUserName(currentUser.user.user_metadata.nombre);
 
-            const getuserTasks = await getTasks();
-            setuserTasks(getuserTasks);
+            const fetchedTasks = await getTasks();
+            setUserTasks(fetchedTasks);
 
 
 
@@ -45,9 +45,9 @@ function Dashboard() {
         }
     }
 
-    const updateDoneTask = userTasks.filter((t) => t.status == "completed").length;
+    const updateDoneTask = userTasks.filter((t) => t.status === "completed").length;
 
-    const progres = userTasks.length > 0 ? (updateDoneTask * 100) / userTasks.length : 0;
+    const progress = userTasks.length > 0 ? (updateDoneTask * 100) / userTasks.length : 0;
 
 
 
@@ -88,7 +88,7 @@ function Dashboard() {
                     />
                 </div>
 
-                <ProgressBarDashboard progres={progres} />
+                <ProgressBarDashboard progress={progress} />
 
                 <section className="mt-6 overflow-hidden bg-white rounded shadow">
 
@@ -117,7 +117,7 @@ function Dashboard() {
                                         <p className="text-sm text-gray-500">{task.description}</p>
                                     </div>
                                 </div>
-                                {task.status == "pending" ? <p className="text-sm text-red-400 rounded-full">Pendiente</p> : <p className="text-sm text-green-500">Completado</p>}
+                                {task.status === "pending" ? <p className="text-sm text-red-400 rounded-full">Pendiente</p> : <p className="text-sm text-green-500">Completado</p>}
                             </div>
                         </div>
                     }

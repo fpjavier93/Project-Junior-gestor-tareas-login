@@ -1,7 +1,6 @@
-import Swal from "sweetalert2";
 import { useState } from "react";
-import { eraseTasks, getTasks } from "../services/tasksApiServices";
-import { openEditEraseTaskModal } from "../services/taskModalServices";
+import { deleteTask, getTasks } from "../services/tasksApiServices";
+import { openDeleteTaskModal } from "../services/taskModalServices";
 
 export function useEraseTasks({ setError, setUserTasks }) {
 
@@ -11,7 +10,7 @@ export function useEraseTasks({ setError, setUserTasks }) {
 
         setIsDeletingID(task_id)
 
-        const result = await openEditEraseTaskModal()
+        const result = await openDeleteTaskModal()
 
         if (result.dismiss) {
             return
@@ -21,7 +20,7 @@ export function useEraseTasks({ setError, setUserTasks }) {
 
         try {
 
-            await eraseTasks(task_id);
+            await deleteTask(task_id);
             const updateTasks = await getTasks()
             setUserTasks(updateTasks);
 

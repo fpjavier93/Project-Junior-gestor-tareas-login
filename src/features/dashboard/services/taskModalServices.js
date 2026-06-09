@@ -1,15 +1,12 @@
 import Swal from "sweetalert2";
-import { useState } from "react";
-
 
 export async function openEditTaskModal(task) {
-
     const result = await Swal.fire({
         title: "Editar tarea",
         html: `
-                    <input id="task-title" class="swal2-input" placeholder="Título">
-                    <textarea id="task-description" class="swal2-textarea" placeholder="Descripción"></textarea>
-                `,
+            <input id="task-title" class="swal2-input" placeholder="Titulo">
+            <textarea id="task-description" class="swal2-textarea" placeholder="Descripcion"></textarea>
+        `,
         showCancelButton: true,
         confirmButtonText: "Guardar",
         cancelButtonText: "Cancelar",
@@ -32,13 +29,10 @@ export async function openEditTaskModal(task) {
             const descriptionInput = document.getElementById("task-description");
 
             const title = titleInput instanceof HTMLInputElement ? titleInput.value : "";
-
             const description = descriptionInput instanceof HTMLTextAreaElement ? descriptionInput.value : "";
 
-
-
             if (!title) {
-                Swal.showValidationMessage("EL titulo no puede esta vacio");
+                Swal.showValidationMessage("El titulo no puede estar vacio");
                 return;
             }
 
@@ -49,15 +43,13 @@ export async function openEditTaskModal(task) {
     return result.isConfirmed ? result.value : null;
 }
 
-
-export async function openEditEraseTaskModal() {
-
+export async function openDeleteTaskModal() {
     const result = await Swal.fire({
-        title: "¿Eliminar tarea?",
-        text: "Esta acción no se puede deshacer.",
+        title: "Eliminar tarea?",
+        text: "Esta accion no se puede deshacer.",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Sí, eliminar",
+        confirmButtonText: "Si, eliminar",
         cancelButtonText: "Cancelar",
         confirmButtonColor: "#ef4444",
         cancelButtonColor: "#6b7280",
@@ -65,9 +57,3 @@ export async function openEditEraseTaskModal() {
 
     return result;
 }
-
-
-
-
-
-

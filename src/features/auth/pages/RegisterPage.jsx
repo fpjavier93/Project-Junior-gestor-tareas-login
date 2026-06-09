@@ -12,7 +12,7 @@ export default function RegisterPage() {
     const [company, setCompany] = useState('');
     const [error, setError] = useState(false);
     const [passIsInvalid, setPassIsInvalid] = useState(false);
-    const [isSubmiting, setIsSubmiting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const isFormInvalid =
         name.trim() === "" ||
@@ -23,7 +23,7 @@ export default function RegisterPage() {
 
     async function handleSubmit(e) {
 
-        setIsSubmiting(true)
+        setIsSubmitting(true)
 
         e.preventDefault();
 
@@ -33,11 +33,11 @@ export default function RegisterPage() {
 
         if (dataFormValue.password !== dataFormValue.confirmPassword) {
             if (passIsInvalid) {
-                setIsSubmiting(false)
+                setIsSubmitting(false)
                 return
             }
             setPassIsInvalid(true);
-            setTimeout(() => [setPassIsInvalid(false), setIsSubmiting(false)], 2000);
+            setTimeout(() => [setPassIsInvalid(false), setIsSubmitting(false)], 2000);
             return
         }
 
@@ -62,7 +62,7 @@ export default function RegisterPage() {
             setError(true);
 
         } finally {
-            setIsSubmiting(false)
+            setIsSubmitting(false)
         }
     }
 
@@ -82,7 +82,7 @@ export default function RegisterPage() {
 
     if (error) {
         return <div>
-            <ErrorMessage error={"No se logró la inscripcion"}
+            <ErrorMessage error={"No se logro la inscripcion"}
                 onTryAgain={() => setError(false)}
             />
         </div>
@@ -192,23 +192,23 @@ export default function RegisterPage() {
                         </div>
                         <div>
                             <button
-                                disabled={isFormInvalid || isSubmiting}
+                                disabled={isFormInvalid || isSubmitting}
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
                                 disabled:bg-indigo-300 disabled:hover:bg-indigo-300 disabled:cursor-not-allowed"
                             >
-                                {isSubmiting ? "Registrando..." : "Registrarse"}
+                                {isSubmitting ? "Registrando..." : "Registrarse"}
                             </button>
                         </div>
                     </form>
 
                     <p className="mt-10 text-center text-gray-500 text-sm/6">
-                        Ya tienes suario?{' '}
+                        Ya tienes usuario?{' '}
                         <Link
                             to="/"
                             className="font-semibold text-indigo-600 hover:text-indigo-500"
                         >
-                            Entra Aquí!
+                            Entra Aqui!
                         </Link>
                     </p>
                 </div>

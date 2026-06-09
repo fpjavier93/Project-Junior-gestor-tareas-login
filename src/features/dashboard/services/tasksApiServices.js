@@ -5,7 +5,7 @@ async function getAccessToken() {
     const result = await getSession();
 
     if (!result.success) {
-        throw new Error(result.error || "No se pudo obtener la sesión");
+        throw new Error(result.error || "No se pudo obtener la sesion");
     }
 
     const accessToken = result.session?.access_token;
@@ -23,20 +23,17 @@ async function getTasks(status, title) {
     const params = {
         select: "*",
         order: "created_at.desc",
-
-    }
+    };
 
     if (status) {
-        params.status = `eq.${status}`
+        params.status = `eq.${status}`;
     }
 
     if (title) {
         params.title = `ilike.%${title}%`;
     }
 
-
     const response = await apiClient.get("/tasks", {
-
         params,
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -54,7 +51,7 @@ async function createTask(task) {
             Authorization: `Bearer ${accessToken}`,
             Prefer: "return=representation",
         },
-    })
+    });
 
     return response.data[0];
 }
@@ -62,29 +59,30 @@ async function createTask(task) {
 async function editTask(id, update) {
     const accessToken = await getAccessToken();
 
-    const response = await apiClient.patch(`/tasks?id=eq.${id}`, update, {
-
+    const response = await apiClient.patch("/tasks", update, {
+        params: {
+            id: `eq.${id}`,
+        },
         headers: {
             Authorization: `Bearer ${accessToken}`,
             Prefer: "return=representation",
         },
-
     });
+
     return response.data[0];
 }
 
+async function deleteTask(id) {
+    const accessToken = await getAccessToken();
 
-async function eraseTasks(taskid) {
-
-    const access_token = await getAccessToken();
-
-    await apiClient.delete(`/tasks?id=eq.${taskid}`, {
-
+    await apiClient.delete("/tasks", {
+        params: {
+            id: `eq.${id}`,
+        },
         headers: {
-            Authorization: `Bearer ${access_token}`,
-        }
+            Authorization: `Bearer ${accessToken}`,
+        },
     });
 }
 
-
-export { getTasks, createTask, editTask, eraseTasks };
+export { getTasks, createTask, editTask, deleteTask };

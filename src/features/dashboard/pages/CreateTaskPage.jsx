@@ -24,7 +24,7 @@ function CreateTaskPage() {
 
         const dataTask = Object.fromEntries([...formData.entries()].map(([key, value]) => {
             return [key,
-                typeof value == "string" ? value.trim() : value
+                typeof value === "string" ? value.trim() : value
             ]
 
         }))
