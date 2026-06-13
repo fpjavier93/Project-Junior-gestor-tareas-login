@@ -7,6 +7,7 @@ import ProgressBarDashboard from "../../../components/ProgressBarDashboard";
 import { getTasks } from "../services/tasksApiServices";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
+import { RisentltyTask } from "../components/TaskCardDashboard";
 
 function Dashboard() {
 
@@ -92,7 +93,7 @@ function Dashboard() {
 
                 <section className="mt-6 overflow-hidden bg-white rounded shadow">
 
-                    <div className="flex items-center justify-between px-5 py-4 bg-indigo-200">
+                    <div className="flex items-center justify-between px-5 py-4 bg-indigo-300">
                         <h2 className="font-semibold text-neutral-900">
                             Tareas Recientes
                         </h2>
@@ -105,21 +106,12 @@ function Dashboard() {
 
                     {userTasks.map((task, index) => {
 
-                        return <div key={task.id}>
+                        return <RisentltyTask
+                            key={task.id}
+                            task={task}
+                            index={index}
+                        />
 
-
-                            <div className={`flex items-center justify-between px-5 py-4 ${(index + 1) % 2 ? "bg-indigo-100" : "bg-indigo-200"} `}>
-                                <div className="flex items-center gap-3">
-                                    <span className="w-2 h-2 bg-indigo-400 rounded-full"></span>
-                                    <div>
-                                        <h3 className="text-sm font-medium text-neutral-900">{task.title}</h3>
-
-                                        <p className="text-sm text-gray-500">{task.description}</p>
-                                    </div>
-                                </div>
-                                {task.status === "pending" ? <p className="text-sm text-red-400 rounded-full">Pendiente</p> : <p className="text-sm text-green-500">Completado</p>}
-                            </div>
-                        </div>
                     }
                     ).slice(0, 6)
                     }

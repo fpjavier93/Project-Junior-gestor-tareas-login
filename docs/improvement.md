@@ -1,161 +1,157 @@
 
+## Plan Actual De Mejora Y Aprendizaje
 
-Tu proyecto está en nivel Junior en formación / Junior inicial, con partes que ya apuntan a Junior sólido, pero todavía no está en nivel Mid.
+### Decision actual
 
-Como proyecto de aprendizaje está bien encaminado. Como proyecto para mostrar en portfolio o entrevista, todavía necesita limpieza profesional antes de que comunique “este candidato está por encima del Junior promedio”.
+Por ahora no conviene hacer deploy como prioridad principal. Primero conviene seguir haciendo crecer la app con features coherentes y usar cada feature para aprender conceptos nuevos de React.
 
-Le daría aproximadamente:
+El deploy, README final, screenshots y usuario demo quedan para un hito posterior, cuando la app tenga mas valor como producto y no sea solo un CRUD de tareas.
 
-Funcionalidad: 7/10
-Arquitectura React: 5.5/10
-Calidad de código: 4.5/10
-Backend/Supabase/RLS: 7/10
-UX/UI: 5/10
-Testing: 0/10
-Preparación profesional: 4.5/10
-Resultado global: 5.5/10 aprox.
+### Objetivo del proyecto
 
-Lo Bueno
+Convertir el gestor de tareas en una app de productividad personal.
 
-Tienes una app real, no solo una pantalla decorativa. Incluye login, registro, rutas protegidas, dashboard, CRUD de tareas, filtros, búsqueda, loading, errores, Supabase Auth, REST API y RLS.
+La app puede crecer con modulos relacionados:
 
-La migración de Supabase está bastante bien para tu nivel: usa UUID, FK hacia auth.users, índices, trigger de updated_at y Row Level Security. Eso suma mucho.
+- Tareas.
+- Prioridades.
+- Fechas limite.
+- Categorias o etiquetas.
+- Proyectos.
+- Detalle de tarea.
+- Estadisticas.
+- Perfil/configuracion.
 
-También separaste por carpetas tipo:
+La regla es no agregar features random. Cada feature debe mejorar la idea central de productividad.
 
-features/auth
-features/dashboard
-services
-context
-layouts
-components
-Eso ya muestra intención de arquitectura.
+### Orden recomendado de features
 
-Lo Que Te Baja Nivel
+1. Prioridad de tareas.
+   - Nueva columna en Supabase: `priority`.
+   - Valores posibles: `low`, `medium`, `high`.
+   - Mostrar prioridad en cada tarea.
+   - Permitir crear/editar prioridad.
+   - Filtrar por prioridad mas adelante.
 
-npm run build pasa, pero npm run lint falla.
+2. Fecha limite.
+   - Nueva columna en Supabase: `due_date`.
+   - Usar input de fecha.
+   - Mostrar si una tarea vence pronto o esta vencida.
+   - Practicar manejo de fechas en JavaScript.
 
-Hay 1 error y 11 warnings. En una empresa, un proyecto pequeño con lint fallando se ve poco profesional.
+3. Detalle de tarea.
+   - Ruta dinamica: `/dashboard/tasks/:taskId`.
+   - Usar `useParams`.
+   - Cargar una tarea por id.
+   - Separar vista de lista y vista de detalle.
 
-Problemas concretos que vi:
+4. Categorias o etiquetas.
+   - Permitir clasificar tareas por tipo.
+   - Ejemplos: trabajo, estudio, personal.
+   - Practicar filtros multiples.
 
-DashboardServices.js tiene una función con bloque vacío.
-Hay imports sin usar.
-Hay console.log en producción.
-Hay nombres mal escritos: handleisCheked, handleEeraseTask, isSubmiting, houver.
-Usas varias comparaciones con == en vez de ===.
-App.jsx queda prácticamente muerto porque usas RouterProvider desde main.jsx.
-En router.jsx importas AuthProvider pero no lo usas.
-AllTasksPage.jsx tiene demasiada lógica junta: fetching, filtros, búsqueda, edición, eliminación, renderizado y errores.
-Hay textos con encoding roto: sesiÃ³n, AquÃ­, Â¿Eliminar tarea?.
-No hay tests.
-No hay deploy.
-No hay validación fuerte de formularios.
-La búsqueda arma una URL con el texto del usuario sin encodeURIComponent.
-En SweetAlert usas html interpolando task.title y task.description; eso puede abrir riesgo de inyección/XSS si el contenido viene del usuario.
-Nivel Según Criterio De Empresa
+5. Proyectos.
+   - Crear una tabla `projects`.
+   - Relacionar tareas con proyectos.
+   - Practicar relaciones entre tablas y rutas dinamicas.
 
-Un Junior normalmente puede:
+6. Formularios profesionales.
+   - Introducir React Hook Form.
+   - Introducir Zod.
+   - Mejorar login, registro y creacion/edicion de tareas.
 
-Crear componentes simples.
-Usar estado, props, eventos y formularios.
-Consumir APIs.
-Entender rutas.
-Leer errores.
-Hacer CRUD básico.
-Trabajar con ayuda.
-Tú ya estás entrando ahí.
+7. Testing.
+   - Introducir Vitest.
+   - Introducir React Testing Library.
+   - Testear componentes principales, hooks y servicios.
 
-Un Junior fuerte además:
+8. Portfolio.
+   - Deploy en Vercel.
+   - README con URL real.
+   - Screenshots.
+   - Usuario demo o instrucciones claras.
+   - Explicacion tecnica de RLS, REST API, Auth y estructura.
 
-Limpia lint y warnings.
-Nombra bien variables y funciones.
-Divide componentes grandes.
-Maneja errores de forma consistente.
-Usa ===.
-No deja logs ni código muerto.
-Entiende seguridad básica.
-Tiene README, deploy y algunas pruebas.
-Puede explicar sus decisiones.
-Ese debería ser tu objetivo inmediato.
+### Roadmap De React Aplicado Al Proyecto
 
-Un Mid normalmente:
+Cada feature nueva debe traer un concepto nuevo del roadmap. La idea no es aprender temas sueltos, sino aplicarlos dentro de una app real.
 
-Diseña estructura mantenible sin que se le diga todo.
-Anticipa errores de sesión, permisos, estados vacíos, race conditions.
-Refactoriza componentes grandes en hooks/componentes.
-Escribe tests útiles.
-Hace reviews de código.
-Piensa en escalabilidad, performance, UX y seguridad.
-Puede tomar una feature de punta a punta con poca supervisión.
-Tu proyecto todavía no demuestra eso de forma consistente.
+#### Conceptos ya practicados
 
-Un Senior:
+- JSX.
+- Componentes funcionales.
+- Props.
+- Estado con `useState`.
+- Efectos con `useEffect`.
+- Renderizado condicional.
+- Listas y keys.
+- Eventos.
+- React Router.
+- Context con `AuthContext`.
+- Custom hooks: `useTasks`, `useEditTasks`, `useEraseTasks`.
+- API calls con Axios.
+- Separacion por features.
+- Servicios para API.
+- Componentes presentacionales: `TaskCard`, `TaskSearch`, `TaskFilters`, `TaskEmptyState`.
 
-Define arquitectura.
-Reduce riesgos técnicos.
-Decide tradeoffs.
-Guía a otros.
-Diseña sistemas mantenibles.
-Detecta problemas antes de que aparezcan.
-No solo programa: toma decisiones de producto, negocio, seguridad y equipo.
-No estás cerca de Senior todavía, y eso es normal. Pero puedes aprender prácticas de Senior desde ahora.
+#### Conceptos a practicar pronto
 
-Mi Diagnóstico Directo
+- Mejor composicion de componentes.
+- Custom hooks con API mas limpia.
+- Rutas dinamicas con `useParams`.
+- Formularios con React Hook Form.
+- Validacion con Zod.
+- Testing con Vitest y React Testing Library.
+- Manejo mas avanzado de errores.
+- Mejoras de UX en loading, empty states y validaciones.
 
-Tu lógica de programación está creciendo. Se nota que estás entendiendo React, estado, eventos, servicios y autenticación.
+#### Conceptos que no conviene priorizar todavia
 
-Pero tu código todavía se ve como código de alguien que está resolviendo problemas “hasta que funciona”, no todavía como alguien que entrega software pulido.
+- Redux.
+- Zustand.
+- Next.js.
+- GraphQL.
+- Framer Motion.
+- Cypress.
+- React Native.
 
-Eso no es malo. Es exactamente la transición de estudiante a Junior.
+No son malos, pero ahora distraen. Primero conviene dominar componentes, estado, hooks, rutas, formularios, API y validacion.
 
-Qué Haría Para Subirte De Nivel Rápido
+### Regla Para Cada Feature Nueva
 
-Primero dejar el proyecto limpio:
+Antes de implementar una feature nueva, definir:
 
-arreglar npm run lint
-borrar logs
-quitar imports muertos
-corregir nombres
-cambiar == por ===
-arreglar encoding de textos
+1. Que problema de la app resuelve.
+2. Que cambio necesita en base de datos.
+3. Que cambio necesita en servicios/API.
+4. Que componentes nuevos necesita.
+5. Que hooks o logica nueva necesita.
+6. Que concepto del roadmap se va a practicar.
+7. Como se va a probar manualmente.
 
-Después refactorizar AllTasksPage.jsx: <--------------------------------------->
-Separar componentes.
-Separar lógica de tareas.
-Crear una estructura más mantenible.
+Ejemplo con prioridad de tareas:
 
-separar TaskCard
-separar TaskFilters
-separar TaskSearch
-crear un hook tipo useTasks
-Mejorar seguridad:
+- Problema: el usuario necesita distinguir tareas importantes de tareas normales.
+- Base de datos: agregar columna `priority`.
+- API: enviar y recibir `priority` en create/edit/get.
+- Componentes: mostrar prioridad en `TaskCard`; agregar select en formulario.
+- Hooks: actualizar flujo de crear/editar/listar tareas.
+- Roadmap: forms, controlled inputs, props, conditional rendering, API calls.
+- Prueba manual: crear tarea con prioridad alta, editarla, verla en lista y confirmar que persiste al recargar.
 
-usar encodeURIComponent en búsqueda
-no interpolar HTML crudo en SweetAlert
-validar sesión antes de leer result.session.access_token
-Profesionalizar portfolio:
+### Proximo paso recomendado
 
-deploy en Vercel
-README con URL real
-screenshots
-usuario demo o instrucciones claras
-explicación técnica de RLS y REST API
-Agregar tests mínimos:
+Implementar `priority` en tareas.
 
-test de servicios con mocks
-test de componentes principales
-test de rutas protegidas
-Conclusión
+Esta feature es buena porque es pequena, pero toca varias partes reales del stack:
 
-Hoy tu proyecto sirve para decir: “Estoy aprendiendo React y ya puedo construir una app CRUD con autenticación y backend real”.
+- Supabase migration.
+- Formulario de creacion.
+- Edicion de tarea.
+- Servicio API.
+- Render en `TaskCard`.
+- Logica de UI.
+- Posible filtro futuro.
 
-Todavía no sirve para decir: “Estoy por encima del Junior promedio”.
-
-Pero si limpias lint, refactorizas la pantalla grande, corriges seguridad básica, agregas deploy y pruebas mínimas, este mismo proyecto puede convertirse en un portfolio de Junior fuerte, que es exactamente la categoría que deberías buscar.
-
-
-
-
-
+Es una buena feature para practicar crecimiento controlado del proyecto.
 

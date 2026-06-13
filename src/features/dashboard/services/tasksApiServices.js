@@ -17,7 +17,8 @@ async function getAccessToken() {
     return accessToken;
 }
 
-async function getTasks(status, title) {
+async function getTasks(status, title, priority) {
+
     const accessToken = await getAccessToken();
 
     const params = {
@@ -31,6 +32,10 @@ async function getTasks(status, title) {
 
     if (title) {
         params.title = `ilike.%${title}%`;
+    }
+
+    if (priority) {
+        params.priority = `eq.${priority}`;
     }
 
     const response = await apiClient.get("/tasks", {

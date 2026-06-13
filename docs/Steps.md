@@ -28,3 +28,6 @@ Cómo evitar repetir navegación en cada página.
 
 max-w-max  “El ancho máximo será el tamaño del contenido”
 shrink-0   “No reduzcas mi ancho aunque el contenido del lado derecho sea grande”.
+
+
+investigar sobre dialog

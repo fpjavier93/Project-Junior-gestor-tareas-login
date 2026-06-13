@@ -10,17 +10,23 @@ import { TaskCard } from "../components/TaskCard";
 import { TaskFilters } from "../components/TaskFilters";
 import { TaskSearch } from "../components/TaskSearch";
 import { TaskEmptyState } from "../components/TaskEmptyState";
-
-
+import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
+import { TaskFilterPerPriority } from "../components/TaskFilterPerPriority";
 
 function AllTasksPage() {
 
-
-    const { userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch } = useTasks();
+    const { userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, selectPriority, setIsCheckedPriotity, handleSelectPriority } = useTasks();
     const { isDeletingID, handleEraseTask } = useEraseTasks({ setUserTasks, setError });
     const { isEditingID, handleEditTask } = useEditTasks({ setUserTasks, setError });
 
     const navigate = useNavigate();
+
+    const errorMessages = {
+        [TASK_ERROR_TYPES.LOAD]: "Error al cargar la lista de Tareas",
+        [TASK_ERROR_TYPES.EDIT]: "Error al editar la tarea",
+        [TASK_ERROR_TYPES.UPDATE_STATUS]: "Error al completar la tarea",
+        [TASK_ERROR_TYPES.DELETE]: "Error al eliminar la tarea",
+    };
 
     useEffect(() => {
 
@@ -33,34 +39,19 @@ function AllTasksPage() {
         return <LoadingSpinner />
     }
 
-    if (error.status === true && error.type === 1) {
-        return <ErrorMessage error={"Error al cargar la lista de Tareas"}
+    if (error.status) {
+        return <ErrorMessage
+            error={errorMessages[error.type] || "Ocurrio un error inesperado"}
             onTryAgain={loadTasks}
-            onCancel={() => navigate("/dashboard")} />
+            onCancel={error.type === TASK_ERROR_TYPES.LOAD ? () => navigate("/dashboard") : undefined} />
     }
 
-    if (error.status === true && error.type === 2) {
-        return <ErrorMessage error={"Error al editar la tarea"}
-            onTryAgain={loadTasks}
-        />
-    }
 
-    if (error.status === true && error.type === 3) {
-        return <ErrorMessage error={"Error al completar la tarea"}
-            onTryAgain={loadTasks}
-        />
-    }
+    const taskCards = userTasks.map((task) => {
 
-    if (error.status === true && error.type === 4) {
-        return <ErrorMessage error={"Error al eliminar la tarea"}
-            onTryAgain={loadTasks}
-        />
-    }
-
-    const showTasks = userTasks.map((task) => {
-
-        return (<div key={task.id}>
+        return (
             <TaskCard
+                key={task.id}
                 task={task}
                 select={select}
                 isEditing={isEditingID === task.id}
@@ -69,11 +60,10 @@ function AllTasksPage() {
                 onToggleStatus={() => handleTaskStatusChange(task, select)}
                 onEdit={() => handleEditTask(task)}
                 onDelete={() => handleEraseTask(task.id)} />
-        </div>)
+        )
     });
 
-
-    function handleShowTasks() {
+    function renderTaskListContent() {
         if (userTasks.length === 0 && searching.length !== 0) {
             return <TaskEmptyState message={"No se encontraron tareas"} />;
         }
@@ -81,17 +71,22 @@ function AllTasksPage() {
             return <TaskEmptyState message={"No existen tareas"} />
         }
 
-        return showTasks;
+        return taskCards;
     }
 
     return (
         <main className="allTaskPage">
-            <div className="max-w-4xl px-4 mx-auto overflow-hidden">
+            <div className="max-w-4xl px-4 mx-auto my-2 overflow-hidden">
                 <div className="flex justify-between">
 
                     <TaskSearch
                         onSearch={handleSearch}
                         searching={searching}
+                    />
+
+                    <TaskFilterPerPriority
+                        onPriorityChange={handleSelectPriority}
+                        onSelectedPriority={selectPriority}
                     />
 
                     <TaskFilters
@@ -101,7 +96,7 @@ function AllTasksPage() {
                 </div>
 
                 <section className="mt-6 overflow-hidden bg-white border border-gray-300 rounded shadow">
-                    {handleShowTasks()}
+                    {renderTaskListContent()}
                 </section>
             </div>
         </main >

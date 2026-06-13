@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { editTask, getTasks } from "../services/tasksApiServices";
-
-
+import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 
 export function useTasks() {
 
@@ -10,6 +9,13 @@ export function useTasks() {
     const [loading, setLoading] = useState(true);
     const [select, setSelect] = useState("todas");
     const [searching, setSearching] = useState("");
+    const [isCheckedPriotity, setIsCheckedPriotity] = useState("");
+    const [selectPriority, setSelectPriority] = useState("");
+
+    function getStatusFilter(status) {
+        return status === "todas" ? undefined : status;
+
+    }
 
     async function handleTaskStatusChange(task, select) {
 
@@ -18,12 +24,12 @@ export function useTasks() {
             await editTask(task.id, { status: nextStatus });
 
 
-            const updatedUserTasks = await getTasks(select === "todas" ? undefined : select)
+            const updatedUserTasks = await getTasks(getStatusFilter(select))
 
             setUserTasks(updatedUserTasks);
         } catch {
 
-            setError({ status: true, type: 3 })
+            setError({ status: true, type: TASK_ERROR_TYPES.UPDATE_STATUS })
         }
     }
 
@@ -39,7 +45,7 @@ export function useTasks() {
         }
         catch {
 
-            setError({ status: true, type: 1 })
+            setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
         }
         finally {
             setLoading(false);
@@ -50,27 +56,15 @@ export function useTasks() {
 
         setSelect(value);
 
-        let tasks;
-
         try {
 
-            if (value === "todas") {
+            const task = await getTasks(getStatusFilter(value), searching, selectPriority);
 
-                tasks = await getTasks()
-            }
-            if (value === "pending") {
+            setUserTasks(task);
 
-                tasks = await getTasks(value)
 
-            }
-            if (value === "completed") {
-
-                tasks = await getTasks(value)
-            }
-
-            setUserTasks(tasks);
         } catch {
-            setError({ status: true, type: 1 })
+            setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
             setSelect("todas")
         }
     }
@@ -78,23 +72,54 @@ export function useTasks() {
     async function handleSearch(value) {
 
         try {
-            setSearching(value)
-            let tasks = [];
 
-            tasks = await getTasks(select === "todas" ? undefined : select, value);
+            setSearching(value)
+
+
+            const tasks = await getTasks(getStatusFilter(select), value, selectPriority);
 
             setUserTasks(tasks)
 
         } catch {
 
-            setError({ status: true, type: 1 })
+            setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
 
         }
     }
 
 
+    function handleIsChecked(priority) {
+
+        return setIsCheckedPriotity(priority)
+
+    };
+
+
+    async function handleSelectPriority(value) {
+
+
+
+        try {
+
+            setSelectPriority(value);
+
+            const priorityTask = await getTasks(getStatusFilter(select), searching, value)
+            console.log((priorityTask));
+
+            setUserTasks(priorityTask);
+
+        } catch {
+
+            setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
+            setIsCheckedPriotity("")
+        }
+
+    }
+
+
+
     return {
-        userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, setLoading, handleSelect, select, setSelect, searching, setSearching, handleSearch
+        userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, handleIsChecked, isCheckedPriotity, selectPriority, setIsCheckedPriotity, handleSelectPriority
     };
 
 };

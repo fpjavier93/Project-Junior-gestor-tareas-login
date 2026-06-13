@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getTasks, editTask } from "../services/tasksApiServices";
 import { openEditTaskModal } from "../services/taskModalServices";
+import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 
 
 export function useEditTasks({ setError, setUserTasks }) {
@@ -29,7 +30,7 @@ export function useEditTasks({ setError, setUserTasks }) {
 
         } catch {
 
-            setError({ status: true, type: 2 })
+            setError({ status: true, type: TASK_ERROR_TYPES.EDIT })
 
         } finally {
 
@@ -37,6 +38,6 @@ export function useEditTasks({ setError, setUserTasks }) {
         }
     }
 
-    return { isEditingID, setIsEditingID, handleEditTask };
+    return { handleEditTask };
 
 }

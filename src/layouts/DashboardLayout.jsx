@@ -49,6 +49,7 @@ function DashboardLayout() {
                     <aside className={`${isDrawerOpen ? "w-64 bg-indigo-500" : "w-0"} overflow-hidden transition-all duration-600 shrink-0`}>
                         {isDrawerOpen && (
                             <nav className="flex flex-col gap-2 px-4 py-6 bg-indigo-500">
+
                                 {linkList.map((link) =>
                                 (
                                     <NavLink
@@ -60,7 +61,6 @@ function DashboardLayout() {
                                 )
                                 )}
                             </nav>
-
                         )}
                     </aside>
 
@@ -77,10 +77,6 @@ function DashboardLayout() {
     function handleToggleDrawer() {
         setIsDrawerOpen((currentValue) => !currentValue)
     }
-
-
-
-
 }
 
 export default DashboardLayout;
