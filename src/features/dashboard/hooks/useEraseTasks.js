@@ -9,6 +9,7 @@ export function useEraseTasks({ setError, setUserTasks }) {
 
     async function handleEraseTask(task_id) {
 
+
         setIsDeletingID(task_id)
 
         const result = await openDeleteTaskModal()
@@ -20,7 +21,6 @@ export function useEraseTasks({ setError, setUserTasks }) {
         setIsDeletingID(null)
 
         try {
-
             await deleteTask(task_id);
             const updateTasks = await getTasks()
             setUserTasks(updateTasks);

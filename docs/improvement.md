@@ -30,7 +30,7 @@ La regla es no agregar features random. Cada feature debe mejorar la idea centra
    - Nueva columna en Supabase: `priority`.
    - Valores posibles: `low`, `medium`, `high`.
    - Mostrar prioridad en cada tarea.
-   - Permitir crear/editar prioridad.
+   - Permitir crear/editar prioridad. ************** falta **************
    - Filtrar por prioridad mas adelante.
 
 2. Fecha limite.

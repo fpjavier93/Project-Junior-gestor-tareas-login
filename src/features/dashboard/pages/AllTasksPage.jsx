@@ -12,12 +12,16 @@ import { TaskSearch } from "../components/TaskSearch";
 import { TaskEmptyState } from "../components/TaskEmptyState";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import { TaskFilterPerPriority } from "../components/TaskFilterPerPriority";
+import { EditTaskDialog } from "../components/EditTaskDialog";
+import { editTask } from "../services/tasksApiServices";
+
 
 function AllTasksPage() {
 
-    const { userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, selectPriority, setIsCheckedPriotity, handleSelectPriority } = useTasks();
+    const { userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, taskPriorityFilter, handleTaskPriorityFilterChange } = useTasks();
     const { isDeletingID, handleEraseTask } = useEraseTasks({ setUserTasks, setError });
-    const { isEditingID, handleEditTask } = useEditTasks({ setUserTasks, setError });
+    const { taskToEdit, setTaskToEdit, openEditDialog, isEditDialogOpen, closeEditDialog, onSave } = useEditTasks({ setUserTasks, setError });
+
 
     const navigate = useNavigate();
 
@@ -54,11 +58,11 @@ function AllTasksPage() {
                 key={task.id}
                 task={task}
                 select={select}
-                isEditing={isEditingID === task.id}
+                isEditing={taskToEdit?.id === task.id}
                 isDeleting={isDeletingID === task.id}
                 isCompleted={isTaskCompleted(task.status)}
                 onToggleStatus={() => handleTaskStatusChange(task, select)}
-                onEdit={() => handleEditTask(task)}
+                onEdit={() => openEditDialog(task)}
                 onDelete={() => handleEraseTask(task.id)} />
         )
     });
@@ -85,8 +89,8 @@ function AllTasksPage() {
                     />
 
                     <TaskFilterPerPriority
-                        onPriorityChange={handleSelectPriority}
-                        onSelectedPriority={selectPriority}
+                        onPriorityChange={handleTaskPriorityFilterChange}
+                        selectedPriority={taskPriorityFilter}
                     />
 
                     <TaskFilters
@@ -98,6 +102,13 @@ function AllTasksPage() {
                 <section className="mt-6 overflow-hidden bg-white border border-gray-300 rounded shadow">
                     {renderTaskListContent()}
                 </section>
+
+                <EditTaskDialog
+                    isOpen={isEditDialogOpen}
+                    task={taskToEdit}
+                    onClose={closeEditDialog}
+                    onSave={onSave}
+                />
             </div>
         </main >
     )

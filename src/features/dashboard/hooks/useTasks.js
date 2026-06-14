@@ -9,12 +9,12 @@ export function useTasks() {
     const [loading, setLoading] = useState(true);
     const [select, setSelect] = useState("todas");
     const [searching, setSearching] = useState("");
-    const [isCheckedPriotity, setIsCheckedPriotity] = useState("");
-    const [selectPriority, setSelectPriority] = useState("");
+    const [createTaskPriority, setCreateTaskPriority] = useState("");
+    const [taskPriorityFilter, setTaskPriorityFilter] = useState("");
+
 
     function getStatusFilter(status) {
         return status === "todas" ? undefined : status;
-
     }
 
     async function handleTaskStatusChange(task, select) {
@@ -24,7 +24,10 @@ export function useTasks() {
             await editTask(task.id, { status: nextStatus });
 
 
-            const updatedUserTasks = await getTasks(getStatusFilter(select))
+            const updatedUserTasks = await getTasks(
+                getStatusFilter(select),
+                searching,
+                taskPriorityFilter)
 
             setUserTasks(updatedUserTasks);
         } catch {
@@ -58,7 +61,10 @@ export function useTasks() {
 
         try {
 
-            const task = await getTasks(getStatusFilter(value), searching, selectPriority);
+            const task = await getTasks(
+                getStatusFilter(value),
+                searching,
+                taskPriorityFilter);
 
             setUserTasks(task);
 
@@ -76,7 +82,10 @@ export function useTasks() {
             setSearching(value)
 
 
-            const tasks = await getTasks(getStatusFilter(select), value, selectPriority);
+            const tasks = await getTasks(
+                getStatusFilter(select),
+                value,
+                taskPriorityFilter);
 
             setUserTasks(tasks)
 
@@ -88,38 +97,36 @@ export function useTasks() {
     }
 
 
-    function handleIsChecked(priority) {
+    function handleCreateTaskPriorityChange(priority) {
 
-        return setIsCheckedPriotity(priority)
+        return setCreateTaskPriority(priority)
 
     };
 
 
-    async function handleSelectPriority(value) {
-
-
+    async function handleTaskPriorityFilterChange(value) {
 
         try {
 
-            setSelectPriority(value);
+            setTaskPriorityFilter(value);
 
-            const priorityTask = await getTasks(getStatusFilter(select), searching, value)
-            console.log((priorityTask));
+            const priorityTask = await getTasks(
+                getStatusFilter(select),
+                searching,
+                value)
 
             setUserTasks(priorityTask);
 
         } catch {
 
             setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
-            setIsCheckedPriotity("")
+            setTaskPriorityFilter("")
         }
 
     }
 
-
-
     return {
-        userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, handleIsChecked, isCheckedPriotity, selectPriority, setIsCheckedPriotity, handleSelectPriority
+        userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter, setCreateTaskPriority, handleTaskPriorityFilterChange
     };
 
 };

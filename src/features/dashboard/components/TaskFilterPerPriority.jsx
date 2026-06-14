@@ -1,6 +1,6 @@
 
 
-export function TaskFilterPerPriority({ onPriorityChange, onSelectedPriority }) {
+export function TaskFilterPerPriority({ onPriorityChange, selectedPriority }) {
 
     return (
 
@@ -10,7 +10,7 @@ export function TaskFilterPerPriority({ onPriorityChange, onSelectedPriority }) 
             <div className="text-sm font-medium text-black">
                 <select className="bg-white"
                     id="prioridad"
-                    value={onSelectedPriority}
+                    value={selectedPriority}
                     onChange={(e) => onPriorityChange(e.target.value)}
                 >
                     <option value={""}>Selecciona Prioridad</option>

@@ -15,7 +15,7 @@ function CreateTaskPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState("");
     const [error, setError] = useState(false)
-    const { handleIsChecked, isCheckedPriotity } = useTasks();
+    const { handleCreateTaskPriorityChange, createTaskPriority } = useTasks();
 
 
 
@@ -108,8 +108,8 @@ function CreateTaskPage() {
                                         value={"low"}
                                         id="low"
                                         type="radio"
-                                        checked={isCheckedPriotity === "low"}
-                                        onChange={(e) => handleIsChecked(e.target.id)} />Baja
+                                        checked={createTaskPriority === "low"}
+                                        onChange={(e) => handleCreateTaskPriorityChange(e.target.id)} />Baja
                                 </label>
 
                                 <label htmlFor="medium">
@@ -118,8 +118,8 @@ function CreateTaskPage() {
                                         value={"medium"}
                                         id="medium"
                                         type="radio"
-                                        checked={isCheckedPriotity === "medium"}
-                                        onChange={(e) => handleIsChecked(e.target.id)} />Media
+                                        checked={createTaskPriority === "medium"}
+                                        onChange={(e) => handleCreateTaskPriorityChange(e.target.id)} />Media
                                 </label>
 
                                 <label htmlFor="high">
@@ -128,8 +128,8 @@ function CreateTaskPage() {
                                         value={"high"}
                                         id="high"
                                         type="radio"
-                                        checked={isCheckedPriotity === "high"}
-                                        onChange={(e) => handleIsChecked(e.target.id)} />Alta
+                                        checked={createTaskPriority === "high"}
+                                        onChange={(e) => handleCreateTaskPriorityChange(e.target.id)} />Alta
                                 </label>
 
                             </div>

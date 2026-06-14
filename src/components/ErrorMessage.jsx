@@ -3,7 +3,7 @@
 export default function ErrorMessage({ error, onTryAgain, onCancel }) {
 
     return (
-        <div id="toast-danger" className="w-full max-w-xs p-4 mb-4 text-sm text-red-300 bg-red-900 border rounded-2xl" role="alert">
+        <div id="toast-danger" className="fixed items-center justify-center w-full max-w-xs p-4 mb-4 text-sm text-red-300 bg-red-900 border rounded-2xl" role="alert">
             <h3 className="font-semibold">Whoops! Ocurrio un error!</h3>
             <div className="mt-2 mb-4">
                 {error}
