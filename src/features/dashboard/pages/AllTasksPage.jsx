@@ -26,6 +26,7 @@ function AllTasksPage() {
     const navigate = useNavigate();
 
     const errorMessages = {
+
         [TASK_ERROR_TYPES.LOAD]: "Error al cargar la lista de Tareas",
         [TASK_ERROR_TYPES.EDIT]: "Error al editar la tarea",
         [TASK_ERROR_TYPES.UPDATE_STATUS]: "Error al completar la tarea",

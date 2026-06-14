@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { White, Blue } from "../../../components/Buttons";
+import { useTasks } from "../hooks/useTasks";
 
 
 
 export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const { titleEditTask, setTitleEditTask, descriptionEditTask, setDescriptionEditTask, editTaskPriority, setCreateTaskPriority, setEditTaskPriority } = useTasks();
 
 
 
@@ -14,25 +14,31 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
 
         if (!task) return;
 
-        setTitle(task.title);
-        setDescription(task.description)
+        setEditTaskPriority(task.priority)
+        setTitleEditTask(task.title);
+        setDescriptionEditTask(task.description)
 
     }, [task])
+
 
     if (!isOpen || !task) return null;
 
     function handleSubmit(e) {
+
+
         e.preventDefault();
 
-        const trimmedTitle = title.trim();
-        const trimmedDescription = description.trim();
+        const trimmedTitle = titleEditTask.trim();
+        const trimmedDescription = descriptionEditTask.trim();
 
-        if (!title) return
+        if (!trimmedTitle) return
 
         onSave({
             title: trimmedTitle,
-            description: trimmedDescription
+            description: trimmedDescription,
+            priority: editTaskPriority
         });
+
     }
 
     return (
@@ -58,8 +64,8 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
 
                     <input className="w-full px-3 py-2 bg-white border border-gray-300 rounded"
                         id="edit-task-title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        value={titleEditTask}
+                        onChange={(e) => setTitleEditTask(e.target.value)}
                     />
 
                     <div>
@@ -72,10 +78,47 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
 
                         <textarea className="w-full px-3 py-2 bg-white border border-gray-300 rounded"
                             id="edit-task-title"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            value={descriptionEditTask}
+                            onChange={(e) => setCreateTaskPriority(e.target.value)}
                         />
                     </div>
+
+                </div>
+
+                <div>
+
+                    <label htmlFor="low">
+                        <input className="mx-2"
+                            name={"priority"}
+                            value={"low"}
+                            id="low"
+                            type="radio"
+                            checked={editTaskPriority === "low"}
+                            onChange={(e) => setEditTaskPriority(e.target.value)}
+                        />Baja
+                    </label>
+
+                    <label htmlFor="medium">
+                        <input className="mx-2"
+                            name={"priority"}
+                            value={"medium"}
+                            id="medium"
+                            type="radio"
+                            checked={editTaskPriority === "medium"}
+                            onChange={(e) => setEditTaskPriority(e.target.value)}
+                        />Media
+                    </label>
+
+                    <label htmlFor="high">
+                        <input className="mx-2"
+                            name={"priority"}
+                            value={"high"}
+                            id="high"
+                            type="radio"
+                            checked={editTaskPriority === "high"}
+                            onChange={(e) => setEditTaskPriority(e.target.value)}
+                        />Alta
+                    </label>
 
                 </div>
 

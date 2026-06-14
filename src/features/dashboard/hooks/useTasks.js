@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { editTask, getTasks } from "../services/tasksApiServices";
+import { editTask, getTasks, createTask } from "../services/tasksApiServices";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
+import getUserID from "../services/CreateTaskServices";
 
 export function useTasks() {
 
@@ -10,7 +11,12 @@ export function useTasks() {
     const [select, setSelect] = useState("todas");
     const [searching, setSearching] = useState("");
     const [createTaskPriority, setCreateTaskPriority] = useState("");
+    const [editTaskPriority, setEditTaskPriority] = useState("")
     const [taskPriorityFilter, setTaskPriorityFilter] = useState("");
+    const [submitError, setSubmitError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [titleEditTask, setTitleEditTask] = useState("");
+    const [descriptionEditTask, setDescriptionEditTask] = useState("");
 
 
     function getStatusFilter(status) {
@@ -20,6 +26,7 @@ export function useTasks() {
     async function handleTaskStatusChange(task, select) {
 
         try {
+
             const nextStatus = task.status === "completed" ? "pending" : "completed";
             await editTask(task.id, { status: nextStatus });
 
@@ -125,8 +132,48 @@ export function useTasks() {
 
     }
 
+    async function handleSubmitCreateTaskForm(e) {
+
+        console.log("entrandoooo")
+
+        setIsSubmitting(true);
+        e.preventDefault();
+        setSubmitError("");
+
+        const formData = new FormData(e.target);
+
+        const dataTask = Object.fromEntries([...formData.entries()].map(([key, value]) => {
+            return [key,
+                typeof value === "string" ? value.trim() : value
+            ]
+
+        }))
+
+        const newDataTask = {
+            user_id: await getUserID(),
+            ...dataTask
+        };
+
+        try {
+
+            await createTask(newDataTask);
+            e.target.reset()
+
+        } catch {
+
+            setError({ status: true, type: TASK_ERROR_TYPES.CREATE })
+
+        } finally {
+
+            setIsSubmitting(false);
+        }
+    }
+
     return {
-        userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter, setCreateTaskPriority, handleTaskPriorityFilterChange
+        userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select,
+        searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
+        setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
+        titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority
     };
 
 };

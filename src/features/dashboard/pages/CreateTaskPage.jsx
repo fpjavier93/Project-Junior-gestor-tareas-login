@@ -1,65 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { Blue, White } from "../../../components/Buttons";
-import getUserID from "../services/CreateTaskServices";
-import { useState } from "react";
-import { createTask } from "../services/tasksApiServices";
 import ErrorMessage from "../../../components/ErrorMessage";
-import { CheckmarkIcon } from "react-hot-toast";
 import { useTasks } from "../hooks/useTasks";
+import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 
 
 
 function CreateTaskPage() {
 
     const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitError, setSubmitError] = useState("");
-    const [error, setError] = useState(false)
-    const { handleCreateTaskPriorityChange, createTaskPriority } = useTasks();
 
 
+    const { handleCreateTaskPriorityChange, createTaskPriority, handleSubmitCreateTaskForm, isSubmitting, submitError, setError, error } = useTasks();
+
+    const errorCreateTask = { [TASK_ERROR_TYPES.CREATE]: "No se pudo crear la tarea" }
 
 
-    async function handleSubmit(e) {
-
-        setIsSubmitting(true);
-        e.preventDefault();
-        setSubmitError("");
-
-        const formData = new FormData(e.target);
-
-        const dataTask = Object.fromEntries([...formData.entries()].map(([key, value]) => {
-            return [key,
-                typeof value === "string" ? value.trim() : value
-            ]
-
-        }))
-
-        console.log(dataTask);
-
-        const newDataTask = {
-            user_id: await getUserID(),
-            ...dataTask
-        };
-
-
-        try {
-            await createTask(newDataTask);
-            e.target.reset()
-
-        } catch {
-
-            setError(true)
-
-        } finally {
-
-            setIsSubmitting(false);
-        }
-    }
-
-
-    if (error) {
-        return <ErrorMessage error={"No se pudo crear la tarea"}
+    if (error.status) {
+        return <ErrorMessage error={errorCreateTask[error.type] || "Accion inesperada"}
             onTryAgain={() => setError(false)}
             onCancel={() => navigate("/dashboard")}
         />
@@ -71,7 +29,7 @@ function CreateTaskPage() {
 
             <div className="p-4 bg-indigo-200 border border-gray-300 rounded shadow my-18">
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmitCreateTaskForm} className="space-y-6">
                     <div>
                         <label htmlFor="title" className="block text-lg font-medium text-gray-900">
                             Titulo

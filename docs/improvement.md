@@ -13,64 +13,64 @@ Convertir el gestor de tareas en una app de productividad personal.
 
 La app puede crecer con modulos relacionados:
 
-- Tareas.
-- Prioridades.
-- Fechas limite.
-- Categorias o etiquetas.
-- Proyectos.
-- Detalle de tarea.
-- Estadisticas.
-- Perfil/configuracion.
+- [x] Tareas.
+- [ ] Prioridades.
+- [ ] Fechas limite.
+- [ ] Categorias o etiquetas.
+- [ ] Proyectos.
+- [ ] Detalle de tarea.
+- [ ] Estadisticas.
+- [ ] Perfil/configuracion.
 
 La regla es no agregar features random. Cada feature debe mejorar la idea central de productividad.
 
 ### Orden recomendado de features
 
-1. Prioridad de tareas.
-   - Nueva columna en Supabase: `priority`.
-   - Valores posibles: `low`, `medium`, `high`.
-   - Mostrar prioridad en cada tarea.
-   - Permitir crear/editar prioridad. ************** falta **************
-   - Filtrar por prioridad mas adelante.
+   - [x] **1. Prioridad de tareas.**
+   - [x] Nueva columna en Supabase: `priority`.
+   - [x] Valores posibles: `low`, `medium`, `high`.
+   - [x] Mostrar prioridad en cada tarea.
+   - [x] Permitir crear/editar prioridad. 
+   - [x] Filtrar por prioridad mas adelante.
 
-2. Fecha limite.
-   - Nueva columna en Supabase: `due_date`.
-   - Usar input de fecha.
-   - Mostrar si una tarea vence pronto o esta vencida.
-   - Practicar manejo de fechas en JavaScript.
+   - [ ] **2. Fecha limite.**
+   - [ ] Nueva columna en Supabase: `due_date`.
+   - [ ] Usar input de fecha.
+   - [ ] Mostrar si una tarea vence pronto o esta vencida.
+   - [ ] Practicar manejo de fechas en JavaScript.
 
-3. Detalle de tarea.
-   - Ruta dinamica: `/dashboard/tasks/:taskId`.
-   - Usar `useParams`.
-   - Cargar una tarea por id.
-   - Separar vista de lista y vista de detalle.
+- [ ] **3. Detalle de tarea.**
+   - [ ] Ruta dinamica: `/dashboard/tasks/:taskId`.
+   - [ ] Usar `useParams`.
+   - [ ] Cargar una tarea por id.
+   - [ ] Separar vista de lista y vista de detalle.
 
-4. Categorias o etiquetas.
-   - Permitir clasificar tareas por tipo.
-   - Ejemplos: trabajo, estudio, personal.
-   - Practicar filtros multiples.
+- [ ] **4. Categorias o etiquetas.**
+   - [ ] Permitir clasificar tareas por tipo.
+   - [ ] Ejemplos: trabajo, estudio, personal.
+   - [ ] Practicar filtros multiples.
 
-5. Proyectos.
-   - Crear una tabla `projects`.
-   - Relacionar tareas con proyectos.
-   - Practicar relaciones entre tablas y rutas dinamicas.
+- [ ] **5. Proyectos.**
+   - [ ] Crear una tabla `projects`.
+   - [ ] Relacionar tareas con proyectos.
+   - [ ] Practicar relaciones entre tablas y rutas dinamicas.
 
-6. Formularios profesionales.
-   - Introducir React Hook Form.
-   - Introducir Zod.
-   - Mejorar login, registro y creacion/edicion de tareas.
+- [ ] **6. Formularios profesionales.**
+   - [ ] Introducir React Hook Form.
+   - [ ] Introducir Zod.
+   - [ ] Mejorar login, registro y creacion/edicion de tareas.
 
-7. Testing.
-   - Introducir Vitest.
-   - Introducir React Testing Library.
-   - Testear componentes principales, hooks y servicios.
+- [ ] **7. Testing.**
+   - [ ] Introducir Vitest.
+   - [ ] Introducir React Testing Library.
+   - [ ] Testear componentes principales, hooks y servicios.
 
-8. Portfolio.
-   - Deploy en Vercel.
-   - README con URL real.
-   - Screenshots.
-   - Usuario demo o instrucciones claras.
-   - Explicacion tecnica de RLS, REST API, Auth y estructura.
+- [ ] **8. Portfolio.**
+   - [ ] Deploy en Vercel.
+   - [ ] README con URL real.
+   - [ ] Screenshots.
+   - [ ] Usuario demo o instrucciones claras.
+   - [ ] Explicacion tecnica de RLS, REST API, Auth y estructura.
 
 ### Roadmap De React Aplicado Al Proyecto
 
@@ -78,26 +78,26 @@ Cada feature nueva debe traer un concepto nuevo del roadmap. La idea no es apren
 
 #### Conceptos ya practicados
 
-- JSX.
-- Componentes funcionales.
-- Props.
-- Estado con `useState`.
-- Efectos con `useEffect`.
-- Renderizado condicional.
-- Listas y keys.
-- Eventos.
-- React Router.
-- Context con `AuthContext`.
-- Custom hooks: `useTasks`, `useEditTasks`, `useEraseTasks`.
-- API calls con Axios.
-- Separacion por features.
-- Servicios para API.
-- Componentes presentacionales: `TaskCard`, `TaskSearch`, `TaskFilters`, `TaskEmptyState`.
+- [x] JSX.
+- [x] Componentes funcionales.
+- [x] Props.
+- [x] Estado con `useState`.
+- [x] Efectos con `useEffect`.
+- [x] Renderizado condicional.
+- [x] Listas y keys.
+- [x] Eventos.
+- [x] React Router.
+- [x] Context con `AuthContext`.
+- [x] Custom hooks: `useTasks`, `useEditTasks`, `useEraseTasks`.
+- [x] API calls con Axios.
+- [x] Separacion por features.
+- [x] Servicios para API.
+- [x] Componentes presentacionales: `TaskCard`, `TaskSearch`, `TaskFilters`, `TaskEmptyState`.
 
 #### Conceptos a practicar pronto
 
-- Mejor composicion de componentes.
-- Custom hooks con API mas limpia.
+- [ ] Mejor composicion de componentes.
+- [ ] Custom hooks con API mas limpia.
 - Rutas dinamicas con `useParams`.
 - Formularios con React Hook Form.
 - Validacion con Zod.
