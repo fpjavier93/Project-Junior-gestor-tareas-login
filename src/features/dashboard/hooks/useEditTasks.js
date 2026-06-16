@@ -8,7 +8,6 @@ import { useTasks } from "./useTasks";
 
 export function useEditTasks({ setError, setUserTasks }) {
 
-
     const [taskToEdit, setTaskToEdit] = useState(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
@@ -16,14 +15,12 @@ export function useEditTasks({ setError, setUserTasks }) {
 
         setTaskToEdit(task);
         setIsEditDialogOpen(true);
-
     }
 
     function closeEditDialog() {
 
         setIsEditDialogOpen(false);
         setTaskToEdit(null);
-
     }
 
 
@@ -54,27 +51,3 @@ export function useEditTasks({ setError, setUserTasks }) {
 
 
 }
-
-//const updateTask = await openEditTaskModal(task);
-
-// if (!updateTask) {
-//     setTaskToEdit(null)
-//     return
-// }
-
-// try {
-
-//     await editTask(task.id, updateTask);
-
-//     const updatedTask = await getTasks();
-
-//     setUserTasks(updatedTask);
-
-// } catch {
-
-//     setError({ status: true, type: TASK_ERROR_TYPES.EDIT })
-
-// } finally {
-
-//     setTaskToEdit(null)
-// }

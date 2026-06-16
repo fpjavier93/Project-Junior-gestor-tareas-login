@@ -3,15 +3,21 @@ import { Blue, White } from "../../../components/Buttons";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { useTasks } from "../hooks/useTasks";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
+import { getTaskImages } from "../services/imagesApiService";
+import { ImagePickerDialog } from "../components/ImagePickerDialog";
+import { useGetImageTask } from "../hooks/useGetImageTask";
 
 
-
-function CreateTaskPage() {
+export default function CreateTaskPage() {
 
     const navigate = useNavigate();
 
 
-    const { handleCreateTaskPriorityChange, createTaskPriority, handleSubmitCreateTaskForm, isSubmitting, submitError, setError, error } = useTasks();
+    const { handleCreateTaskPriorityChange, createTaskPriority,
+        handleSubmitCreateTaskForm, isSubmitting, submitError,
+        setError, error, handleGetImagesTask } = useTasks();
+
+    const { isShowSelectTask, openGetImageDialog, closeGetImageDialog } = useGetImageTask();
 
     const errorCreateTask = { [TASK_ERROR_TYPES.CREATE]: "No se pudo crear la tarea" }
 
@@ -22,6 +28,8 @@ function CreateTaskPage() {
             onCancel={() => navigate("/dashboard")}
         />
     }
+
+
 
 
     return (
@@ -97,9 +105,17 @@ function CreateTaskPage() {
                                 <p className="text-sm text-red-600">{submitError}</p>
                             )}
                             <div className="flex justify-end gap-3">
+
                                 <White
+                                    type={"button"}
                                     name="Cancelar"
                                     onClick={() => navigate("/dashboard")}
+                                />
+
+                                <White
+                                    type={"button"}
+                                    name="Añadir Imagen..."
+                                    onClick={openGetImageDialog}
                                 />
 
                                 <Blue
@@ -111,9 +127,13 @@ function CreateTaskPage() {
                         </div>
                     </div>
                 </form>
+
             </div>
+            <ImagePickerDialog
+                isOpen={isShowSelectTask}
+                onClose={closeGetImageDialog}
+            />
         </div>
+
     )
 }
-
-export default CreateTaskPage;

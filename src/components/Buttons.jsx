@@ -13,9 +13,10 @@ function Blue({ name, onClick = undefined, type, disabled }) {
 
 }
 
-function White({ name, onClick }) {
+function White({ name, type, onClick }) {
     return (
         <button className="inline-flex items-center px-4 py-2 text-black bg-white border border-gray-300 rounded w-fit hover:cursor-pointer hover:bg-gray-50"
+            type={type}
             onClick={onClick}
 
         >{name}</button>

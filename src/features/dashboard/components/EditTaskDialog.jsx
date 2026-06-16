@@ -8,8 +8,6 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
 
     const { titleEditTask, setTitleEditTask, descriptionEditTask, setDescriptionEditTask, editTaskPriority, setCreateTaskPriority, setEditTaskPriority } = useTasks();
 
-
-
     useEffect(() => {
 
         if (!task) return;
@@ -24,7 +22,6 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
     if (!isOpen || !task) return null;
 
     function handleSubmit(e) {
-
 
         e.preventDefault();
 
@@ -77,9 +74,9 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
                         </label>
 
                         <textarea className="w-full px-3 py-2 bg-white border border-gray-300 rounded"
-                            id="edit-task-title"
+                            id="edit-task-priority"
                             value={descriptionEditTask}
-                            onChange={(e) => setCreateTaskPriority(e.target.value)}
+                            onChange={(e) => setDescriptionEditTask(e.target.value)}
                         />
                     </div>
 

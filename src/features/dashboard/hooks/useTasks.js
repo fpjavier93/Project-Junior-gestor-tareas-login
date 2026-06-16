@@ -19,6 +19,7 @@ export function useTasks() {
     const [descriptionEditTask, setDescriptionEditTask] = useState("");
 
 
+
     function getStatusFilter(status) {
         return status === "todas" ? undefined : status;
     }
@@ -134,7 +135,6 @@ export function useTasks() {
 
     async function handleSubmitCreateTaskForm(e) {
 
-        console.log("entrandoooo")
 
         setIsSubmitting(true);
         e.preventDefault();
@@ -169,11 +169,13 @@ export function useTasks() {
         }
     }
 
+
+
     return {
         userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select,
         searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
         setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
-        titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority
+        titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority,
     };
 
 };
