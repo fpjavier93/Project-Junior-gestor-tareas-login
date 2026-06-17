@@ -8,4 +8,4 @@ export async function getTaskImages() {
 
     return response.json();
 
-}
+};

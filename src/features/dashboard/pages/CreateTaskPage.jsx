@@ -6,18 +6,21 @@ import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import { getTaskImages } from "../services/imagesApiService";
 import { ImagePickerDialog } from "../components/ImagePickerDialog";
 import { useGetImageTask } from "../hooks/useGetImageTask";
+import { useState } from "react";
 
 
 export default function CreateTaskPage() {
 
     const navigate = useNavigate();
-
+    const [selectedImage, setSelectedImage] = useState("");
 
     const { handleCreateTaskPriorityChange, createTaskPriority,
         handleSubmitCreateTaskForm, isSubmitting, submitError,
         setError, error, handleGetImagesTask } = useTasks();
 
     const { isShowSelectTask, openGetImageDialog, closeGetImageDialog } = useGetImageTask();
+
+
 
     const errorCreateTask = { [TASK_ERROR_TYPES.CREATE]: "No se pudo crear la tarea" }
 
@@ -29,15 +32,14 @@ export default function CreateTaskPage() {
         />
     }
 
-
-
-
     return (
         <div className="max-w-4xl max-h-screen py-1 mx-auto px-auto">
 
             <div className="p-4 bg-indigo-200 border border-gray-300 rounded shadow my-18">
 
-                <form onSubmit={handleSubmitCreateTaskForm} className="space-y-6">
+                <form
+                    onSubmit={(e) => handleSubmitCreateTaskForm(e, setSelectedImage)}
+                    className="space-y-6">
                     <div>
                         <label htmlFor="title" className="block text-lg font-medium text-gray-900">
                             Titulo
@@ -55,7 +57,7 @@ export default function CreateTaskPage() {
                             <label htmlFor="description" className="block text-lg font-medium text-gray-900">
                                 Descripcion
                             </label>
-                            <div className="py-3">
+                            <div className="flex py-3">
                                 <textarea
                                     id="description"
                                     name="description"
@@ -63,6 +65,20 @@ export default function CreateTaskPage() {
                                     rows={5}
                                     className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
+
+                                {selectedImage && (
+                                    <img
+                                        className="object-cover w-40 h-32"
+                                        src={selectedImage}
+                                        alt="Imagen seleccionada para la tarea"
+                                    />)
+                                }
+                                <input
+                                    type="hidden"
+                                    name="image_url"
+                                    value={selectedImage}
+                                />
+
                             </div>
                             <div className="flex gap-3 py-3">
 
@@ -132,8 +148,9 @@ export default function CreateTaskPage() {
             <ImagePickerDialog
                 isOpen={isShowSelectTask}
                 onClose={closeGetImageDialog}
+                onSelectedImage={setSelectedImage}
             />
-        </div>
+        </div >
 
     )
 }

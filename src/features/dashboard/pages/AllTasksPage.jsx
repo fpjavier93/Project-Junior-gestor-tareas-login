@@ -14,6 +14,7 @@ import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import { TaskFilterPerPriority } from "../components/TaskFilterPerPriority";
 import { EditTaskDialog } from "../components/EditTaskDialog";
 import { editTask } from "../services/tasksApiServices";
+import { handleImage } from "../utils/getURLImagen";
 
 
 function AllTasksPage() {
@@ -64,7 +65,10 @@ function AllTasksPage() {
                 isCompleted={isTaskCompleted(task.status)}
                 onToggleStatus={() => handleTaskStatusChange(task, select)}
                 onEdit={() => openEditDialog(task)}
-                onDelete={() => handleEraseTask(task.id)} />
+                onDelete={() => handleEraseTask(task.id)}
+                Image={handleImage(task.image_url)}
+            />
+
         )
     });
 

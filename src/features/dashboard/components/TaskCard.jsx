@@ -1,10 +1,19 @@
 
-export function TaskCard({ task, isEditing, isDeleting, isCompleted, onToggleStatus, onEdit, onDelete }) {
+export function TaskCard({ task, isEditing, isDeleting, isCompleted, onToggleStatus, onEdit, onDelete, Image }) {
     return (
         <div className="flex flex-col">
             <div className="flex justify-between px-5 py-4 text-2xl font-bold bg-indigo-200 border-b border-gray-300">
 
                 <h3 className="flex min-w-0">{task.title}</h3>
+
+                <div>
+
+                    {Image && <img
+                        src={Image}
+                        alt={task.title}
+                        className="object-cover w-48 h-32"
+                    />}
+                </div>
 
                 <div className="flex flex-col items-end gap-2">
 

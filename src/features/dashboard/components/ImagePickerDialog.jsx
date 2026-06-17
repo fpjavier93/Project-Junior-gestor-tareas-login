@@ -5,11 +5,13 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 
 
 
-export function ImagePickerDialog({ isOpen, onClose }) {
+export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
 
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [selectedImage, setSelectedImage] = useState("");
+    const [tempSelectImage, setTempSelectImage] = useState("");
 
 
     useEffect(() => {
@@ -42,6 +44,22 @@ export function ImagePickerDialog({ isOpen, onClose }) {
 
     }, [isOpen]);
 
+
+    function hanldeSelectdImage(image) {
+
+        if (tempSelectImage === image.download_url) {
+            setTempSelectImage("");
+            onSelectedImage("")
+            return;
+        }
+
+        setTempSelectImage(image.download_url)
+        setTempSelectImage(image.download_url)
+
+    }
+
+
+
     if (!isOpen) return null
 
 
@@ -69,7 +87,10 @@ export function ImagePickerDialog({ isOpen, onClose }) {
                             key={image.id}
                             src={image.download_url}
                             alt={image.author}
-                            className="object-cover w-48 h-48 hover:border-6 hover:border-indigo-200"
+                            className={tempSelectImage === image.download_url
+                                ? "object-cover w-48 h-48 border-indigo-600 border-6 hover:cursor-pointer hover:border-8"
+                                : "object-cover w-48 h-48 hover:border-6 hover:border-indigo-200 hover:cursor-pointer"}
+                            onClick={() => hanldeSelectdImage(image)}
 
                         />
                     ))}
@@ -80,13 +101,22 @@ export function ImagePickerDialog({ isOpen, onClose }) {
 
                     <White
                         type={"button"}
-                        onClick={onClose}
                         name={"Cerrar"}
+                        onClick={() => {
+                            setTempSelectImage("")
+                            onClose()
+                        }}
                     />
 
                     <Blue
                         type={"button"}
                         name={"Aceptar"}
+                        onClick={() => {
+                            onSelectedImage(tempSelectImage)
+                            setSelectedImage(tempSelectImage)
+                            onClose()
+                        }}
+
                     />
                 </div>
             </div>

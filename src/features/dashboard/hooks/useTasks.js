@@ -133,8 +133,7 @@ export function useTasks() {
 
     }
 
-    async function handleSubmitCreateTaskForm(e) {
-
+    async function handleSubmitCreateTaskForm(e, setSelectedImage) {
 
         setIsSubmitting(true);
         e.preventDefault();
@@ -158,6 +157,8 @@ export function useTasks() {
 
             await createTask(newDataTask);
             e.target.reset()
+            setSelectedImage("");
+
 
         } catch {
 
