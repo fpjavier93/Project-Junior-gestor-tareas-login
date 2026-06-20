@@ -18,17 +18,13 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const result = await signIn(email, password);
+      const result = await signIn(email.trim(), password);
 
       if (result.success) {
         setSuccessMessage(result.message);
         setEmail("");
         setPassword("");
-
-        // Redirigir al dashboard después de 1 segundo
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1000);
+        navigate("/dashboard", { replace: true });
       } else {
         setError(result.error || "Error al iniciar sesión");
       }
@@ -149,3 +145,4 @@ export default function LoginPage() {
     </>
   );
 }
+

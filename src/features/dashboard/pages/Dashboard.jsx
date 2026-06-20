@@ -30,7 +30,12 @@ function Dashboard() {
             setLoading(true);
 
             const currentUser = await getCurrentUser();
-            setUserName(currentUser.user.user_metadata.nombre);
+
+            if (!currentUser.success || !currentUser.user) {
+                throw new Error(currentUser.error || "No se pudo obtener el usuario actual");
+            }
+
+            setUserName(currentUser.user.user_metadata?.nombre || currentUser.user.email || "Usuario");
 
             const fetchedTasks = await getTasks();
             setUserTasks(fetchedTasks);
@@ -127,6 +132,7 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
 
 

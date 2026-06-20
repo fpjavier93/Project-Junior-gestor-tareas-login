@@ -52,10 +52,10 @@ function AllTasksPage() {
             onCancel={error.type === TASK_ERROR_TYPES.LOAD ? () => navigate("/dashboard") : undefined} />
     }
 
-
     const taskCards = userTasks.map((task) => {
 
         return (
+
             <TaskCard
                 key={task.id}
                 task={task}
@@ -67,6 +67,7 @@ function AllTasksPage() {
                 onEdit={() => openEditDialog(task)}
                 onDelete={() => handleEraseTask(task.id)}
                 Image={handleImage(task.image_url)}
+
             />
 
         )
@@ -81,6 +82,7 @@ function AllTasksPage() {
         }
 
         return taskCards;
+
     }
 
     return (
@@ -104,7 +106,7 @@ function AllTasksPage() {
                     />
                 </div>
 
-                <section className="mt-6 overflow-hidden bg-white border border-gray-300 rounded shadow">
+                <section className="flex flex-col gap-6 mt-6">
                     {renderTaskListContent()}
                 </section>
 

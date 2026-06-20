@@ -91,7 +91,6 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
                                 ? "object-cover w-48 h-48 border-indigo-600 border-6 hover:cursor-pointer hover:border-8"
                                 : "object-cover w-48 h-48 hover:border-6 hover:border-indigo-200 hover:cursor-pointer"}
                             onClick={() => hanldeSelectdImage(image)}
-
                         />
                     ))}
 

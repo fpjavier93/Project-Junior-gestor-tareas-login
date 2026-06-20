@@ -18,9 +18,9 @@ function DashboardLayout() {
     ]
 
     return (
-        <main className="fixed inset-0 py-4 overflow-hidden bg-gray-50">
+        <main className="fixed inset-0 overflow-hidden bg-gray-50">
 
-            <div className="flex flex-col h-[calc(100vh-2rem)] mx-auto max-w-7xl">
+            <div className="flex flex-col h-[calc(100vh)] max-w-8x1">
 
                 <header className="flex justify-between px-5 bg-indigo-500 ">
 
