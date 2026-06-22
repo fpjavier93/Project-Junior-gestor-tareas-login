@@ -18,11 +18,11 @@ function DashboardLayout() {
     ]
 
     return (
-        <main className="fixed inset-0 overflow-hidden bg-gray-50">
+        <main className="min-h-screen bg-gray-50">
 
-            <div className="flex flex-col h-[calc(100vh)] max-w-8x1">
+            <div className="flex flex-col min-h-screen max-w-8x1">
 
-                <header className="flex justify-between px-5 bg-indigo-500 ">
+                <header className="sticky top-0 z-30 flex justify-between px-5 bg-indigo-500 ">
 
                     <div className="flex py-2">
                         <button
@@ -44,27 +44,27 @@ function DashboardLayout() {
                 </header>
 
 
-                <div className="flex flex-1 min-h-0">
+                <div className="flex flex-1">
 
-                    <aside className={`${isDrawerOpen ? "w-64 bg-indigo-500" : "w-0"} overflow-hidden transition-all duration-600 shrink-0`}>
-                        {isDrawerOpen && (
-                            <nav className="flex flex-col gap-2 px-4 py-6 bg-indigo-500">
+                    <aside className={`${isDrawerOpen ? "w-64" : "w-0"} sticky top-18 h-[calc(100vh-72px)] overflow-hidden transition-all duration-300 shrink-0 bg-indigo-500`}>
+                        <nav className="flex flex-col gap-2 px-4 py-6 bg-indigo-500">
 
-                                {linkList.map((link) =>
-                                (
-                                    <NavLink
-                                        key={link.to}
-                                        to={link.to}
-                                        end={link.end}
-                                        className={({ isActive }) => getMenuLinkClassName(isActive)}
-                                    >{link.label}</NavLink>
-                                )
-                                )}
-                            </nav>
-                        )}
+                            {linkList.map((link) =>
+                            (
+                                <NavLink
+                                    key={link.to}
+                                    to={link.to}
+                                    end={link.end}
+                                    className={({ isActive }) => getMenuLinkClassName(isActive)}
+                                >{link.label}</NavLink>
+                            )
+                            )}
+                        </nav>
                     </aside>
 
-                    <section className="flex-1 min-h-0 overflow-y-auto bg-indigo-50">
+                    <section
+                        id="dashboard-scroll-container"
+                        className="flex-1 bg-indigo-50">
                         <Outlet />
                     </section>
 

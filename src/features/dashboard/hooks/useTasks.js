@@ -15,6 +15,7 @@ export function useTasks() {
     const [taskPriorityFilter, setTaskPriorityFilter] = useState("");
     const [submitError, setSubmitError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [updatingStatusId, setUpdatingStatusId] = useState(null);
     const [titleEditTask, setTitleEditTask] = useState("");
     const [descriptionEditTask, setDescriptionEditTask] = useState("");
 
@@ -27,20 +28,29 @@ export function useTasks() {
     async function handleTaskStatusChange(task, select) {
 
         try {
+            setSubmitError("");
+            setUpdatingStatusId(task.id);
 
             const nextStatus = task.status === "completed" ? "pending" : "completed";
-            await editTask(task.id, { status: nextStatus });
+            const updatedTaskFromApi = await editTask(task.id, { status: nextStatus });
+            const updatedTask = updatedTaskFromApi || { ...task, status: nextStatus };
 
+            setUserTasks((currentTasks) => {
+                if (select !== "todas" && updatedTask.status !== select) {
+                    return currentTasks.filter((currentTask) => currentTask.id !== updatedTask.id);
+                }
 
-            const updatedUserTasks = await getTasks(
-                getStatusFilter(select),
-                searching,
-                taskPriorityFilter)
+                return currentTasks.map((currentTask) =>
+                    currentTask.id === updatedTask.id ? updatedTask : currentTask
+                );
+            });
 
-            setUserTasks(updatedUserTasks);
-        } catch {
+        } catch (error) {
 
-            setError({ status: true, type: TASK_ERROR_TYPES.UPDATE_STATUS })
+            console.error("Error al actualizar el estado de la tarea", error);
+            setSubmitError("No se pudo actualizar el estado de la tarea");
+        } finally {
+            setUpdatingStatusId(null);
         }
     }
 
@@ -158,6 +168,7 @@ export function useTasks() {
             await createTask(newDataTask);
             e.target.reset()
             setSelectedImage("");
+            set
 
 
         } catch {
@@ -177,6 +188,7 @@ export function useTasks() {
         searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
         setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
         titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority,
+        updatingStatusId,
     };
 
 };

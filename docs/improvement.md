@@ -34,10 +34,10 @@ La regla es no agregar features random. Cada feature debe mejorar la idea centra
    - [x] Filtrar por prioridad mas adelante.
 
    - [ ] **2. Fecha limite.**
-   - [ ] Nueva columna en Supabase: `due_date`.
-   - [ ] Usar input de fecha.
-   - [ ] Mostrar si una tarea vence pronto o esta vencida.
-   - [ ] Practicar manejo de fechas en JavaScript.
+   - [x] Nueva columna en Supabase: `due_date`.
+   - [x] Usar input de fecha.
+   - [x] Mostrar si una tarea vence pronto o esta vencida.
+   - [x] Practicar manejo de fechas en JavaScript.
 
 - [ ] **3. Detalle de tarea.**
    - [ ] Ruta dinamica: `/dashboard/tasks/:taskId`.

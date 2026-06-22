@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { getTasks, editTask } from "../services/tasksApiServices";
-import { openEditTaskModal } from "../services/taskModalServices";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
-import { useTasks } from "./useTasks";
+
 
 
 

@@ -8,8 +8,11 @@ import { getTasks } from "../services/tasksApiServices";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { RisentltyTask } from "../components/TaskCardDashboard";
+import { calcDiffInDays } from "../utils/CreateTaskUtils";
+
 
 function Dashboard() {
+    const today = new Date().toISOString().split("T")[0];
 
     const navigate = useNavigate();
     const [userTasks, setUserTasks] = useState([]);
@@ -65,9 +68,6 @@ function Dashboard() {
             onCancel={() => handleSignOut(navigate)} />
     }
 
-
-
-
     return (
         <main className="dashboard">
 
@@ -117,14 +117,13 @@ function Dashboard() {
                             key={task.id}
                             task={task}
                             index={index}
+                            today={today}
+                            diffInDays={calcDiffInDays(task, today)}
                         />
-
                     }
                     ).slice(0, 6)
                     }
                 </section>
-
-
             </div>
         </main>
 

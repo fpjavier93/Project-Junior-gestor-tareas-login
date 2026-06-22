@@ -13,16 +13,16 @@ import { TaskEmptyState } from "../components/TaskEmptyState";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import { TaskFilterPerPriority } from "../components/TaskFilterPerPriority";
 import { EditTaskDialog } from "../components/EditTaskDialog";
-import { editTask } from "../services/tasksApiServices";
 import { handleImage } from "../utils/getURLImagen";
+import { calcDiffInDays } from "../utils/CreateTaskUtils";
 
 
 function AllTasksPage() {
 
-    const { userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, taskPriorityFilter, handleTaskPriorityFilterChange } = useTasks();
+    const { userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, taskPriorityFilter, handleTaskPriorityFilterChange, updatingStatusId, submitError } = useTasks();
     const { isDeletingID, handleEraseTask } = useEraseTasks({ setUserTasks, setError });
-    const { taskToEdit, setTaskToEdit, openEditDialog, isEditDialogOpen, closeEditDialog, onSave } = useEditTasks({ setUserTasks, setError });
-
+    const { taskToEdit, openEditDialog, isEditDialogOpen, closeEditDialog, onSave } = useEditTasks({ setUserTasks, setError });
+    const today = new Date().toISOString().split("T")[0];
 
     const navigate = useNavigate();
 
@@ -45,11 +45,11 @@ function AllTasksPage() {
         return <LoadingSpinner />
     }
 
-    if (error.status) {
+    if (error.status && error.type === TASK_ERROR_TYPES.LOAD) {
         return <ErrorMessage
             error={errorMessages[error.type] || "Ocurrio un error inesperado"}
             onTryAgain={loadTasks}
-            onCancel={error.type === TASK_ERROR_TYPES.LOAD ? () => navigate("/dashboard") : undefined} />
+            onCancel={() => navigate("/dashboard")} />
     }
 
     const taskCards = userTasks.map((task) => {
@@ -63,10 +63,13 @@ function AllTasksPage() {
                 isEditing={taskToEdit?.id === task.id}
                 isDeleting={isDeletingID === task.id}
                 isCompleted={isTaskCompleted(task.status)}
+                isStatusUpdating={updatingStatusId === task.id}
                 onToggleStatus={() => handleTaskStatusChange(task, select)}
                 onEdit={() => openEditDialog(task)}
                 onDelete={() => handleEraseTask(task.id)}
                 Image={handleImage(task.image_url)}
+                today={today}
+                diffInDays={calcDiffInDays(task, today)}
 
             />
 
@@ -105,6 +108,10 @@ function AllTasksPage() {
                         select={select}
                     />
                 </div>
+
+                {submitError && (
+                    <p className="mt-4 text-sm font-medium text-red-600">{submitError}</p>
+                )}
 
                 <section className="flex flex-col gap-6 mt-6">
                     {renderTaskListContent()}

@@ -1,11 +1,12 @@
 import { useState } from "react";
 
-export function TaskCard({ task, isEditing, isDeleting, isCompleted, onToggleStatus, onEdit, onDelete, Image }) {
+export function TaskCard({ task, isEditing, isDeleting, isCompleted, isStatusUpdating, onToggleStatus, onEdit, onDelete, Image, diffInDays }) {
 
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
     const description = task.description || "";
     const isLongDescripion = description.length > 120;
+
 
     function hanldeIsDescriptionExpanded() {
         setIsDescriptionExpanded((currentValue) => !currentValue)
@@ -16,7 +17,13 @@ export function TaskCard({ task, isEditing, isDeleting, isCompleted, onToggleSta
         <div className="overflow-hidden shadow rounded-3xl">
             <div className="flex justify-between px-5 py-4 text-2xl font-bold bg-indigo-200 border-b border-gray-300">
 
-                <h3 className="flex min-w-0">{task.title}</h3>
+                <div>
+                    <p className="text-sm text-red-500">{task.due_date === null || task.status === "completed" ? null
+                        : diffInDays > 3 ? `Fecha limite: ${task.due_date}`
+                            : diffInDays >= 0 && diffInDays <= 3 ? `La tarea vence pronto (${task.due_date})`
+                                : "Limite vencido"}</p>
+                    <h3 className="flex min-w-0">{task.title}</h3>
+                </div>
 
                 <div className="flex justify-end gap-6">
 
@@ -43,6 +50,7 @@ export function TaskCard({ task, isEditing, isDeleting, isCompleted, onToggleSta
                         <label className="inline-flex items-center cursor-pointer">
                             <input type="checkbox" value="" className="sr-only peer"
                                 checked={isCompleted}
+                                disabled={isStatusUpdating}
                                 onChange={onToggleStatus}
                             />
                             <div className="relative w-9 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>

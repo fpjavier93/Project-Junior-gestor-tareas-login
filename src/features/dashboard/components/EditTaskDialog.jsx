@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { White, Blue } from "../../../components/Buttons";
 import { useTasks } from "../hooks/useTasks";
 
@@ -6,7 +6,7 @@ import { useTasks } from "../hooks/useTasks";
 
 export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
 
-    const { titleEditTask, setTitleEditTask, descriptionEditTask, setDescriptionEditTask, editTaskPriority, setCreateTaskPriority, setEditTaskPriority } = useTasks();
+    const { titleEditTask, setTitleEditTask, descriptionEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority } = useTasks();
 
     useEffect(() => {
 

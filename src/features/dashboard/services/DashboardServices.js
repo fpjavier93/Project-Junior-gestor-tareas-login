@@ -2,7 +2,6 @@ import { supabase } from "../../../../utils/supabase";
 import { signOut } from "../../auth/services";
 
 
-
 async function getUserDataId() {
     const { data, error } = await supabase.auth.getUser();
 
