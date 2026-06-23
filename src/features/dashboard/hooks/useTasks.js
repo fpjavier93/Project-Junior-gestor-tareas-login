@@ -46,8 +46,6 @@ export function useTasks() {
             });
 
         } catch (error) {
-
-            console.error("Error al actualizar el estado de la tarea", error);
             setSubmitError("No se pudo actualizar el estado de la tarea");
         } finally {
             setUpdatingStatusId(null);
@@ -143,7 +141,7 @@ export function useTasks() {
 
     }
 
-    async function handleSubmitCreateTaskForm(e, setSelectedImage) {
+    async function handleSubmitCreateTaskForm(e, setSelectedImage, setCheckin) {
 
         setIsSubmitting(true);
         e.preventDefault();
@@ -168,7 +166,7 @@ export function useTasks() {
             await createTask(newDataTask);
             e.target.reset()
             setSelectedImage("");
-            set
+            setCheckin(false);
 
 
         } catch {

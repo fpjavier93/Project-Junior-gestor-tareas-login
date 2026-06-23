@@ -1,7 +1,7 @@
 import { apiClient } from "../../../lib/apiClient";
 import { getSession } from "../../auth/services";
 
-async function getAccessToken() {
+export async function getAccessToken() {
     const result = await getSession();
 
     if (!result.success) {

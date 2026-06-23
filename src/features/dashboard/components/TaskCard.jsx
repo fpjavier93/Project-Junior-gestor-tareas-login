@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function TaskCard({ task, isEditing, isDeleting, isCompleted, isStatusUpdating, onToggleStatus, onEdit, onDelete, Image, diffInDays }) {
 
+    const navigate = useNavigate();
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
     const description = task.description || "";
@@ -64,6 +66,11 @@ export function TaskCard({ task, isEditing, isDeleting, isCompleted, isStatusUpd
                             onClick={onDelete}
                             disabled={isDeleting}
                         >{isDeleting ? "eliminando tarea..." : "eliminar tarea"}</button>
+                        <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
+                            onClick={() => navigate(`/dashboard/tasks/${task.id}`)}>
+                            Ver detalles
+                        </button>
+
                     </div>
                 </div>
             </div>

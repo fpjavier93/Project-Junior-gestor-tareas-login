@@ -7,7 +7,14 @@ import { useState } from "react";
 
 
 function DashboardLayout() {
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(() => {
+
+        const saveValue = localStorage.getItem("MenuPosition");
+
+        return saveValue === "true";
+    });
+
+
     const navigate = useNavigate();
     const { user } = useAuth();
 
@@ -75,8 +82,13 @@ function DashboardLayout() {
     );
 
     function handleToggleDrawer() {
-        setIsDrawerOpen((currentValue) => !currentValue)
+        setIsDrawerOpen((currentValue) => {
+            const nextValue = !currentValue;
+
+            localStorage.setItem("MenuPosition", String(nextValue))
+
+            return nextValue;
+        })
     }
 }
-
-export default DashboardLayout;
+export default DashboardLayout
