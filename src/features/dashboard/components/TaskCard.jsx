@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function TaskCard({ task, isEditing, isDeleting, isCompleted, isStatusUpdating, onToggleStatus, onEdit, onDelete, Image, diffInDays }) {
+export function TaskCard({ task, isEditing, isDeleting, isCompleted, isStatusUpdating, onToggleStatus, onEdit, onDelete, Image, diffInDays, taskType }) {
 
     const navigate = useNavigate();
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -46,6 +46,16 @@ export function TaskCard({ task, isEditing, isDeleting, isCompleted, isStatusUpd
                             }>{task.priority === "low"
                                 ? "Baja Prioridad" : task.priority === "medium"
                                     ? "Mediana Prioridad" : "Alta Prioridad"}</p>
+                        </div>
+
+                        <div className="text-sm font-medium text-indigo-500 hover:cursor-default">
+                            <p className="font-medium text-black">
+                                {taskType === null ? null
+                                    : taskType === "work" ? " Tipo de tarea: Trabajo"
+                                        : taskType === "study" ? " Tipo de tarea: Estudio" : "Tipo de tarea: Personal"}
+                            </p>
+
+
 
                         </div>
 

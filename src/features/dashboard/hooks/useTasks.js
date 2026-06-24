@@ -18,6 +18,7 @@ export function useTasks() {
     const [updatingStatusId, setUpdatingStatusId] = useState(null);
     const [titleEditTask, setTitleEditTask] = useState("");
     const [descriptionEditTask, setDescriptionEditTask] = useState("");
+    const [taskType, setTaskType] = useState("");
 
 
 
@@ -80,7 +81,9 @@ export function useTasks() {
             const task = await getTasks(
                 getStatusFilter(value),
                 searching,
-                taskPriorityFilter);
+                taskPriorityFilter,
+                taskType
+            );
 
             setUserTasks(task);
 
@@ -101,7 +104,9 @@ export function useTasks() {
             const tasks = await getTasks(
                 getStatusFilter(select),
                 value,
-                taskPriorityFilter);
+                taskPriorityFilter,
+                taskType
+            );
 
             setUserTasks(tasks)
 
@@ -129,7 +134,8 @@ export function useTasks() {
             const priorityTask = await getTasks(
                 getStatusFilter(select),
                 searching,
-                value)
+                value,
+                taskType)
 
             setUserTasks(priorityTask);
 
@@ -178,6 +184,33 @@ export function useTasks() {
             setIsSubmitting(false);
         }
     }
+    function selectTypeTask(value) {
+
+        setTaskType(value);
+
+    }
+
+    async function hanldeSearchTypeTask(value) {
+
+        setTaskType(value);
+
+        try {
+
+            const typeTask = await getTasks(
+                getStatusFilter(select),
+                searching,
+                taskPriorityFilter,
+                value
+            )
+
+            setUserTasks(typeTask)
+        } catch {
+            setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
+
+        }
+
+    }
+
 
 
 
@@ -186,7 +219,7 @@ export function useTasks() {
         searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
         setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
         titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority,
-        updatingStatusId,
+        updatingStatusId, selectTypeTask, taskType, hanldeSearchTypeTask
     };
 
 };

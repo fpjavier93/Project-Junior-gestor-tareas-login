@@ -40,20 +40,35 @@ La regla es no agregar features random. Cada feature debe mejorar la idea centra
    - [x] Practicar manejo de fechas en JavaScript.
 
 - [ ] **3. Detalle de tarea.**
-   - [ ] Ruta dinamica: `/dashboard/tasks/:taskId`.
-   - [ ] Usar `useParams`.
-   - [ ] Cargar una tarea por id.
-   - [ ] Separar vista de lista y vista de detalle.
+   - [x] Ruta dinamica: `/dashboard/tasks/:taskId`.
+   - [x] Usar `useParams`.
+   - [x] Cargar una tarea por id.
+   - [x] Separar vista de lista y vista de detalle.
 
 - [ ] **4. Categorias o etiquetas.**
-   - [ ] Permitir clasificar tareas por tipo.
-   - [ ] Ejemplos: trabajo, estudio, personal.
-   - [ ] Practicar filtros multiples.
+   - [x] Permitir clasificar tareas por tipo.
+   - [x] Ejemplos: trabajo, estudio, personal.
+   - [x] Practicar filtros multiples.
 
 - [ ] **5. Proyectos.**
    - [ ] Crear una tabla `projects`.
    - [ ] Relacionar tareas con proyectos.
    - [ ] Practicar relaciones entre tablas y rutas dinamicas.
+
+Orden recomendado
+Yo lo haría en este orden:
+Crear tabla projects en Supabase.
+Crear columna project_id en tasks.
+Crear formulario para crear proyectos.
+Crear vista para listar proyectos.
+Crear ruta dinámica /dashboard/projects/:projectId.
+Dentro del detalle del proyecto, cargar sus tareas.
+Al crear una tarea, permitir elegir a qué proyecto pertenece.
+No empezaría metiendo todo en el formulario de tareas todavía. Primero crea proyectos, después conectas tareas con proyectos.
+La idea central: projects debe ser un feature propio, porque ya no es solo un atributo de la tarea; es una entidad con sus propias páginas, rutas y relación con tareas.
+
+
+
 
 - [ ] **6. Formularios profesionales.**
    - [ ] Introducir React Hook Form.

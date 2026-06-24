@@ -15,11 +15,13 @@ import { TaskFilterPerPriority } from "../components/TaskFilterPerPriority";
 import { EditTaskDialog } from "../components/EditTaskDialog";
 import { handleImage } from "../utils/getURLImagen";
 import { calcDiffInDays } from "../utils/CreateTaskUtils";
+import { TaskFilterType } from "../components/TaskType";
 
 
 function AllTasksPage() {
 
-    const { userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch, taskPriorityFilter, handleTaskPriorityFilterChange, updatingStatusId, submitError } = useTasks();
+    const { userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching, handleSearch,
+        taskPriorityFilter, handleTaskPriorityFilterChange, updatingStatusId, submitError, taskType, hanldeSearchTypeTask } = useTasks();
     const { isDeletingID, handleEraseTask } = useEraseTasks({ setUserTasks, setError });
     const { taskToEdit, openEditDialog, isEditDialogOpen, closeEditDialog, onSave } = useEditTasks({ setUserTasks, setError });
     const today = new Date().toISOString().split("T")[0];
@@ -70,6 +72,7 @@ function AllTasksPage() {
                 Image={handleImage(task.image_url)}
                 today={today}
                 diffInDays={calcDiffInDays(task, today)}
+                taskType={task.task_type}
 
             />
 
@@ -107,6 +110,13 @@ function AllTasksPage() {
                         onStatusChange={handleSelect}
                         select={select}
                     />
+                    <TaskFilterType
+                        onselectedType={taskType}
+                        onTaskChange={hanldeSearchTypeTask}
+                    />
+
+
+
                 </div>
 
                 {submitError && (

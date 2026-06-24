@@ -9,6 +9,8 @@ import { useState } from "react";
 
 
 
+
+
 export default function CreateTaskPage() {
 
     const navigate = useNavigate();
@@ -21,7 +23,7 @@ export default function CreateTaskPage() {
 
     const { handleCreateTaskPriorityChange, createTaskPriority,
         handleSubmitCreateTaskForm, isSubmitting, submitError,
-        setError, error, handleGetImagesTask } = useTasks();
+        setError, error, handleGetImagesTask, selectTypeTask, taskType } = useTasks();
 
     const { isShowSelectTask, openGetImageDialog, closeGetImageDialog } = useGetImageTask();
 
@@ -149,6 +151,23 @@ export default function CreateTaskPage() {
                                     />
 
                                 </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <p className="block text-lg font-medium text-gray-900"> Tipo de tarea: </p>
+
+                                <select className="bg-white"
+                                    id="task_type"
+                                    name="task_type"
+                                    value={taskType}
+                                    onChange={(e) => selectTypeTask(e.target.value)}>
+
+                                    <option value={"study"}>Estudio</option>
+                                    <option value={"work"}>Trabajo</option>
+                                    <option value={"personal"}>Personal</option>
+
+                                </select>
+
 
                             </div>
 
@@ -156,6 +175,7 @@ export default function CreateTaskPage() {
                             {submitError && (
                                 <p className="text-sm text-red-600">{submitError}</p>
                             )}
+
                             <div className="flex justify-end gap-3">
 
                                 <White

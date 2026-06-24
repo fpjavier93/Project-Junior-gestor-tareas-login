@@ -17,7 +17,7 @@ export async function getAccessToken() {
     return accessToken;
 }
 
-async function getTasks(status, title, priority) {
+async function getTasks(status, title, priority, task_type) {
 
     const accessToken = await getAccessToken();
 
@@ -36,6 +36,10 @@ async function getTasks(status, title, priority) {
 
     if (priority) {
         params.priority = `eq.${priority}`;
+    }
+
+    if (task_type) {
+        params.task_type = `eq.${task_type}`;
     }
 
     const response = await apiClient.get("/tasks", {
