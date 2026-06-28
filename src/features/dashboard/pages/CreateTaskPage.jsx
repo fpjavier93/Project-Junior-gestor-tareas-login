@@ -5,11 +5,9 @@ import { useTasks } from "../hooks/useTasks";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import { ImagePickerDialog } from "../components/ImagePickerDialog";
 import { useGetImageTask } from "../hooks/useGetImageTask";
-import { useState } from "react";
-
-
-
-
+import { useState, useEffect } from "react";
+import { ProjectSelect } from "../components/ProjectSelect";
+import { useProject } from "../hooks/useProjects";
 
 export default function CreateTaskPage() {
 
@@ -19,6 +17,8 @@ export default function CreateTaskPage() {
     const [selectedImage, setSelectedImage] = useState("");
     const [dueDate, setDueDate] = useState((new Date().toISOString().split("T")[0]));
     const [checkin, setCheckin] = useState(false);
+    const { project, handleProjects, projectSelected, hanldeProjectSelected } = useProject();
+
 
 
     const { handleCreateTaskPriorityChange, createTaskPriority,
@@ -28,6 +28,11 @@ export default function CreateTaskPage() {
     const { isShowSelectTask, openGetImageDialog, closeGetImageDialog } = useGetImageTask();
 
     const errorCreateTask = { [TASK_ERROR_TYPES.CREATE]: "No se pudo crear la tarea" };
+
+    useEffect(() => {
+        handleProjects();
+
+    }, [])
 
     function handleSetChekin() {
 
@@ -167,8 +172,20 @@ export default function CreateTaskPage() {
                                     <option value={"personal"}>Personal</option>
 
                                 </select>
+                            </div>
+
+                            <div className="py-3">
+                                <div className="flex gap-3">
+                                    <p className="block text-lg font-medium text-gray-900"> Asignar la tarea al proyecto: </p>
+
+                                    <ProjectSelect
+                                        projects={project}
+                                        onProjecSelected={projectSelected}
+                                        onHandleProjectSelected={hanldeProjectSelected}
+                                    />
 
 
+                                </div>
                             </div>
 
                             <div className="pt-4 my-5 border-t border-gray-200"></div>

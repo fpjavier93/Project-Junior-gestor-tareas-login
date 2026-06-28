@@ -20,8 +20,10 @@ function DashboardLayout() {
 
     const linkList = [
         { label: 'Inicio', to: "/dashboard", end: true },
+        { label: "Crear Proyecto", to: "create-project-page", end: false },
+        { label: "Proyectos", to: "project-page", end: false },
         { label: 'Crear Tareas', to: "/dashboard/create-task", end: false },
-        { label: "Tareas", to: "/dashboard/tasks", end: false },
+        { label: "Tareas", to: "/dashboard/tasks", end: false }
     ]
 
     return (

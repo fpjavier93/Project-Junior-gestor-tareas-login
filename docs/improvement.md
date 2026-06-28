@@ -51,7 +51,7 @@ La regla es no agregar features random. Cada feature debe mejorar la idea centra
    - [x] Practicar filtros multiples.
 
 - [ ] **5. Proyectos.**
-   - [ ] Crear una tabla `projects`.
+   - [x] Crear una tabla `projects`.
    - [ ] Relacionar tareas con proyectos.
    - [ ] Practicar relaciones entre tablas y rutas dinamicas.
 
@@ -129,6 +129,8 @@ Cada feature nueva debe traer un concepto nuevo del roadmap. La idea no es apren
 - Framer Motion.
 - Cypress.
 - React Native.
+- Context API
+- React Query
 
 No son malos, pero ahora distraen. Primero conviene dominar componentes, estado, hooks, rutas, formularios, API y validacion.
 

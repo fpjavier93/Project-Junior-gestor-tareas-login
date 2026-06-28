@@ -121,7 +121,7 @@ function Dashboard() {
                             diffInDays={calcDiffInDays(task, today)}
                         />
                     }
-                    ).slice(0, 6)
+                    ).slice(0, 4)
                     }
                 </section>
             </div>

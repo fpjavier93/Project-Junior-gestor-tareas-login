@@ -7,6 +7,9 @@ import CreateTaskPage from "../features/dashboard/pages/CreateTaskPage"
 import AllTasksPage from "../features/dashboard/pages/AllTasksPage"
 import DashboardLayout from "../layouts/DashboardLayout";
 import TaskDetailPage from "../features/dashboard/pages/TaskDetailPage";
+import { ProjectPage } from "../features/dashboard/pages/ProjectPage";
+import { CreateProjectPage } from "../features/dashboard/pages/CreateProjectPage";
+import { ProjectDetailsPage } from "../features/dashboard/pages/ProjectDetailsPage";
 
 
 export const router = createBrowserRouter([
@@ -24,7 +27,12 @@ export const router = createBrowserRouter([
             { index: true, element: <Dashboard /> },
             { path: "create-task", element: <CreateTaskPage /> },
             { path: "tasks", element: <AllTasksPage /> },
-            { path: "tasks/:taskId", element: <TaskDetailPage /> }
+            { path: "tasks/:taskId", element: <TaskDetailPage /> },
+            { path: "project-page", element: <ProjectPage /> },
+            { path: "create-project-page", element: <CreateProjectPage /> },
+            { path: "project-page", element: <ProjectPage /> },
+            { path: "projects/:projectID", element: <ProjectDetailsPage /> }
+
         ],
     },
 ]);

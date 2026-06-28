@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { editTask, getTasks, createTask } from "../services/tasksApiServices";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import getUserID from "../services/CreateTaskServices";
@@ -47,6 +47,7 @@ export function useTasks() {
             });
 
         } catch (error) {
+            console.error("Error al actualizar el estado de la tarea:", error.response?.data || error);
             setSubmitError("No se pudo actualizar el estado de la tarea");
         } finally {
             setUpdatingStatusId(null);
@@ -63,7 +64,8 @@ export function useTasks() {
 
             setUserTasks(getUserTasks);
         }
-        catch {
+        catch (error) {
+            console.error("Error al cargar las tareas:", error.response?.data || error);
 
             setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
         }
@@ -88,7 +90,8 @@ export function useTasks() {
             setUserTasks(task);
 
 
-        } catch {
+        } catch (error) {
+            console.error("Error al filtrar tareas por estado:", error.response?.data || error);
             setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
             setSelect("todas")
         }
@@ -110,7 +113,8 @@ export function useTasks() {
 
             setUserTasks(tasks)
 
-        } catch {
+        } catch (error) {
+            console.error("Error al buscar tareas:", error.response?.data || error);
 
             setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
 
@@ -139,7 +143,8 @@ export function useTasks() {
 
             setUserTasks(priorityTask);
 
-        } catch {
+        } catch (error) {
+            console.error("Error al filtrar tareas por prioridad:", error.response?.data || error);
 
             setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
             setTaskPriorityFilter("")
@@ -175,7 +180,8 @@ export function useTasks() {
             setCheckin(false);
 
 
-        } catch {
+        } catch (error) {
+            console.error("Error al crear la tarea:", error.response?.data || error);
 
             setError({ status: true, type: TASK_ERROR_TYPES.CREATE })
 
@@ -204,7 +210,8 @@ export function useTasks() {
             )
 
             setUserTasks(typeTask)
-        } catch {
+        } catch (error) {
+            console.error("Error al filtrar tareas por tipo:", error.response?.data || error);
             setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
 
         }
@@ -223,3 +230,5 @@ export function useTasks() {
     };
 
 };
+
+
