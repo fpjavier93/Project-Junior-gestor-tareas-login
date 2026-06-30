@@ -94,4 +94,27 @@ async function deleteTask(id) {
     });
 }
 
-export { getTasks, createTask, editTask, deleteTask };
+async function getTasksById(projectID) {
+
+    const accessToken = await getAccessToken();
+
+    const params = {
+        select: "*",
+        order: "created_at.desc",
+        project_id: `eq.${projectID}`
+    };
+
+
+    const response = await apiClient.get("/tasks", {
+        params,
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
+    return response.data;
+}
+
+
+
+export { getTasks, createTask, editTask, deleteTask, getTasksById };

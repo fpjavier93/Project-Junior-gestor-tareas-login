@@ -1,39 +1,44 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../services";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "../schemas/loginSchema";
 
 export default function LoginPage() {
 
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(loginSchema)
+  })
+
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+
+
+  async function onSubmit(data) {
+
     setError("");
     setSuccessMessage("");
-    setLoading(true);
 
     try {
-      const result = await signIn(email.trim(), password);
+      const result = await signIn(data.email, data.password);
 
       if (result.success) {
         setSuccessMessage(result.message);
-        setEmail("");
-        setPassword("");
         navigate("/dashboard", { replace: true });
       } else {
         setError(result.error || "Error al iniciar sesión");
       }
     } catch {
-
       setError("Error inesperado al iniciar sesión");
-
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -64,7 +69,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -75,13 +80,9 @@ export default function LoginPage() {
               <div className="mt-2">
                 <input
                   id="email"
-                  name="email"
                   type="email"
-                  required
                   autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={loading}
+                  {...register("email")}
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 disabled:bg-gray-100 disabled:cursor-not-allowed"
                 />
               </div>
@@ -99,13 +100,9 @@ export default function LoginPage() {
               <div className="mt-2">
                 <input
                   id="password"
-                  name="password"
                   type="password"
-                  required
                   autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={loading}
+                  {...register("password")}
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 disabled:bg-gray-100 disabled:cursor-not-allowed"
                 />
               </div>
@@ -123,10 +120,10 @@ export default function LoginPage() {
             <div>
               <button
                 type="submit"
-                disabled={loading}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors"
+                disabled={isSubmitting}
               >
-                {loading ? "Iniciando sesión..." : "Login"}
+                {isSubmitting ? "Iniciando sesión..." : "Login"}
               </button>
             </div>
           </form>

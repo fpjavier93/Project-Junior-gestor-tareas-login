@@ -77,7 +77,12 @@ export function TaskCard({ task, isEditing, isDeleting, isCompleted, isStatusUpd
                             disabled={isDeleting}
                         >{isDeleting ? "eliminando tarea..." : "eliminar tarea"}</button>
                         <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
-                            onClick={() => navigate(`/dashboard/tasks/${task.id}`)}>
+                            onClick={() => navigate(`/dashboard/tasks/${task.id}`, {
+                                state: {
+                                    from: "/dashboard/tasks"
+                                }
+
+                            })}>
                             Ver detalles
                         </button>
 

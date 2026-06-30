@@ -52,8 +52,8 @@ La regla es no agregar features random. Cada feature debe mejorar la idea centra
 
 - [ ] **5. Proyectos.**
    - [x] Crear una tabla `projects`.
-   - [ ] Relacionar tareas con proyectos.
-   - [ ] Practicar relaciones entre tablas y rutas dinamicas.
+   - [x] Relacionar tareas con proyectos.
+   - [x] Practicar relaciones entre tablas y rutas dinamicas.
 
 Orden recomendado
 Yo lo haría en este orden:

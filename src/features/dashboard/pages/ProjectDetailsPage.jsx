@@ -1,14 +1,20 @@
-﻿import { useParams } from "react-router-dom"
+﻿import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useProject } from "../hooks/useProjects"
 import LoadingSpinner from "../../../components/LoadingSpinner"
 import { getProjectByID } from "../services/taskProjectServices"
+import { getTasksById } from "../services/tasksApiServices"
+
 
 export function ProjectDetailsPage() {
 
     const { projectID } = useParams()
     const { loading, setloading } = useProject();
     const [project, setProject] = useState({});
+    const [tasks, setTasks] = useState([]);
+    const navigate = useNavigate();
+
+
 
 
     useEffect(() => {
@@ -18,8 +24,11 @@ export function ProjectDetailsPage() {
             try {
                 setloading(true)
                 const detailsProject = await getProjectByID(projectID)
-                setProject(detailsProject);
-                console.log(detailsProject)
+                setProject(detailsProject)
+
+                const tasksList = await getTasksById(projectID)
+                console.log(tasksList)
+                setTasks(tasksList);
 
             } finally {
                 setloading(false)
@@ -37,7 +46,6 @@ export function ProjectDetailsPage() {
     if (loading) {
         return <LoadingSpinner />
     }
-
 
 
     return (
@@ -62,7 +70,7 @@ export function ProjectDetailsPage() {
                             className="text-sm font-medium text-indigo-600 hover:underline hover:cursor-pointer"
                             onClick={() => navigate("/dashboard/project-page")}
                         >
-                            Volver
+                            ← Volver atras
                         </button>
                     </div>
                 </header>
@@ -92,7 +100,7 @@ export function ProjectDetailsPage() {
                                 Tareas
                             </h2>
                             <p className="mt-1 text-2xl font-bold text-gray-900">
-                                0
+                                {tasks.length}
                             </p>
                         </div>
 
@@ -111,15 +119,26 @@ export function ProjectDetailsPage() {
                             <h2 className="text-xl font-bold text-gray-900">
                                 Tareas del proyecto
                             </h2>
-                            <p className="mt-1 text-sm text-gray-700">
-                                Aqui podras mostrar las tareas relacionadas con este proyecto.
-                            </p>
                         </div>
 
-                        <div className="flex items-center justify-center mt-5 border border-indigo-300 border-dashed rounded-md min-h-40 bg-indigo-50">
-                            <p className="text-sm font-medium text-gray-500">
-                                Todavia no hay tareas cargadas en esta vista.
-                            </p>
+                        <div className="flex flex-col mt-5 border border-indigo-300 border-dashed rounded-md min-h-40 bg-indigo-50">
+
+                            {tasks.map((task) => (
+
+                                <p className="text-4xl font-medium text-black"
+                                    key={task.id}>
+                                    - <button className="hover:underline hover:cursor-pointer"
+                                        onClick={() => (navigate(`/dashboard/tasks/${task.id}`, {
+                                            state: {
+                                                from: `/dashboard/projects/${projectID}`
+                                            }
+
+                                        }))}
+
+                                    > {task.title} </button>
+                                </p>
+
+                            ))}
                         </div>
                     </div>
                 </section>

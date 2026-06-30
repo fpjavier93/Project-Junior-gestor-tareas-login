@@ -6,6 +6,7 @@ import { useTasks } from "../hooks/useTasks";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function TaskDetailPage() {
     const navigate = useNavigate();
@@ -13,6 +14,9 @@ function TaskDetailPage() {
     const [showTask, setShowTask] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState({ status: false, type: 0 });
+    const location = useLocation();
+    const backTo = location.state?.from || "/dashboard/tasks";
+
 
     useEffect(() => {
 
@@ -111,7 +115,7 @@ function TaskDetailPage() {
             <div className="flex justify-end py-3">
                 <button
                     className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
-                    onClick={() => navigate("/dashboard/tasks")}
+                    onClick={() => navigate(backTo)}
                 > ← Volver atras</button>
             </div>
         </main>
