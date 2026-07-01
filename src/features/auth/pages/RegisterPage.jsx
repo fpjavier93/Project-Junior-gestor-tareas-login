@@ -3,54 +3,33 @@ import { useState } from "react";
 import { signUp } from "../services";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../../components/ErrorMessage";
+import { useForm } from "react-hook-form";
+import { registerSchema } from "../schemas/registerSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function RegisterPage() {
+
+
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: zodResolver(registerSchema),
+        mode: "onChange"
+    })
+
     const navigate = useNavigate();
-    const [name, setName] = useState('');
-    const [lastName, setlastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [company, setCompany] = useState('');
+
     const [error, setError] = useState(false);
-    const [passIsInvalid, setPassIsInvalid] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const isFormInvalid =
-        name.trim() === "" ||
-        lastName.trim() === "" ||
-        email.trim() === "" ||
-        company.trim() === "";
 
 
-    async function handleSubmit(e) {
 
-        setIsSubmitting(true)
-
-        e.preventDefault();
-
-        const formData = new FormData(e.target);
-
-        const dataFormValue = Object.fromEntries(formData)
-
-        if (dataFormValue.password !== dataFormValue.confirmPassword) {
-            if (passIsInvalid) {
-                setIsSubmitting(false)
-                return
-            }
-            setPassIsInvalid(true);
-            setTimeout(() => [setPassIsInvalid(false), setIsSubmitting(false)], 2000);
-            return
-        }
-
-
-        for (const key in dataFormValue) {
-            if (typeof dataFormValue[key] === "string") {
-                dataFormValue[key] = dataFormValue[key].trim()
-            }
-        }
-
+    async function onSubmit(data) {
 
         try {
-            const response = await signUp(dataFormValue)
+            const response = await signUp(data)
             if (response.success) {
                 navigate("/");
                 return;
@@ -61,24 +40,8 @@ export default function RegisterPage() {
         } catch {
             setError(true);
 
-        } finally {
-            setIsSubmitting(false)
         }
     }
-
-
-
-    function validateEmail(e) {
-        const email = e.target.value.trim();
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailRegex.test(email)) {
-
-            return
-        }
-    }
-
 
     if (error) {
         return <div>
@@ -103,23 +66,33 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
                         <div>
                             <label htmlFor="nombre" className="block font-medium text-gray-900 text-sm/6">
                                 Nombre(s)
                             </label>
                             <div className="mt-2">
                                 <input
-                                    onChange={e => setName(e.target.value)}
-                                    value={name}
+
                                     id="nombre"
                                     name="nombre"
                                     type="nombre"
+                                    {...register("nombre")}
                                     required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                             </div>
+
+                            {errors.nombre && (
+                                <div className="my-2 font-light text-center text-red-700 bg-red-200 border-0 rounded">
+                                    {errors.nombre.message}
+                                </div>
+                            )}
+
                         </div>
+
+
 
                         <div>
                             <div className="items-center justify-between">
@@ -128,16 +101,23 @@ export default function RegisterPage() {
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                        onChange={e => setlastName(e.target.value)}
-                                        value={lastName}
+
                                         id="apellidos"
                                         name="apellidos"
                                         type="apellidos"
+                                        {...register("apellidos")}
                                         required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
                             </div>
+
+                            {errors.apellidos && (
+                                <div className="my-2 font-light text-center text-red-700 bg-red-200 border-0 rounded">
+                                    {errors.apellidos.message}
+                                </div>
+                            )}
+
                         </div>
 
                         <div className="items-center justify-between">
@@ -146,11 +126,13 @@ export default function RegisterPage() {
                             </label>
                             <div className="mt-2">
                                 <input
-                                    onChange={e => setEmail(e.target.value)}
-                                    value={email}
-                                    onBlur={(validateEmail)}
 
-                                    id='email' name="email" type="email" autoComplete="current-email" required
+                                    id='email'
+                                    name="email"
+                                    type="email"
+                                    {...register("email")}
+                                    autoComplete="current-email"
+                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
 
                             </div>
@@ -162,10 +144,20 @@ export default function RegisterPage() {
                             </label>
                             <div className="mt-2">
                                 <input
-                                    onChange={e => setCompany(e.target.value)}
-                                    value={company} id="empresa" name="empresa" type="empresa" required
+
+                                    id="empresa"
+                                    name="empresa"
+                                    type="empresa"
+                                    {...register("empresa")}
+                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
+
+                            {errors.empresa && (
+                                <div className="my-2 font-light text-center text-red-700 bg-red-200 border-0 rounded">
+                                    {errors.empresa.message}
+                                </div>
+                            )}
 
                         </div>
 
@@ -175,7 +167,11 @@ export default function RegisterPage() {
                             </label>
 
                             <div className="mt-2">
-                                <input id="password" name="password" type="password" required
+                                <input id="password"
+                                    name="password"
+                                    type="password"
+                                    {...register("password")}
+                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
                         </div>
@@ -185,14 +181,25 @@ export default function RegisterPage() {
                                 Confirmar Password
                             </label>
                             <div className="mt-2">
-                                <input id="confirmPassword" name="confirmPassword" type="password" required
+                                <input id="confirmPassword"
+                                    name="confirmPassword"
+                                    type="password"
+                                    {...register("confirmPassword")}
+                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
-                            {passIsInvalid && <div className="my-2 font-light text-center text-red-700 bg-red-200 border-0 rounded">No coinciden los passwords</div>}
+
+                            {errors.confirmPassword && (
+                                <div className="my-2 font-light text-center text-red-700 bg-red-200 border-0 rounded">
+                                    {errors.confirmPassword.message}
+                                </div>
+                            )}
+
+
                         </div>
                         <div>
                             <button
-                                disabled={isFormInvalid || isSubmitting}
+                                disabled={isSubmitting}
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
                                 disabled:bg-indigo-300 disabled:hover:bg-indigo-300 disabled:cursor-not-allowed"

@@ -190,6 +190,7 @@ export function useTasks() {
             setIsSubmitting(false);
         }
     }
+
     function selectTypeTask(value) {
 
         setTaskType(value);

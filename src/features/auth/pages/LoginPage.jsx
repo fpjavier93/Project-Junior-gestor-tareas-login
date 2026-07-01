@@ -21,8 +21,6 @@ export default function LoginPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
 
-
-
   async function onSubmit(data) {
 
     setError("");
