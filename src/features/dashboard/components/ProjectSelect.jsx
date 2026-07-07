@@ -10,11 +10,14 @@ export function ProjectSelect({ projects, onProjecSelected, onHandleProjectSelec
             value={onProjecSelected}
             onChange={(e) => onHandleProjectSelected(e.target.value)}
         >
+
+            <option value={""}> Sin Proyecto</option>
             {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                     {project.name}
                 </option>
             ))}
+
         </select>
     )
 }

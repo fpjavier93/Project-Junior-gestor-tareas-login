@@ -30,4 +30,20 @@ max-w-max  “El ancho máximo será el tamaño del contenido”
 shrink-0   “No reduzcas mi ancho aunque el contenido del lado derecho sea grande”.
 
 
-investigar sobre dialog
+
+
+Revisar due_date
+Ahora estás mezclando value={dueDate}, onChange, disabled y register. Hay que dejarlo limpio para que React Hook Form reciba bien la fecha.
+
+Revisar project_id
+Tu ProjectSelect todavía no está registrado directamente con React Hook Form. Funciona por HTML si tiene name, pero si quieres validarlo con Zod de forma consistente, conviene conectarlo mejor.
+
+Después migrar EditTaskDialog
+Usa reglas parecidas a crear tarea, así puedes reutilizar parte del schema o crear editTaskSchema.
+
+Finalmente limpiar warnings
+Imports sin usar, estados viejos que ya no necesitas, y código duplicado.
+
+Mi recomendación inmediata: mostrar los errores de Zod en CreateTaskPage. Es el siguiente paso lógico porque ya validas, pero el usuario todavía no ve claramente qué falló.
+
+

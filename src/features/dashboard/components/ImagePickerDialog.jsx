@@ -3,8 +3,6 @@ import { Blue, White } from "../../../components/Buttons";
 import { getTaskImages } from "../services/imagesApiService";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
-
-
 export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
 
     const [images, setImages] = useState([]);
@@ -45,7 +43,7 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
     }, [isOpen]);
 
 
-    function hanldeSelectdImage(image) {
+    function handleSelectdImage(image) {
 
         if (tempSelectImage === image.download_url) {
             setTempSelectImage("");
@@ -58,10 +56,7 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
 
     }
 
-
-
     if (!isOpen) return null
-
 
     if (loading) {
 
@@ -73,6 +68,7 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
             </div>
         )
     }
+
 
     return (
 
@@ -90,7 +86,7 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
                             className={tempSelectImage === image.download_url
                                 ? "object-cover w-48 h-48 border-indigo-600 border-6 hover:cursor-pointer hover:border-8"
                                 : "object-cover w-48 h-48 hover:border-6 hover:border-indigo-200 hover:cursor-pointer"}
-                            onClick={() => hanldeSelectdImage(image)}
+                            onClick={() => handleSelectdImage(image)}
                         />
                     ))}
 

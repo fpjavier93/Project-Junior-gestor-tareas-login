@@ -8,21 +8,44 @@ import { useGetImageTask } from "../hooks/useGetImageTask";
 import { useState, useEffect } from "react";
 import { ProjectSelect } from "../components/ProjectSelect";
 import { useProject } from "../hooks/useProjects";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { taskSchema } from "../schemas/taskSchema";
+import { useForm } from "react-hook-form";
+import { tr } from "zod/locales";
 
 export default function CreateTaskPage() {
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setValue,
+        watch,
+        formState: { errors, isSubmitting }
+    } = useForm({
+        resolver: zodResolver(taskSchema),
+        mode: "onChange",
+        defaultValues: {
+            has_due_date: false,
+            due_date: "",
+            image_url: "",
+        }
+    })
+
+    const hasDueDate = watch("has_due_date");
 
     const navigate = useNavigate();
     const today = new Date().toISOString().split("T")[0];
 
     const [selectedImage, setSelectedImage] = useState("");
-    const [dueDate, setDueDate] = useState((new Date().toISOString().split("T")[0]));
-    const [checkin, setCheckin] = useState(false);
+
+
     const { project, handleProjects, projectSelected, hanldeProjectSelected } = useProject();
 
 
 
     const { handleCreateTaskPriorityChange, createTaskPriority,
-        handleSubmitCreateTaskForm, isSubmitting, submitError,
+        handleSubmitCreateTaskForm, submitError,
         setError, error, handleGetImagesTask, selectTypeTask, taskType } = useTasks();
 
     const { isShowSelectTask, openGetImageDialog, closeGetImageDialog } = useGetImageTask();
@@ -37,11 +60,7 @@ export default function CreateTaskPage() {
 
     }, [])
 
-    function handleSetChekin() {
 
-        setCheckin((currentValue) => !currentValue)
-
-    }
 
     if (error.status) {
         return <ErrorMessage error={errorCreateTask[error.type] || "Accion inesperada"}
@@ -56,7 +75,7 @@ export default function CreateTaskPage() {
             <div className="p-4 bg-indigo-200 border border-gray-300 rounded shadow my-18">
 
                 <form
-                    onSubmit={(e) => handleSubmitCreateTaskForm(e, setSelectedImage, setCheckin)}
+                    onSubmit={handleSubmit((data) => handleSubmitCreateTaskForm(data, setSelectedImage, reset))}
                     className="space-y-6">
                     <div>
 
@@ -69,9 +88,15 @@ export default function CreateTaskPage() {
                                 id="title"
                                 name="title"
                                 type="title"
-                                required
+                                {...register("title")}
                                 className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                             />
+
+                            {errors.title && (
+                                <p className="mt-1 text-sm font-medium text-red-600">
+                                    {errors.title.message}
+                                </p>
+                            )}
                         </div>
 
                         <div className="py-5">
@@ -84,7 +109,7 @@ export default function CreateTaskPage() {
                                 <textarea
                                     id="description"
                                     name="description"
-                                    required
+                                    {...register("description")}
                                     rows={5}
                                     className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
@@ -96,13 +121,25 @@ export default function CreateTaskPage() {
                                         alt="Imagen seleccionada para la tarea"
                                     />)
                                 }
+
+
                                 <input
                                     type="hidden"
                                     name="image_url"
-                                    value={selectedImage}
+                                    {...register("image_url")}
+
                                 />
 
                             </div>
+
+                            <div>
+                                {errors.description && (
+                                    <p className="mt-1 text-sm font-medium text-red-600">
+                                        {errors.description.message}
+                                    </p>
+                                )}
+                            </div>
+
                             <div className="flex justify-between py-3">
                                 <div className="flex gap-3">
 
@@ -114,8 +151,8 @@ export default function CreateTaskPage() {
                                             value={"low"}
                                             id="low"
                                             type="radio"
-                                            checked={createTaskPriority === "low"}
-                                            onChange={(e) => handleCreateTaskPriorityChange(e.target.id)} />Baja
+                                            {...register("priority")}
+                                        />Baja
                                     </label>
 
                                     <label htmlFor="medium">
@@ -124,8 +161,9 @@ export default function CreateTaskPage() {
                                             value={"medium"}
                                             id="medium"
                                             type="radio"
-                                            checked={createTaskPriority === "medium"}
-                                            onChange={(e) => handleCreateTaskPriorityChange(e.target.id)} />Media
+                                            {...register("priority")}
+
+                                        />Media
                                     </label>
 
                                     <label htmlFor="high">
@@ -134,9 +172,16 @@ export default function CreateTaskPage() {
                                             value={"high"}
                                             id="high"
                                             type="radio"
-                                            checked={createTaskPriority === "high"}
-                                            onChange={(e) => handleCreateTaskPriorityChange(e.target.id)} />Alta
+                                            {...register("priority")}
+
+                                        />Alta
                                     </label>
+
+                                    {errors.priority && (
+                                        <p className="mt-1 text-sm font-medium text-red-600">
+                                            {errors.priority.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="flex gap-3">
@@ -144,20 +189,39 @@ export default function CreateTaskPage() {
                                     <input
                                         id="has_due_date"
                                         type="checkbox"
-                                        checked={checkin}
-                                        onChange={(e) => handleSetChekin(e.target.checked)}
+                                        checked={hasDueDate}
+                                        {...register("has_due_date", {
+                                            onChange: (e) => {
+                                                if (e.target.checked) {
+                                                    setValue("due_date", today, { shouldValidate: true });
+                                                } else {
+                                                    setValue("due_date", "", { shouldValidate: true });
+                                                }
+                                            },
+                                        })}
+
                                     />
+                                    {errors.task_type && (
+                                        <p className="mt-1 text-sm font-medium text-red-600">
+                                            {errors.task_type.message}
+                                        </p>
+                                    )}
+
                                     <label htmlFor="has_due_date" className="font-medium">Seleccionar fecha limite:</label>
 
-                                    <input className={`h-8 font-medium rounded bg-indigo-50 ${!checkin ? "disabled:bg-gray-300" : ""}`}
+                                    <input className={`h-8 font-medium rounded bg-indigo-50 ${!hasDueDate ? "disabled:bg-gray-300" : ""}`}
                                         type="date"
                                         name="due_date"
                                         min={today}
-                                        value={dueDate}
-                                        onChange={(e) => setDueDate(e.target.value)}
-                                        disabled={!checkin}
+                                        {...register("due_date")}
+                                        disabled={!hasDueDate}
                                     />
 
+                                    {errors.due_date && (
+                                        <p className="mt-1 text-sm font-medium text-red-600">
+                                            {errors.due_date.message}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
@@ -168,8 +232,9 @@ export default function CreateTaskPage() {
                                     id="task_type"
                                     name="task_type"
                                     value={taskType}
-                                    onChange={(e) => selectTypeTask(e.target.value)}>
-
+                                    onChange={(e) => selectTypeTask(e.target.value)}
+                                    {...register("task_type")}
+                                >
                                     <option value={"study"}>Estudio</option>
                                     <option value={"work"}>Trabajo</option>
                                     <option value={"personal"}>Personal</option>
@@ -186,7 +251,6 @@ export default function CreateTaskPage() {
                                         onProjecSelected={projectSelected}
                                         onHandleProjectSelected={hanldeProjectSelected}
                                     />
-
 
                                 </div>
                             </div>
@@ -221,10 +285,14 @@ export default function CreateTaskPage() {
                 </form>
 
             </div>
+
             <ImagePickerDialog
                 isOpen={isShowSelectTask}
                 onClose={closeGetImageDialog}
-                onSelectedImage={setSelectedImage}
+                onSelectedImage={(tempSelectImage) => {
+                    setSelectedImage(tempSelectImage);
+                    setValue("image_url", tempSelectImage);
+                }}
             />
         </div >
 

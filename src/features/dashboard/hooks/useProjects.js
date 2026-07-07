@@ -8,7 +8,7 @@ import { getAccessToken } from "../services/tasksApiServices";
 export function useProject() {
     const [loading, setloading] = useState(false);
     const [project, setProject] = useState([]);
-    const [projectSelected, setprojectSelected] = useState("");
+    const [projectSelected, setprojectSelected] = useState("Sin proyecto");
 
 
     async function handleSubmitCreateProjectForm(e) {

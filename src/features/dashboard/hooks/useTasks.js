@@ -152,32 +152,24 @@ export function useTasks() {
 
     }
 
-    async function handleSubmitCreateTaskForm(e, setSelectedImage, setCheckin) {
+    async function handleSubmitCreateTaskForm(data, setSelectedImage, reset) {
 
-        setIsSubmitting(true);
-        e.preventDefault();
-        setSubmitError("");
-
-        const formData = new FormData(e.target);
-
-        const dataTask = Object.fromEntries([...formData.entries()].map(([key, value]) => {
-            return [key,
-                typeof value === "string" ? value.trim() : value
-            ]
-
-        }))
+        setIsSubmitting(true)
 
         const newDataTask = {
             user_id: await getUserID(),
-            ...dataTask
+            ...data
         };
 
-        try {
+        if (newDataTask.project_id === "") {
+            newDataTask.project_id = null;
+        }
 
+        try {
             await createTask(newDataTask);
-            e.target.reset()
+
             setSelectedImage("");
-            setCheckin(false);
+            reset();
 
 
         } catch (error) {

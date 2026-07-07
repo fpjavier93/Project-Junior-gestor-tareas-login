@@ -9,8 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function RegisterPage() {
 
-
-
     const {
         register,
         handleSubmit,
@@ -23,8 +21,6 @@ export default function RegisterPage() {
     const navigate = useNavigate();
 
     const [error, setError] = useState(false);
-
-
 
     async function onSubmit(data) {
 
@@ -91,8 +87,6 @@ export default function RegisterPage() {
                             )}
 
                         </div>
-
-
 
                         <div>
                             <div className="items-center justify-between">
