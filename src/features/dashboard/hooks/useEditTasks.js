@@ -27,6 +27,7 @@ export function useEditTasks({ setError, setUserTasks }) {
 
         if (!taskToEdit) return
 
+
         try {
 
             await editTask(taskToEdit.id, editedTask)
@@ -35,13 +36,17 @@ export function useEditTasks({ setError, setUserTasks }) {
 
             setUserTasks(getUserTasks);
 
-        } catch {
-
-            setError({ status: true, type: TASK_ERROR_TYPES.EDIT })
-
-        } finally {
             setIsEditDialogOpen(false)
             setTaskToEdit(null)
+
+        } catch (error) {
+            console.error("Error al editar la tarea:", error);
+
+            setError({ status: true, type: TASK_ERROR_TYPES.EDIT });
+
+            throw error;
+
+
         }
 
     }

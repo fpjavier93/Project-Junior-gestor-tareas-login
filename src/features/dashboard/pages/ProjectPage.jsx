@@ -1,6 +1,5 @@
-﻿import { useEffect, useState } from "react";
+﻿import { useEffect } from "react";
 import { useProject } from "../hooks/useProjects";
-import { getProject } from "../services/taskProjectServices";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { ProjectCard } from "../components/ProjectCard";
 
@@ -8,7 +7,7 @@ import { ProjectCard } from "../components/ProjectCard";
 export function ProjectPage() {
 
 
-    const { loading, setloading, project, setProject, handleProjects } = useProject();
+    const { loading, project, handleProjects } = useProject();
 
 
     useEffect(() => {
@@ -41,3 +40,4 @@ export function ProjectPage() {
         </main>
     )
 }
+

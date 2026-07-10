@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { deleteTask, getTasks } from "../services/tasksApiServices";
 import { openDeleteTaskModal } from "../services/taskModalServices";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
@@ -15,7 +15,8 @@ export function useEraseTasks({ setError, setUserTasks }) {
         const result = await openDeleteTaskModal()
 
         if (result.dismiss) {
-            return
+            setIsDeletingID(null);
+            return;
         }
 
         setIsDeletingID(null)
@@ -33,6 +34,7 @@ export function useEraseTasks({ setError, setUserTasks }) {
         }
     };
 
-    return { handleEraseTask }
+    return { handleEraseTask, isDeletingID }
 
 };
+

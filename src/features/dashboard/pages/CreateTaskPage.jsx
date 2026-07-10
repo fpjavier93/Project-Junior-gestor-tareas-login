@@ -11,7 +11,6 @@ import { useProject } from "../hooks/useProjects";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { taskSchema } from "../schemas/taskSchema";
 import { useForm } from "react-hook-form";
-import { tr } from "zod/locales";
 
 export default function CreateTaskPage() {
 
@@ -40,13 +39,11 @@ export default function CreateTaskPage() {
     const [selectedImage, setSelectedImage] = useState("");
 
 
-    const { project, handleProjects, projectSelected, hanldeProjectSelected } = useProject();
+    const { project, handleProjects } = useProject();
 
-
-
-    const { handleCreateTaskPriorityChange, createTaskPriority,
+    const {
         handleSubmitCreateTaskForm, submitError,
-        setError, error, handleGetImagesTask, selectTypeTask, taskType } = useTasks();
+        setError, error } = useTasks();
 
     const { isShowSelectTask, openGetImageDialog, closeGetImageDialog } = useGetImageTask();
 
@@ -64,7 +61,7 @@ export default function CreateTaskPage() {
 
     if (error.status) {
         return <ErrorMessage error={errorCreateTask[error.type] || "Accion inesperada"}
-            onTryAgain={() => setError(false)}
+            onTryAgain={() => setError({ status: false, type: 0 })}
             onCancel={() => navigate("/dashboard")}
         />
     }
@@ -86,8 +83,7 @@ export default function CreateTaskPage() {
                         <div className="py-3">
                             <input
                                 id="title"
-                                name="title"
-                                type="title"
+                                type="text"
                                 {...register("title")}
                                 className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                             />
@@ -108,7 +104,6 @@ export default function CreateTaskPage() {
                             <div className="flex py-3">
                                 <textarea
                                     id="description"
-                                    name="description"
                                     {...register("description")}
                                     rows={5}
                                     className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -121,7 +116,6 @@ export default function CreateTaskPage() {
                                         alt="Imagen seleccionada para la tarea"
                                     />)
                                 }
-
 
                                 <input
                                     type="hidden"
@@ -147,7 +141,6 @@ export default function CreateTaskPage() {
 
                                     <label htmlFor="low">
                                         <input className="mx-2"
-                                            name={"priority"}
                                             value={"low"}
                                             id="low"
                                             type="radio"
@@ -157,7 +150,6 @@ export default function CreateTaskPage() {
 
                                     <label htmlFor="medium">
                                         <input className="mx-2"
-                                            name={"priority"}
                                             value={"medium"}
                                             id="medium"
                                             type="radio"
@@ -168,7 +160,6 @@ export default function CreateTaskPage() {
 
                                     <label htmlFor="high">
                                         <input className="mx-2"
-                                            name={"priority"}
                                             value={"high"}
                                             id="high"
                                             type="radio"
@@ -201,17 +192,12 @@ export default function CreateTaskPage() {
                                         })}
 
                                     />
-                                    {errors.task_type && (
-                                        <p className="mt-1 text-sm font-medium text-red-600">
-                                            {errors.task_type.message}
-                                        </p>
-                                    )}
+
 
                                     <label htmlFor="has_due_date" className="font-medium">Seleccionar fecha limite:</label>
 
                                     <input className={`h-8 font-medium rounded bg-indigo-50 ${!hasDueDate ? "disabled:bg-gray-300" : ""}`}
                                         type="date"
-                                        name="due_date"
                                         min={today}
                                         {...register("due_date")}
                                         disabled={!hasDueDate}
@@ -230,9 +216,6 @@ export default function CreateTaskPage() {
 
                                 <select className="bg-white"
                                     id="task_type"
-                                    name="task_type"
-                                    value={taskType}
-                                    onChange={(e) => selectTypeTask(e.target.value)}
                                     {...register("task_type")}
                                 >
                                     <option value={"study"}>Estudio</option>
@@ -240,6 +223,13 @@ export default function CreateTaskPage() {
                                     <option value={"personal"}>Personal</option>
 
                                 </select>
+
+                                {errors.task_type && (
+                                    <p className="mt-1 text-sm font-medium text-red-600">
+                                        {errors.task_type.message}
+                                    </p>
+                                )}
+
                             </div>
 
                             <div className="py-3">
@@ -248,8 +238,7 @@ export default function CreateTaskPage() {
 
                                     <ProjectSelect
                                         projects={project}
-                                        onProjecSelected={projectSelected}
-                                        onHandleProjectSelected={hanldeProjectSelected}
+                                        projectField={register("project_id")}
                                     />
 
                                 </div>

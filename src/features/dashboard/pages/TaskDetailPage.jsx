@@ -1,8 +1,7 @@
-import { useParams } from "react-router-dom"
+﻿import { useParams } from "react-router-dom"
 import { getTaskById } from "../services/getTaskById";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
-import { useTasks } from "../hooks/useTasks";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +32,8 @@ function TaskDetailPage() {
                 setShowTask(task);
 
             } catch (error) {
-                setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
+                console.error("Error al cargar la tarea:", error);
+                setError({ status: true, type: TASK_ERROR_TYPES.LOAD });
             } finally {
                 setLoading(false);
             }
@@ -123,3 +123,4 @@ function TaskDetailPage() {
 }
 
 export default TaskDetailPage;
+

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+﻿import { Link } from "react-router-dom"
 import { useState } from "react";
 import { signUp } from "../services";
 import { useNavigate } from "react-router-dom";
@@ -62,7 +62,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                    <form
+                        noValidate
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-6">
 
                         <div>
                             <label htmlFor="nombre" className="block font-medium text-gray-900 text-sm/6">
@@ -70,12 +73,10 @@ export default function RegisterPage() {
                             </label>
                             <div className="mt-2">
                                 <input
-
                                     id="nombre"
                                     name="nombre"
-                                    type="nombre"
+                                    type="text"
                                     {...register("nombre")}
-                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                             </div>
@@ -95,12 +96,10 @@ export default function RegisterPage() {
                                 </label>
                                 <div className="mt-2">
                                     <input
-
                                         id="apellidos"
                                         name="apellidos"
-                                        type="apellidos"
+                                        type="text"
                                         {...register("apellidos")}
-                                        required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -120,16 +119,19 @@ export default function RegisterPage() {
                             </label>
                             <div className="mt-2">
                                 <input
-
                                     id='email'
                                     name="email"
                                     type="email"
                                     {...register("email")}
                                     autoComplete="current-email"
-                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
-
                             </div>
+
+                            {errors.email && (
+                                <div className="my-2 font-light text-center text-red-700 bg-red-200 border-0 rounded">
+                                    {errors.email.message}
+                                </div>
+                            )}
                         </div>
 
                         <div className="items-center justify-between">
@@ -138,12 +140,10 @@ export default function RegisterPage() {
                             </label>
                             <div className="mt-2">
                                 <input
-
                                     id="empresa"
                                     name="empresa"
-                                    type="empresa"
+                                    type="text"
                                     {...register("empresa")}
-                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
 
@@ -165,9 +165,14 @@ export default function RegisterPage() {
                                     name="password"
                                     type="password"
                                     {...register("password")}
-                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
+
+                            {errors.password && (
+                                <div className="my-2 font-light text-center text-red-700 bg-red-200 border-0 rounded">
+                                    {errors.password.message}
+                                </div>
+                            )}
                         </div>
 
                         <div className="items-center justify-between">
@@ -179,7 +184,6 @@ export default function RegisterPage() {
                                     name="confirmPassword"
                                     type="password"
                                     {...register("confirmPassword")}
-                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset- outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/" />
                             </div>
 

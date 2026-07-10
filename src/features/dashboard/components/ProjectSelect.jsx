@@ -1,5 +1,5 @@
 
-export function ProjectSelect({ projects, onProjecSelected, onHandleProjectSelected }) {
+export function ProjectSelect({ projects, projectField }) {
 
 
     return (
@@ -7,11 +7,12 @@ export function ProjectSelect({ projects, onProjecSelected, onHandleProjectSelec
         <select className="bg-white"
             id="project_id"
             name="project_id"
-            value={onProjecSelected}
-            onChange={(e) => onHandleProjectSelected(e.target.value)}
+            {...projectField}
+
         >
 
             <option value={""}> Sin Proyecto</option>
+
             {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                     {project.name}

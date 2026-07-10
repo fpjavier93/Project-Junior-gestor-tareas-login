@@ -161,9 +161,17 @@ export function useTasks() {
             ...data
         };
 
+        if (!newDataTask.has_due_date || newDataTask.due_date === "") {
+            newDataTask.due_date = null;
+        }
+
+        delete newDataTask.has_due_date;
+
         if (newDataTask.project_id === "") {
             newDataTask.project_id = null;
         }
+
+
 
         try {
             await createTask(newDataTask);
@@ -183,11 +191,6 @@ export function useTasks() {
         }
     }
 
-    function selectTypeTask(value) {
-
-        setTaskType(value);
-
-    }
 
     async function hanldeSearchTypeTask(value) {
 
@@ -219,7 +222,7 @@ export function useTasks() {
         searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
         setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
         titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority,
-        updatingStatusId, selectTypeTask, taskType, hanldeSearchTypeTask
+        updatingStatusId, hanldeSearchTypeTask
     };
 
 };

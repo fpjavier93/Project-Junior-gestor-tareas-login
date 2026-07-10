@@ -1,9 +1,7 @@
 ﻿import getUserID from "../services/CreateTaskServices";
 import { createProject } from "../services/taskProjectServices";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import { use, useState } from "react";
+import { useState } from "react";
 import { getProject } from "../services/taskProjectServices";
-import { getAccessToken } from "../services/tasksApiServices";
 
 export function useProject() {
     const [loading, setloading] = useState(false);
@@ -62,4 +60,5 @@ export function useProject() {
 
     return { handleSubmitCreateProjectForm, loading, setloading, project, setProject, handleProjects, projectSelected, hanldeProjectSelected };
 };
+
 

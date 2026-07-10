@@ -51,8 +51,10 @@ function AllTasksPage() {
         return <ErrorMessage
             error={errorMessages[error.type] || "Ocurrio un error inesperado"}
             onTryAgain={loadTasks}
-            onCancel={() => navigate("/dashboard")} />
+            onCancel={() => navigate("/dashboard")}
+        />
     }
+
 
     const taskCards = userTasks.map((task) => {
 

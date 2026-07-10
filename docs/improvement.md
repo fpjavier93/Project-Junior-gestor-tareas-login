@@ -39,18 +39,18 @@ La regla es no agregar features random. Cada feature debe mejorar la idea centra
    - [x] Mostrar si una tarea vence pronto o esta vencida.
    - [x] Practicar manejo de fechas en JavaScript.
 
-- [ ] **3. Detalle de tarea.**
+- [x] **3. Detalle de tarea.**
    - [x] Ruta dinamica: `/dashboard/tasks/:taskId`.
    - [x] Usar `useParams`.
    - [x] Cargar una tarea por id.
    - [x] Separar vista de lista y vista de detalle.
 
-- [ ] **4. Categorias o etiquetas.**
+- [x] **4. Categorias o etiquetas.**
    - [x] Permitir clasificar tareas por tipo.
    - [x] Ejemplos: trabajo, estudio, personal.
    - [x] Practicar filtros multiples.
 
-- [ ] **5. Proyectos.**
+- [x] **5. Proyectos.**
    - [x] Crear una tabla `projects`.
    - [x] Relacionar tareas con proyectos.
    - [x] Practicar relaciones entre tablas y rutas dinamicas.
@@ -68,12 +68,11 @@ No empezaría metiendo todo en el formulario de tareas todavía. Primero crea pr
 La idea central: projects debe ser un feature propio, porque ya no es solo un atributo de la tarea; es una entidad con sus propias páginas, rutas y relación con tareas.
 
 
+- [x] **6. Formularios profesionales.**
+   - [x] Introducir React Hook Form.
+   - [x] Introducir Zod.
+   - [x] Mejorar login, registro y creacion/edicion de tareas.
 
-
-- [ ] **6. Formularios profesionales.**
-   - [ ] Introducir React Hook Form.
-   - [ ] Introducir Zod.
-   - [ ] Mejorar login, registro y creacion/edicion de tareas.
 
 - [ ] **7. Testing.**
    - [ ] Introducir Vitest.

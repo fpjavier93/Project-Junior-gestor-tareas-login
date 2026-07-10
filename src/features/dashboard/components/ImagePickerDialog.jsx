@@ -8,7 +8,7 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [selectedImage, setSelectedImage] = useState("");
+
     const [tempSelectImage, setTempSelectImage] = useState("");
 
 
@@ -52,7 +52,6 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
         }
 
         setTempSelectImage(image.download_url)
-        setTempSelectImage(image.download_url)
 
     }
 
@@ -94,6 +93,12 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
 
                 <div className="flex justify-end gap-5">
 
+                    {error && (
+                        <p className="font-medium text-red-600">
+                            {error}
+                        </p>
+                    )}
+
                     <White
                         type={"button"}
                         name={"Cerrar"}
@@ -108,7 +113,6 @@ export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
                         name={"Aceptar"}
                         onClick={() => {
                             onSelectedImage(tempSelectImage)
-                            setSelectedImage(tempSelectImage)
                             onClose()
                         }}
 

@@ -1,48 +1,61 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import { White, Blue } from "../../../components/Buttons";
-import { useTasks } from "../hooks/useTasks";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { editTaskDialogSchema } from "../schemas/editTaskDialogSchema";
+import { useForm } from "react-hook-form";
 
 
 export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
 
-    const { titleEditTask, setTitleEditTask, descriptionEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority } = useTasks();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setError,
+        clearErrors,
+        formState: { errors, isSubmitting }
+    } = useForm({
+        resolver: zodResolver(editTaskDialogSchema)
+    })
+
 
     useEffect(() => {
+        if (!isOpen || !task) return;
 
-        if (!task) return;
-
-        setEditTaskPriority(task.priority)
-        setTitleEditTask(task.title);
-        setDescriptionEditTask(task.description)
-
-    }, [task])
+        reset({
+            edit_task_title: task.title ?? "",
+            edit_task_description: task.description ?? "",
+            priority: task.priority ?? "medium",
+        });
+    }, [isOpen, task, reset]);
 
 
     if (!isOpen || !task) return null;
 
-    function handleSubmit(e) {
 
-        e.preventDefault();
+    async function handleEditTask(data) {
+        clearErrors("root.server");
 
-        const trimmedTitle = titleEditTask.trim();
-        const trimmedDescription = descriptionEditTask.trim();
-
-        if (!trimmedTitle) return
-
-        onSave({
-            title: trimmedTitle,
-            description: trimmedDescription,
-            priority: editTaskPriority
-        });
-
+        try {
+            await onSave({
+                title: data.edit_task_title,
+                description: data.edit_task_description,
+                priority: data.priority,
+            });
+        } catch {
+            setError("root.server", {
+                type: "server",
+                message: "No se pudo actualizar la tarea. Inténtalo nuevamente.",
+            });
+        }
     }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
 
             <form
-                onSubmit={handleSubmit}
+                noValidate
+                onSubmit={handleSubmit(handleEditTask)}
                 className="flex flex-col w-full max-w-md p-6 bg-indigo-200 border border-gray-300 rounded shadow">
 
                 <h2 className="mb-4 text-xl font-bold text-gray-900">
@@ -52,7 +65,7 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
                 <div className="space-y-4">
                     <div>
                         <label
-                            htmlFor="edit-task-title"
+                            htmlFor="edit_task_title"
                             className="block mb-1 text-sm font-medium text-gray-700"
                         >
                             Titulo:
@@ -60,24 +73,34 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
                     </div>
 
                     <input className="w-full px-3 py-2 bg-white border border-gray-300 rounded"
-                        id="edit-task-title"
-                        value={titleEditTask}
-                        onChange={(e) => setTitleEditTask(e.target.value)}
+                        id="edit_task_title"
+                        {...register("edit_task_title")}
                     />
+
+                    {errors.edit_task_title && (
+                        <p className="mt-1 text-sm font-medium text-red-600">
+                            {errors.edit_task_title.message}
+                        </p>
+                    )}
 
                     <div>
                         <label
-                            htmlFor="edit-task-title"
+                            htmlFor="edit_task_description"
                             className="block mb-1 text-sm font-medium text-gray-700"
                         >
                             Descripcion:
                         </label>
 
                         <textarea className="w-full px-3 py-2 bg-white border border-gray-300 rounded"
-                            id="edit-task-priority"
-                            value={descriptionEditTask}
-                            onChange={(e) => setDescriptionEditTask(e.target.value)}
+                            id="edit_task_description"
+                            {...register("edit_task_description")}
                         />
+
+                        {errors.edit_task_description && (
+                            <p className="mt-1 text-sm font-medium text-red-600">
+                                {errors.edit_task_description.message}
+                            </p>
+                        )}
                     </div>
 
                 </div>
@@ -90,8 +113,7 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
                             value={"low"}
                             id="low"
                             type="radio"
-                            checked={editTaskPriority === "low"}
-                            onChange={(e) => setEditTaskPriority(e.target.value)}
+                            {...register("priority")}
                         />Baja
                     </label>
 
@@ -101,8 +123,7 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
                             value={"medium"}
                             id="medium"
                             type="radio"
-                            checked={editTaskPriority === "medium"}
-                            onChange={(e) => setEditTaskPriority(e.target.value)}
+                            {...register("priority")}
                         />Media
                     </label>
 
@@ -112,25 +133,37 @@ export function EditTaskDialog({ isOpen, task, onClose, onSave }) {
                             value={"high"}
                             id="high"
                             type="radio"
-                            checked={editTaskPriority === "high"}
-                            onChange={(e) => setEditTaskPriority(e.target.value)}
+                            {...register("priority")}
                         />Alta
                     </label>
+
+                    {errors.priority && (
+                        <p className="mt-1 text-sm font-medium text-red-600">
+                            {errors.priority.message}
+                        </p>
+                    )}
 
                 </div>
 
                 <div className="flex justify-between">
                     <White
+                        type={"button"}
                         name={"Cerrar"}
                         onClick={onClose}
                     />
 
                     <Blue
+                        disabled={isSubmitting}
                         type={"submit"}
-                        name={"Aceptar"}
+                        name={isSubmitting ? "Guardando..." : "Aceptar"}
                     />
                 </div>
 
+                {errors.root?.server && (
+                    <p className="mt-3 text-sm font-medium text-red-600">
+                        {errors.root.server.message}
+                    </p>
+                )}
             </form>
         </div>
     )
