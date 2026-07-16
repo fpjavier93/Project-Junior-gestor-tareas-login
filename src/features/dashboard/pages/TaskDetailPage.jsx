@@ -44,6 +44,7 @@ function TaskDetailPage() {
 
 
     if (loading) return <LoadingSpinner />
+
     if (error.status) {
         return <ErrorMessage
             error={"No se pudo cargar la tarea"}

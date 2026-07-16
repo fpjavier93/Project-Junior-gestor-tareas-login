@@ -73,3 +73,28 @@ export async function getProjectByID(projects_id) {
 
     return response.data[0];
 }
+
+export async function deleteProjectByID(project_id) {
+
+    const access_token = await getAccessToken();
+
+    const response = await apiClient.delete("/projects", {
+        params: {
+            id: `eq.${project_id}`,
+        },
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            Prefer: "return=representation",
+        },
+    });
+
+    const deletedProject = response.data?.[0];
+
+    if (!deletedProject) {
+        const error = new Error("Supabase no eliminó el proyecto");
+        error.code = "PROJECT_NOT_DELETED";
+        throw error;
+    }
+
+    return deletedProject;
+}

@@ -56,4 +56,4 @@ export async function openDeleteTaskModal() {
     });
 
     return result;
-}
+}   

@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect } from "react";
 import { useProject } from "../hooks/useProjects";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { ProjectCard } from "../components/ProjectCard";
@@ -7,7 +7,7 @@ import { ProjectCard } from "../components/ProjectCard";
 export function ProjectPage() {
 
 
-    const { loading, project, handleProjects } = useProject();
+    const { loading, project, handleProjects, hanldeDeleteProject, deleteError, setDeleteError } = useProject();
 
 
     useEffect(() => {
@@ -33,8 +33,29 @@ export function ProjectPage() {
                 </div>
             </header>
 
+            {deleteError && (
+                <div
+                    className="flex items-start justify-between gap-4 p-4 mb-6 text-sm text-red-800 bg-red-100 border border-red-300 rounded-md"
+                    role="alert"
+                >
+                    <div>
+                        <p className="font-semibold">No se pudo eliminar el proyecto</p>
+                        <p className="mt-1">{deleteError}</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="font-medium text-red-700 hover:text-red-900 hover:underline"
+                        onClick={() => setDeleteError("")}
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            )}
+
             <ProjectCard
                 projects={project}
+                onDelete={hanldeDeleteProject}
             />
 
         </main>

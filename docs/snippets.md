@@ -47,3 +47,6 @@ bg-
 border-
 rounded-
 shadow-
+
+npm run test: deja Vitest escuchando cambios.
+npm run test:run: ejecuta una vez y termina. Es el comando ideal para verificar antes de un commit.

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 
-export function ProjectCard({ projects }) {
+export function ProjectCard({ projects, onDelete }) {
     const navigate = useNavigate();
 
     return (
@@ -21,13 +21,23 @@ export function ProjectCard({ projects }) {
                         </h2>
                     </div>
 
-                    <div className="flex justify-end pt-6">
+                    <div className="flex justify-end mt-10">
                         <button
                             type="button"
                             className="text-sm font-medium text-indigo-600 hover:underline hover:cursor-pointer"
                             onClick={() => navigate(`/dashboard/projects/${project.id}`)}
                         >
-                            VER DETALLES
+                            Ver detalles
+                        </button>
+                    </div>
+
+                    <div className="flex justify-end">
+                        <button
+                            type="button"
+                            className="text-sm font-medium text-indigo-600 hover:underline hover:cursor-pointer"
+                            onClick={() => onDelete(project)}
+                        >
+                            Eliminar
                         </button>
                     </div>
                 </article>
