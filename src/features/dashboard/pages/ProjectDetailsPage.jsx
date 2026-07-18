@@ -27,7 +27,6 @@ export function ProjectDetailsPage() {
                 setProject(detailsProject)
 
                 const tasksList = await getTasksById(projectID)
-                console.log(tasksList)
                 setTasks(tasksList);
 
             } finally {

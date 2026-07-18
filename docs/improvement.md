@@ -74,10 +74,10 @@ La idea central: projects debe ser un feature propio, porque ya no es solo un at
    - [x] Mejorar login, registro y creacion/edicion de tareas.
 
 
-- [ ] **7. Testing.**
-   - [ ] Introducir Vitest.
-   - [ ] Introducir React Testing Library.
-   - [ ] Testear componentes principales, hooks y servicios.
+- [x] **7. Testing.**
+   - [x] Introducir Vitest.
+   - [x] Introducir React Testing Library.
+   - [x] Testear componentes principales, hooks y servicios.
 
 - [ ] **8. Portfolio.**
    - [ ] Deploy en Vercel.
