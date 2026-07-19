@@ -1,51 +1,30 @@
-
+import { ArrowLeft, LogOutIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 function Blue({ name, onClick = undefined, type, disabled }) {
-    return (
-        <button className="inline-flex items-center px-4 py-2 text-white bg-indigo-500 border border-indigo-500 rounded shadow w-fit hover:cursor-pointer hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed disabled:hover:bg-indigo-300"
-            disabled={disabled}
-            type={type}
-            onClick={onClick}
-
-        >{name}</button>
-
-    )
-
+    return <Button disabled={disabled} type={type} onClick={onClick}>{name}</Button>
 }
 
 function White({ name, type, onClick }) {
-    return (
-        <button className="inline-flex items-center px-4 py-2 text-black bg-white border border-gray-300 rounded shadow w-fit hover:cursor-pointer hover:bg-gray-50"
-            type={type}
-            onClick={onClick}
-
-        >{name}</button>
-
-    )
-
+    return <Button variant="outline" type={type} onClick={onClick}>{name}</Button>
 }
 
 function LogOut({ onclick }) {
     return (
-        <button className="text-sm font-medium text-white hover:underline hover:cursor-pointer"
-            onClick={onclick}
-        >
-            Log-Out
-        </button>
+        <Button variant="ghost" onClick={onclick}>
+            <LogOutIcon data-icon="inline-start" />
+            Cerrar sesión
+        </Button>
     )
 }
-
-
 
 function Inicio({ onclick }) {
     return (
-        <button className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
-            onClick={onclick}
-        >
+        <Button variant="ghost" onClick={onclick}>
+            <ArrowLeft data-icon="inline-start" />
             Volver a inicio
-        </button>
+        </Button>
     )
 }
 
-
-export { Blue, White, LogOut, Inicio };
+export { Blue, White, LogOut, Inicio }

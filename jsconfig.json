@@ -10,7 +10,11 @@
     "strictFunctionTypes": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "target": "ES2020"
+    "target": "ES2020",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"]
 }

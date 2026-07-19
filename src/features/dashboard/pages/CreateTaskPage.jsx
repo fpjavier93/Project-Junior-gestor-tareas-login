@@ -1,289 +1,251 @@
-import { useNavigate } from "react-router-dom";
-import { Blue, White } from "../../../components/Buttons";
-import ErrorMessage from "../../../components/ErrorMessage";
-import { useTasks } from "../hooks/useTasks";
-import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
-import { ImagePickerDialog } from "../components/ImagePickerDialog";
-import { useGetImageTask } from "../hooks/useGetImageTask";
-import { useState, useEffect } from "react";
-import { ProjectSelect } from "../components/ProjectSelect";
-import { useProject } from "../hooks/useProjects";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { taskSchema } from "../schemas/taskSchema";
-import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom"
+import { CalendarDays, ImagePlus } from "lucide-react"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Blue, White } from "../../../components/Buttons"
+import ErrorMessage from "../../../components/ErrorMessage"
+import { useTasks } from "../hooks/useTasks"
+import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes"
+import { ImagePickerDialog } from "../components/ImagePickerDialog"
+import { useGetImageTask } from "../hooks/useGetImageTask"
+import { useState, useEffect } from "react"
+import { ProjectSelect } from "../components/ProjectSelect"
+import { useProject } from "../hooks/useProjects"
+import { taskSchema } from "../schemas/taskSchema"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+    Field,
+    FieldContent,
+    FieldDescription,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+    FieldLegend,
+    FieldSet,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 
 export default function CreateTaskPage() {
-
     const {
         register,
+        control,
         handleSubmit,
         reset,
         setValue,
         watch,
-        formState: { errors, isSubmitting }
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: zodResolver(taskSchema),
         mode: "onChange",
         defaultValues: {
+            title: "",
+            description: "",
+            priority: "medium",
+            task_type: "study",
+            project_id: "",
             has_due_date: false,
             due_date: "",
             image_url: "",
-        }
+        },
     })
 
-    const hasDueDate = watch("has_due_date");
-
-    const navigate = useNavigate();
-    const today = new Date().toISOString().split("T")[0];
-
-    const [selectedImage, setSelectedImage] = useState("");
-
-
-    const { project, handleProjects } = useProject();
-
-    const {
-        handleSubmitCreateTaskForm, submitError,
-        setError, error } = useTasks();
-
-    const { isShowSelectTask, openGetImageDialog, closeGetImageDialog } = useGetImageTask();
-
-    const errorCreateTask = { [TASK_ERROR_TYPES.CREATE]: "No se pudo crear la tarea" };
-
-
-
+    const hasDueDate = watch("has_due_date")
+    const navigate = useNavigate()
+    const today = new Date().toISOString().split("T")[0]
+    const [selectedImage, setSelectedImage] = useState("")
+    const { project, handleProjects } = useProject()
+    const { handleSubmitCreateTaskForm, submitError, setError, error } = useTasks()
+    const { isShowSelectTask, openGetImageDialog, closeGetImageDialog } = useGetImageTask()
+    const errorCreateTask = { [TASK_ERROR_TYPES.CREATE]: "No se pudo crear la tarea" }
 
     useEffect(() => {
-        handleProjects();
-
+        handleProjects()
     }, [])
 
-
-
     if (error.status) {
-        return <ErrorMessage error={errorCreateTask[error.type] || "Accion inesperada"}
-            onTryAgain={() => setError({ status: false, type: 0 })}
-            onCancel={() => navigate("/dashboard")}
-        />
+        return (
+            <ErrorMessage
+                error={errorCreateTask[error.type] || "Acción inesperada"}
+                onTryAgain={() => setError({ status: false, type: 0 })}
+                onCancel={() => navigate("/dashboard")}
+            />
+        )
     }
 
     return (
-        <div className="max-w-4xl max-h-screen py-1 mx-auto px-auto">
+        <main className="w-full max-w-4xl px-4 py-8 mx-auto">
+            <Card>
+                <CardHeader className="border-b">
+                    <CardTitle className="text-xl">Crear tarea</CardTitle>
+                    <CardDescription>Define el trabajo, su prioridad y la fecha límite opcional.</CardDescription>
+                </CardHeader>
 
-            <div className="p-4 bg-indigo-200 border border-gray-300 rounded shadow my-18">
+                <CardContent>
+                    <form
+                        id="create-task-form"
+                        noValidate
+                        onSubmit={handleSubmit((data) => handleSubmitCreateTaskForm(data, setSelectedImage, reset))}
+                    >
+                        <FieldGroup>
+                            <Field data-invalid={Boolean(errors.title)}>
+                                <FieldLabel htmlFor="title">Título</FieldLabel>
+                                <Input id="title" type="text" aria-invalid={Boolean(errors.title)} {...register("title")} />
+                                <FieldError errors={[errors.title]} />
+                            </Field>
 
-                <form
-                    onSubmit={handleSubmit((data) => handleSubmitCreateTaskForm(data, setSelectedImage, reset))}
-                    className="space-y-6">
-                    <div>
+                            <Field data-invalid={Boolean(errors.description)}>
+                                <FieldLabel htmlFor="description">Descripción</FieldLabel>
+                                <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_12rem]">
+                                    <Textarea id="description" rows={6} aria-invalid={Boolean(errors.description)} {...register("description")} />
+                                    {selectedImage ? (
+                                        <img src={selectedImage} alt="Imagen seleccionada para la tarea" className="object-cover w-full rounded-lg aspect-square" />
+                                    ) : (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="flex flex-col items-center justify-center w-full gap-2 text-sm transition-colors border border-dashed rounded-lg aspect-square text-muted-foreground hover:bg-muted"
+                                            onClick={openGetImageDialog}
+                                        >
+                                            <ImagePlus className="size-6" />
+                                            Añadir imagen
+                                        </Button>
+                                    )}
+                                </div>
+                                <input type="hidden" {...register("image_url")} />
+                                <FieldError errors={[errors.description]} />
+                            </Field>
 
-                        <label htmlFor="title" className="block text-lg font-medium text-gray-900">
-                            Titulo
-                        </label>
+                            <div className="grid gap-6 lg:grid-cols-2">
+                                <Controller
+                                    name="priority"
+                                    control={control}
+                                    render={({ field, fieldState }) => (
+                                        <FieldSet data-invalid={fieldState.invalid}>
+                                            <FieldLegend variant="label">Prioridad</FieldLegend>
+                                            <RadioGroup value={field.value} onValueChange={field.onChange} className="grid grid-cols-3 gap-2">
+                                                {[
+                                                    { value: "low", label: "Baja" },
+                                                    { value: "medium", label: "Media" },
+                                                    { value: "high", label: "Alta" },
+                                                ].map((option) => (
+                                                    <Label key={option.value} htmlFor={"priority-" + option.value} className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer has-data-checked:border-primary has-data-checked:bg-primary/5">
+                                                        <RadioGroupItem id={"priority-" + option.value} value={option.value} />
+                                                        {option.label}
+                                                    </Label>
+                                                ))}
+                                            </RadioGroup>
+                                            <FieldError errors={[fieldState.error]} />
+                                        </FieldSet>
+                                    )}
+                                />
 
-                        <div className="py-3">
-                            <input
-                                id="title"
-                                type="text"
-                                {...register("title")}
-                                className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                <Field data-invalid={Boolean(errors.task_type)}>
+                                    <FieldLabel htmlFor="task_type">Tipo de tarea</FieldLabel>
+                                    <Controller
+                                        name="task_type"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select value={field.value} onValueChange={field.onChange}>
+                                                <SelectTrigger id="task_type" className="w-full" aria-invalid={Boolean(errors.task_type)}>
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent
+                                                    position="popper"
+                                                    side="bottom"
+                                                    align="start"
+                                                    sideOffset={4}>
+                                                    <SelectItem value="study">Estudio</SelectItem>
+                                                    <SelectItem value="work">Trabajo</SelectItem>
+                                                    <SelectItem value="personal">Personal</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                    />
+                                    <FieldError errors={[errors.task_type]} />
+                                </Field>
+                            </div>
+
+                            <Controller
+                                name="has_due_date"
+                                control={control}
+                                render={({ field }) => (
+                                    <Field orientation="horizontal">
+                                        <Checkbox
+                                            id="has_due_date"
+                                            checked={field.value}
+                                            onCheckedChange={(checked) => {
+                                                const isChecked = checked === true
+                                                field.onChange(isChecked)
+                                                setValue("due_date", isChecked ? today : "", { shouldValidate: true })
+                                            }}
+                                        />
+                                        <FieldContent>
+                                            <FieldLabel htmlFor="has_due_date">Establecer fecha límite</FieldLabel>
+                                            <FieldDescription>Activa esta opción para indicar cuándo debe completarse.</FieldDescription>
+                                        </FieldContent>
+                                    </Field>
+                                )}
                             />
 
-                            {errors.title && (
-                                <p className="mt-1 text-sm font-medium text-red-600">
-                                    {errors.title.message}
-                                </p>
-                            )}
-                        </div>
+                            <Field data-invalid={Boolean(errors.due_date)} data-disabled={!hasDueDate}>
+                                <FieldLabel htmlFor="due_date">Fecha límite</FieldLabel>
+                                <div className="relative">
+                                    <CalendarDays className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                                    <Input id="due_date" className="pl-8" type="date" min={today} disabled={!hasDueDate} aria-invalid={Boolean(errors.due_date)} {...register("due_date")} />
+                                </div>
+                                <FieldError errors={[errors.due_date]} />
+                            </Field>
 
-                        <div className="py-5">
-
-                            <label htmlFor="description" className="block text-lg font-medium text-gray-900">
-                                Descripcion
-                            </label>
-
-                            <div className="flex py-3">
-                                <textarea
-                                    id="description"
-                                    {...register("description")}
-                                    rows={5}
-                                    className="block w-full rounded-md bg-indigo-50 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                />
-
-                                {selectedImage && (
-                                    <img
-                                        className="object-cover w-40 h-32"
-                                        src={selectedImage}
-                                        alt="Imagen seleccionada para la tarea"
-                                    />)
-                                }
-
-                                <input
-                                    type="hidden"
-                                    name="image_url"
-                                    {...register("image_url")}
-
-                                />
-
-                            </div>
-
-                            <div>
-                                {errors.description && (
-                                    <p className="mt-1 text-sm font-medium text-red-600">
-                                        {errors.description.message}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="flex justify-between py-3">
-                                <div className="flex gap-3">
-
-                                    <p className="block text-lg font-medium text-gray-900">Prioridad:</p>
-
-                                    <label htmlFor="low">
-                                        <input className="mx-2"
-                                            value={"low"}
-                                            id="low"
-                                            type="radio"
-                                            {...register("priority")}
-                                        />Baja
-                                    </label>
-
-                                    <label htmlFor="medium">
-                                        <input className="mx-2"
-                                            value={"medium"}
-                                            id="medium"
-                                            type="radio"
-                                            {...register("priority")}
-
-                                        />Media
-                                    </label>
-
-                                    <label htmlFor="high">
-                                        <input className="mx-2"
-                                            value={"high"}
-                                            id="high"
-                                            type="radio"
-                                            {...register("priority")}
-
-                                        />Alta
-                                    </label>
-
-                                    {errors.priority && (
-                                        <p className="mt-1 text-sm font-medium text-red-600">
-                                            {errors.priority.message}
-                                        </p>
+                            <Field data-invalid={Boolean(errors.project_id)}>
+                                <FieldLabel htmlFor="project_id">Proyecto</FieldLabel>
+                                <Controller
+                                    name="project_id"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <ProjectSelect projects={project} value={field.value} onValueChange={field.onChange} disabled={isSubmitting} />
                                     )}
-                                </div>
+                                />
+                                <FieldDescription>La tarea puede quedar sin proyecto.</FieldDescription>
+                                <FieldError errors={[errors.project_id]} />
+                            </Field>
 
-                                <div className="flex gap-3">
-
-                                    <input
-                                        id="has_due_date"
-                                        type="checkbox"
-                                        checked={hasDueDate}
-                                        {...register("has_due_date", {
-                                            onChange: (e) => {
-                                                if (e.target.checked) {
-                                                    setValue("due_date", today, { shouldValidate: true });
-                                                } else {
-                                                    setValue("due_date", "", { shouldValidate: true });
-                                                }
-                                            },
-                                        })}
-
-                                    />
-
-
-                                    <label htmlFor="has_due_date" className="font-medium">Seleccionar fecha limite:</label>
-
-                                    <input className={`h-8 font-medium rounded bg-indigo-50 ${!hasDueDate ? "disabled:bg-gray-300" : ""}`}
-                                        type="date"
-                                        min={today}
-                                        {...register("due_date")}
-                                        disabled={!hasDueDate}
-                                    />
-
-                                    {errors.due_date && (
-                                        <p className="mt-1 text-sm font-medium text-red-600">
-                                            {errors.due_date.message}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="flex gap-3">
-                                <p className="block text-lg font-medium text-gray-900"> Tipo de tarea: </p>
-
-                                <select className="bg-white"
-                                    id="task_type"
-                                    {...register("task_type")}
-                                >
-                                    <option value={"study"}>Estudio</option>
-                                    <option value={"work"}>Trabajo</option>
-                                    <option value={"personal"}>Personal</option>
-
-                                </select>
-
-                                {errors.task_type && (
-                                    <p className="mt-1 text-sm font-medium text-red-600">
-                                        {errors.task_type.message}
-                                    </p>
-                                )}
-
-                            </div>
-
-                            <div className="py-3">
-                                <div className="flex gap-3">
-                                    <p className="block text-lg font-medium text-gray-900"> Asignar la tarea al proyecto: </p>
-
-                                    <ProjectSelect
-                                        projects={project}
-                                        projectField={register("project_id")}
-                                    />
-
-                                </div>
-                            </div>
-
-                            <div className="pt-4 my-5 border-t border-gray-200"></div>
                             {submitError && (
-                                <p className="text-sm text-red-600">{submitError}</p>
+                                <Alert variant="destructive" role="alert">
+                                    <AlertDescription>{submitError}</AlertDescription>
+                                </Alert>
                             )}
 
-                            <div className="flex justify-end gap-3">
+                            <Separator />
 
-                                <White
-                                    type={"button"}
-                                    name="Cancelar"
-                                    onClick={() => navigate("/dashboard")}
-                                />
-
-                                <White
-                                    type={"button"}
-                                    name="Añadir Imagen..."
-                                    onClick={openGetImageDialog}
-                                />
-
-                                <Blue
-                                    disabled={isSubmitting ? true : false}
-                                    name={isSubmitting ? "Creando..." : "Crear tarea"}
-                                    type="submit"
-                                />
+                            <div className="flex flex-wrap justify-end gap-2">
+                                <White type="button" name="Cancelar" onClick={() => navigate("/dashboard")} />
+                                <Button type="button" variant="outline" onClick={openGetImageDialog}>
+                                    <ImagePlus />
+                                    {selectedImage ? "Cambiar imagen" : "Añadir imagen"}
+                                </Button>
+                                <Blue disabled={isSubmitting} name={isSubmitting ? "Creando..." : "Crear tarea"} type="submit" />
                             </div>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
+                        </FieldGroup>
+                    </form>
+                </CardContent>
+            </Card>
 
             <ImagePickerDialog
                 isOpen={isShowSelectTask}
                 onClose={closeGetImageDialog}
                 onSelectedImage={(tempSelectImage) => {
-                    setSelectedImage(tempSelectImage);
-                    setValue("image_url", tempSelectImage);
+                    setSelectedImage(tempSelectImage)
+                    setValue("image_url", tempSelectImage, { shouldValidate: true })
                 }}
             />
-        </div >
-
+        </main>
     )
 }

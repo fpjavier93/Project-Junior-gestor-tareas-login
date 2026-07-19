@@ -1,12 +1,14 @@
-export function TaskEmptyState({ message }) {
+import { Inbox } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
 
+export function TaskEmptyState({ message }) {
     return (
-        <div>
-            <div className="flex flex-col">
-                <div className="flex justify-center px-5 py-4 text-4xl font-bold border-b border-gray-300">
-                    <p>{message}</p>
-                </div>
-            </div>
-        </div>
-    );
+        <Card>
+            <CardContent className="flex min-h-48 flex-col items-center justify-center gap-3 text-center">
+                <div className="flex size-12 items-center justify-center rounded-full bg-muted"><Inbox className="size-6 text-muted-foreground" /></div>
+                <p className="font-medium">{message}</p>
+                <p className="text-sm text-muted-foreground">Prueba con otros filtros o crea una nueva tarea.</p>
+            </CardContent>
+        </Card>
+    )
 }

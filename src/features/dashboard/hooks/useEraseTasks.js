@@ -1,40 +1,43 @@
-﻿import { useState } from "react";
-import { deleteTask, getTasks } from "../services/tasksApiServices";
-import { openDeleteTaskModal } from "../services/taskModalServices";
-import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
+import { useState } from "react"
+import { deleteTask, getTasks } from "../services/tasksApiServices"
+import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes"
 
 export function useEraseTasks({ setError, setUserTasks }) {
+    const [isDeletingID, setIsDeletingID] = useState(null)
+    const [taskToDeleteID, setTaskToDeleteID] = useState(null)
 
-    const [isDeletingID, setIsDeletingID] = useState(null);
+    function handleEraseTask(taskID) {
+        setTaskToDeleteID(taskID)
+    }
 
-    async function handleEraseTask(task_id) {
+    function closeDeleteDialog() {
+        if (isDeletingID) return
+        setTaskToDeleteID(null)
+    }
 
+    async function confirmEraseTask() {
+        if (!taskToDeleteID) return
 
-        setIsDeletingID(task_id)
-
-        const result = await openDeleteTaskModal()
-
-        if (result.dismiss) {
-            setIsDeletingID(null);
-            return;
-        }
-
-        setIsDeletingID(null)
+        setIsDeletingID(taskToDeleteID)
 
         try {
-            await deleteTask(task_id);
-            const updateTasks = await getTasks()
-            setUserTasks(updateTasks);
-
-        } catch {
+            await deleteTask(taskToDeleteID)
+            setUserTasks(await getTasks())
+            setTaskToDeleteID(null)
+        } catch (error) {
+            console.error("Error al eliminar la tarea:", error.response?.data || error)
             setError({ status: true, type: TASK_ERROR_TYPES.DELETE })
+            setTaskToDeleteID(null)
         } finally {
-
-            setIsDeletingID(null);
+            setIsDeletingID(null)
         }
-    };
+    }
 
-    return { handleEraseTask, isDeletingID }
-
-};
-
+    return {
+        handleEraseTask,
+        isDeletingID,
+        isDeleteDialogOpen: Boolean(taskToDeleteID),
+        closeDeleteDialog,
+        confirmEraseTask,
+    }
+}

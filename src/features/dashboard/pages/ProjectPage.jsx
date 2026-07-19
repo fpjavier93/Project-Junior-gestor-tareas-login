@@ -1,64 +1,71 @@
-import { useEffect } from "react";
-import { useProject } from "../hooks/useProjects";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import { ProjectCard } from "../components/ProjectCard";
-
+import { useEffect } from "react"
+import { CircleAlert, FolderKanban, X } from "lucide-react"
+import { useProject } from "../hooks/useProjects"
+import LoadingSpinner from "../../../components/LoadingSpinner"
+import { ProjectCard } from "../components/ProjectCard"
+import { DeleteConfirmationDialog } from "../components/DeleteConfirmationDialog"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
 
 export function ProjectPage() {
-
-
-    const { loading, project, handleProjects, hanldeDeleteProject, deleteError, setDeleteError } = useProject();
-
+    const {
+        loading,
+        project,
+        handleProjects,
+        hanldeDeleteProject,
+        deleteError,
+        setDeleteError,
+        projectToDelete,
+        isDeletingProject,
+        closeDeleteProjectDialog,
+        confirmDeleteProject,
+    } = useProject()
 
     useEffect(() => {
+        handleProjects()
+    }, [])
 
-        handleProjects();
-
-    }, []);
-
-    if (loading) {
-        return <LoadingSpinner />
-    }
+    if (loading) return <LoadingSpinner />
 
     return (
-        <main className="max-w-6xl px-4 py-8 mx-auto">
-            <header className="flex items-center justify-between pb-5 mb-8 border-b border-indigo-200">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">
-                        Proyectos
-                    </h1>
-                    <p className="mt-1 text-sm text-gray-700">
-                        Organiza tus tareas por proyecto.
-                    </p>
-                </div>
+        <main className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8">
+            <header>
+                <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
+                    <FolderKanban className="size-6" />
+                    Proyectos
+                </h1>
+                <p className="mt-1 text-sm text-muted-foreground">Organiza tus tareas por proyecto.</p>
             </header>
 
             {deleteError && (
-                <div
-                    className="flex items-start justify-between gap-4 p-4 mb-6 text-sm text-red-800 bg-red-100 border border-red-300 rounded-md"
-                    role="alert"
-                >
-                    <div>
-                        <p className="font-semibold">No se pudo eliminar el proyecto</p>
-                        <p className="mt-1">{deleteError}</p>
-                    </div>
-
-                    <button
-                        type="button"
-                        className="font-medium text-red-700 hover:text-red-900 hover:underline"
-                        onClick={() => setDeleteError("")}
-                    >
-                        Cerrar
-                    </button>
-                </div>
+                <Alert variant="destructive" role="alert">
+                    <CircleAlert />
+                    <AlertTitle>No se pudo eliminar el proyecto</AlertTitle>
+                    <AlertDescription className="flex items-center justify-between gap-4">
+                        <span>{deleteError}</span>
+                        <Button type="button" variant="ghost" size="icon-sm" aria-label="Cerrar error" onClick={() => setDeleteError("")}><X /></Button>
+                    </AlertDescription>
+                </Alert>
             )}
 
-            <ProjectCard
-                projects={project}
-                onDelete={hanldeDeleteProject}
-            />
+            {project.length === 0 ? (
+                <div className="flex min-h-56 flex-col items-center justify-center rounded-xl border border-dashed bg-background text-center">
+                    <FolderKanban className="mb-3 size-10 text-muted-foreground" />
+                    <p className="font-medium">Todavía no tienes proyectos</p>
+                    <p className="mt-1 text-sm text-muted-foreground">Crea uno para agrupar tareas relacionadas.</p>
+                </div>
+            ) : (
+                <ProjectCard projects={project} onDelete={hanldeDeleteProject} />
+            )}
 
+            <DeleteConfirmationDialog
+                isOpen={Boolean(projectToDelete)}
+                title="¿Eliminar este proyecto?"
+                description={projectToDelete ? "Se eliminará el proyecto " + projectToDelete.name + ". Esta acción no se puede deshacer." : ""}
+                isDeleting={isDeletingProject}
+                onCancel={closeDeleteProjectDialog}
+                onConfirm={confirmDeleteProject}
+            />
         </main>
     )
 }
-

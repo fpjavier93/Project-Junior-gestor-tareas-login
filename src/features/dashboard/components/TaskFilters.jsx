@@ -1,23 +1,18 @@
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
 export function TaskFilters({ onStatusChange, select }) {
-
     return (
-
-        <div className="flex">
-            <div className="mx-1 text-sm font-medium text-indigo-500">Mostrar Tareas:</div>
-
-            <div className="text-sm font-medium text-black">
-                <select className="bg-white"
-                    id="estado"
-                    value={select}
-                    onChange={(e) => onStatusChange(e.target.value)}
-                >
-                    <option value={"todas"}>Todas las tareas</option>
-                    <option value={"completed"}>Completadas</option>
-                    <option value={"pending"}>Pendientes</option>
-                </select>
-            </div>
+        <div className="space-y-1.5">
+            <Label htmlFor="estado">Estado</Label>
+            <Select value={select} onValueChange={onStatusChange}>
+                <SelectTrigger id="estado" className="w-full"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="todas">Todas</SelectItem>
+                    <SelectItem value="completed">Completadas</SelectItem>
+                    <SelectItem value="pending">Pendientes</SelectItem>
+                </SelectContent>
+            </Select>
         </div>
-
     )
-
 }

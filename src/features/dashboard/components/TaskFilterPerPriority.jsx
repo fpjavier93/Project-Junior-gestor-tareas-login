@@ -1,27 +1,19 @@
-
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function TaskFilterPerPriority({ onPriorityChange, selectedPriority }) {
-
     return (
-
-        <div className="flex">
-            <div className="mx-1 text-sm font-medium text-indigo-500">Prioridad:</div>
-
-            <div className="text-sm font-medium text-black">
-                <select className="bg-white"
-                    id="prioridad"
-                    value={selectedPriority}
-                    onChange={(e) => onPriorityChange(e.target.value)}
-                >
-                    <option value={""}>Selecciona Prioridad</option>
-                    <option value={"low"}>Baja</option>
-                    <option value={"medium"}>Media</option>
-                    <option value={"high"}>Alta</option>
-                </select>
-            </div>
+        <div className="space-y-1.5">
+            <Label htmlFor="prioridad">Prioridad</Label>
+            <Select value={selectedPriority || "all"} onValueChange={(value) => onPriorityChange(value === "all" ? "" : value)}>
+                <SelectTrigger id="prioridad" className="w-full"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="all">Todas</SelectItem>
+                    <SelectItem value="low">Baja</SelectItem>
+                    <SelectItem value="medium">Media</SelectItem>
+                    <SelectItem value="high">Alta</SelectItem>
+                </SelectContent>
+            </Select>
         </div>
-
     )
-
-
 }

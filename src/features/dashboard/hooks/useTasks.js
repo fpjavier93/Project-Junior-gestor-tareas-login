@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { editTask, getTasks, createTask } from "../services/tasksApiServices";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import getUserID from "../services/CreateTaskServices";
@@ -222,7 +222,7 @@ export function useTasks() {
         searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
         setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
         titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority,
-        updatingStatusId, hanldeSearchTypeTask
+        updatingStatusId, hanldeSearchTypeTask, setSubmitError
     };
 
 };

@@ -1,124 +1,110 @@
-import { useEffect, useState } from "react";
-import { Blue, White } from "../../../components/Buttons";
-import { getTaskImages } from "../services/imagesApiService";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import { useEffect, useState } from "react"
+import { Check, Image as ImageIcon } from "lucide-react"
+import { getTaskImages } from "../services/imagesApiService"
+import LoadingSpinner from "../../../components/LoadingSpinner"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
 
 export function ImagePickerDialog({ isOpen, onClose, onSelectedImage }) {
-
-    const [images, setImages] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-
-    const [tempSelectImage, setTempSelectImage] = useState("");
-
+    const [images, setImages] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
+    const [tempSelectImage, setTempSelectImage] = useState("")
 
     useEffect(() => {
-
         if (!isOpen) return
 
         async function loadImages() {
-
             try {
-
                 setLoading(true)
-                setError("");
-
-                const data = await getTaskImages();
-
-                setImages(data);
-
+                setError("")
+                setImages(await getTaskImages())
             } catch {
-
-                setError("Error al cargar imagenes");
-
+                setError("Error al cargar imágenes")
             } finally {
-
                 setLoading(false)
-
             }
         }
 
-        loadImages();
+        loadImages()
+    }, [isOpen])
 
-    }, [isOpen]);
-
-
-    function handleSelectdImage(image) {
-
-        if (tempSelectImage === image.download_url) {
-            setTempSelectImage("");
-            onSelectedImage("")
-            return;
-        }
-
-        setTempSelectImage(image.download_url)
-
+    function handleClose() {
+        setTempSelectImage("")
+        onClose()
     }
 
-    if (!isOpen) return null
-
-    if (loading) {
-
-        return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-
-                <LoadingSpinner />
-
-            </div>
-        )
+    function handleSelectedImage(image) {
+        setTempSelectImage((currentImage) => currentImage === image.download_url ? "" : image.download_url)
     }
 
+    function handleAccept() {
+        onSelectedImage(tempSelectImage)
+        handleClose()
+    }
 
     return (
+        <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+            <DialogContent className="max-h-[90vh] overflow-hidden sm:max-w-4xl">
+                <DialogHeader>
+                    <DialogTitle>Seleccionar imagen</DialogTitle>
+                    <DialogDescription>Elige una imagen para identificar visualmente la tarea.</DialogDescription>
+                </DialogHeader>
 
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                {loading ? (
+                    <LoadingSpinner />
+                ) : (
+                    <div className="max-h-[60vh] overflow-y-auto pr-1">
+                        {error ? (
+                            <Alert variant="destructive"><ImageIcon /><AlertDescription>{error}</AlertDescription></Alert>
+                        ) : (
+                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                                {images.map((image) => {
+                                    const isSelected = tempSelectImage === image.download_url
+                                    return (
+                                        <Button
+                                            key={image.id}
+                                            variant="ghost"
+                                            type="button"
+                                            className={cn(
+                                                "relative aspect-video h-auto overflow-hidden rounded-lg border-2 p-0 transition-colors",
+                                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                                isSelected
+                                                    ? "border-primary"
+                                                    : "border-transparent hover:border-muted-foreground/30"
+                                            )}
+                                            aria-label={"Seleccionar imagen de " + image.author}
+                                            aria-pressed={isSelected}
+                                            onClick={() => handleSelectedImage(image)}
+                                        >
+                                            <img src={image.download_url} alt={image.author} className="object-cover w-full h-full" />
+                                            {isSelected && (
+                                                <span className="absolute flex items-center justify-center rounded-full right-2 top-2 size-7 bg-primary text-primary-foreground">
+                                                    <Check className="size-4" />
+                                                </span>
+                                            )}
+                                        </Button>
+                                    )
+                                })}
+                            </div>
+                        )}
+                    </div>
+                )}
 
-            <div className="flex flex-col gap-3">
-
-                <div className="grid grid-cols-3 gap-3 bg-indigo-200">
-
-                    {images.map((image) => (
-                        <img
-                            key={image.id}
-                            src={image.download_url}
-                            alt={image.author}
-                            className={tempSelectImage === image.download_url
-                                ? "object-cover w-48 h-48 border-indigo-600 border-6 hover:cursor-pointer hover:border-8"
-                                : "object-cover w-48 h-48 hover:border-6 hover:border-indigo-200 hover:cursor-pointer"}
-                            onClick={() => handleSelectdImage(image)}
-                        />
-                    ))}
-
-                </div>
-
-                <div className="flex justify-end gap-5">
-
-                    {error && (
-                        <p className="font-medium text-red-600">
-                            {error}
-                        </p>
-                    )}
-
-                    <White
-                        type={"button"}
-                        name={"Cerrar"}
-                        onClick={() => {
-                            setTempSelectImage("")
-                            onClose()
-                        }}
-                    />
-
-                    <Blue
-                        type={"button"}
-                        name={"Aceptar"}
-                        onClick={() => {
-                            onSelectedImage(tempSelectImage)
-                            onClose()
-                        }}
-
-                    />
-                </div>
-            </div>
-        </div>
+                <DialogFooter>
+                    <Button type="button" variant="outline" onClick={handleClose}>Cerrar</Button>
+                    <Button type="button" onClick={handleAccept} disabled={loading || Boolean(error)}>Aceptar</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }

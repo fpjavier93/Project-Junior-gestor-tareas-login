@@ -1,12 +1,14 @@
+import { Card as ShadcnCard, CardContent, CardDescription } from "@/components/ui/card"
+
 function Card({ name, value }) {
     return (
-        <div className="p-4 bg-indigo-100 rounded shadow">
-            <p className="text-gray-500">{name}</p>
-            <p className="text-4xl font-bold">{value}</p>
-        </div>
+        <ShadcnCard>
+            <CardContent className="space-y-2">
+                <CardDescription className="text-xs font-medium uppercase">{name}</CardDescription>
+                <p className="text-3xl font-semibold tracking-tight">{value}</p>
+            </CardContent>
+        </ShadcnCard>
     )
-
-
 }
 
-export { Card };
+export { Card }

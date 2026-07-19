@@ -1,96 +1,116 @@
-import { Outlet, useNavigate, NavLink } from "react-router-dom";
-import { LogOut } from "../components/Buttons";
-import { handlesignOut } from "../features/dashboard/services/DashboardServices";
-import { useAuth } from "../features/auth/context/AuthContext";
-import getMenuLinkClassName from "./utils/getMenuLinkClass";
-import { useState } from "react";
-
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { FolderKanban, FolderPlus, Home, ListPlus, ListTodo, LogOut, PanelsTopLeft } from "lucide-react"
+import { handlesignOut } from "../features/dashboard/services/DashboardServices"
+import { useAuth } from "../features/auth/context/AuthContext"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarInset,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarProvider,
+    SidebarRail,
+    SidebarSeparator,
+    SidebarTrigger,
+} from "@/components/ui/sidebar"
+import { Separator } from "@/components/ui/separator"
 
 function DashboardLayout() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(() => {
+        const savedValue = localStorage.getItem("MenuPosition")
+        return savedValue === null ? true : savedValue === "true"
+    })
 
-        const saveValue = localStorage.getItem("MenuPosition");
-
-        return saveValue === "true";
-    });
-
-
-    const navigate = useNavigate();
-    const { user } = useAuth();
+    const navigate = useNavigate()
+    const { user } = useAuth()
 
     const linkList = [
-        { label: 'Inicio', to: "/dashboard", end: true },
-        { label: "Crear Proyecto", to: "create-project-page", end: false },
-        { label: "Proyectos", to: "project-page", end: false },
-        { label: 'Crear Tareas', to: "/dashboard/create-task", end: false },
-        { label: "Tareas", to: "/dashboard/tasks", end: false }
+        { label: "Inicio", to: "/dashboard", end: true, icon: Home },
+        { label: "Crear proyecto", to: "create-project-page", end: false, icon: FolderPlus },
+        { label: "Proyectos", to: "project-page", end: false, icon: FolderKanban },
+        { label: "Crear tarea", to: "/dashboard/create-task", end: false, icon: ListPlus },
+        { label: "Tareas", to: "/dashboard/tasks", end: false, icon: ListTodo },
     ]
 
+    function handleDrawerChange(nextValue) {
+        setIsDrawerOpen(nextValue)
+        localStorage.setItem("MenuPosition", String(nextValue))
+    }
+
     return (
-        <main className="min-h-screen bg-gray-50">
-
-            <div className="flex flex-col min-h-screen max-w-8x1">
-
-                <header className="sticky top-0 z-30 flex justify-between px-5 bg-indigo-500 ">
-
-                    <div className="flex py-2">
-                        <button
-                            type="button"
-                            onClick={handleToggleDrawer}
-                            className="px-3 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700"
-                        > {isDrawerOpen ? "Cerrar" : "Menu"}
-
-                        </button>
-
-                        <div className="px-2">
-                            <h1 className="text-2xl font-bold text-white gap">Bienvenido {user?.user_metadata?.nombre}</h1>
-                            <p className="text-white">Gestiona tus tareas</p>
+        <SidebarProvider open={isDrawerOpen} onOpenChange={handleDrawerChange} className="h-svh min-h-0 overflow-hidden">
+            <Sidebar collapsible="offcanvas">
+                <SidebarHeader className="p-4">
+                    <div className="flex items-center gap-3">
+                        <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                            <PanelsTopLeft className="size-5" />
+                        </div>
+                        <div className="min-w-0">
+                            <p className="font-heading font-semibold">TaskFlow</p>
+                            <p className="truncate text-xs text-muted-foreground">Gestor de tareas</p>
                         </div>
                     </div>
-                    <div className="py-5">
-                        <LogOut onclick={() => handlesignOut(navigate)} />
+                </SidebarHeader>
+                <SidebarSeparator />
+                <SidebarContent>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Navegación</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {linkList.map((link) => {
+                                    const Icon = link.icon
+                                    return (
+                                        <SidebarMenuItem key={link.to}>
+                                            <NavLink to={link.to} end={link.end}>
+                                                {({ isActive }) => (
+                                                    <SidebarMenuButton isActive={isActive} tooltip={link.label} asChild>
+                                                        <span>
+                                                            <Icon />
+                                                            <span>{link.label}</span>
+                                                        </span>
+                                                    </SidebarMenuButton>
+                                                )}
+                                            </NavLink>
+                                        </SidebarMenuItem>
+                                    )
+                                })}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                </SidebarContent>
+                <SidebarFooter>
+                    <Button type="button" variant="ghost" className="w-full justify-start" onClick={() => handlesignOut(navigate)}>
+                        <LogOut data-icon="inline-start" />
+                        Cerrar sesión
+                    </Button>
+                </SidebarFooter>
+                <SidebarRail />
+            </Sidebar>
+            <SidebarInset className="h-svh min-w-0 overflow-hidden">
+                <header className="flex h-16 shrink-0 items-center gap-3 border-b bg-background px-4">
+                    <SidebarTrigger />
+                    <Separator orientation="vertical" className="h-5" />
+                    <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">
+                            Bienvenido, {user?.user_metadata?.nombre || "Usuario"}
+                        </p>
+                        <p className="text-xs text-muted-foreground">Gestiona tus tareas y proyectos</p>
                     </div>
                 </header>
-
-
-                <div className="flex flex-1">
-
-                    <aside className={`${isDrawerOpen ? "w-64" : "w-0"} sticky top-18 h-[calc(100vh-72px)] overflow-hidden transition-all duration-300 shrink-0 bg-indigo-500`}>
-                        <nav className="flex flex-col gap-2 px-4 py-6 bg-indigo-500">
-
-                            {linkList.map((link) =>
-                            (
-                                <NavLink
-                                    key={link.to}
-                                    to={link.to}
-                                    end={link.end}
-                                    className={({ isActive }) => getMenuLinkClassName(isActive)}
-                                >{link.label}</NavLink>
-                            )
-                            )}
-                        </nav>
-                    </aside>
-
-                    <section
-                        id="dashboard-scroll-container"
-                        className="flex-1 bg-indigo-50">
-                        <Outlet />
-                    </section>
-
-                </div>
-            </div>
-        </main>
-
-    );
-
-    function handleToggleDrawer() {
-        setIsDrawerOpen((currentValue) => {
-            const nextValue = !currentValue;
-
-            localStorage.setItem("MenuPosition", String(nextValue))
-
-            return nextValue;
-        })
-    }
+                <section id="dashboard-scroll-container" className="min-h-0 flex-1 overflow-y-auto bg-muted/30">
+                    <Outlet />
+                </section>
+            </SidebarInset>
+        </SidebarProvider>
+    )
 }
+
 export default DashboardLayout

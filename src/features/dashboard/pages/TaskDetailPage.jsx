@@ -1,127 +1,68 @@
-﻿import { useParams } from "react-router-dom"
-import { getTaskById } from "../services/getTaskById";
-import { useEffect, useState } from "react";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
-import ErrorMessage from "../../../components/ErrorMessage";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom"
+import { ArrowLeft, CalendarDays, Flag, ListChecks } from "lucide-react"
+import { getTaskById } from "../services/getTaskById"
+import { useEffect, useState } from "react"
+import LoadingSpinner from "../../../components/LoadingSpinner"
+import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes"
+import ErrorMessage from "../../../components/ErrorMessage"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 function TaskDetailPage() {
-    const navigate = useNavigate();
-    const { taskId } = useParams();
-    const [showTask, setShowTask] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState({ status: false, type: 0 });
-    const location = useLocation();
-    const backTo = location.state?.from || "/dashboard/tasks";
-
+    const navigate = useNavigate()
+    const { taskId } = useParams()
+    const [showTask, setShowTask] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState({ status: false, type: 0 })
+    const location = useLocation()
+    const backTo = location.state?.from || "/dashboard/tasks"
 
     useEffect(() => {
-
         async function getTask() {
             try {
                 setError({ status: false, type: 0 })
-
-                const task = await getTaskById(taskId);
-
-                if (!task) {
-                    throw new Error("Error al traer la tarea");
-                }
-
-                setShowTask(task);
-
+                const task = await getTaskById(taskId)
+                if (!task) throw new Error("Error al traer la tarea")
+                setShowTask(task)
             } catch (error) {
-                console.error("Error al cargar la tarea:", error);
-                setError({ status: true, type: TASK_ERROR_TYPES.LOAD });
+                console.error("Error al cargar la tarea:", error)
+                setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
         }
-
-        getTask();
-    }, [taskId]);
-
+        getTask()
+    }, [taskId])
 
     if (loading) return <LoadingSpinner />
+    if (error.status) return <ErrorMessage error="No se pudo cargar la tarea" onTryAgain={() => window.location.reload()} onCancel={() => navigate("/dashboard")} />
 
-    if (error.status) {
-        return <ErrorMessage
-            error={"No se pudo cargar la tarea"}
-            onTryAgain={() => window.location.reload()}
-            onCancel={() => navigate("/dashboard")}
-        />
-    }
-
+    const priorityLabel = showTask.priority === "low" ? "Baja" : showTask.priority === "medium" ? "Media" : "Alta"
 
     return (
-
-        <main className="max-w-4xl px-4 py-8 mx-auto">
-            <article className="overflow-hidden bg-indigo-100 border border-indigo-200 shadow rounded-3xl">
-                <header className="px-6 py-5 bg-indigo-200 border-b border-indigo-300">
-                    <h1 className="text-2xl font-bold text-gray-900">
-                        {showTask.title}
-                    </h1>
-                </header>
-
-                <section className="px-6 py-5 space-y-4">
-                    <div>
-                        <h2 className="text-sm font-semibold text-gray-500">
-                            Descripción
-                        </h2>
-                        <p className="mt-1 text-gray-900">
-                            {showTask.description}
-                        </p>
+        <main className="mx-auto w-full max-w-4xl space-y-4 px-4 py-8">
+            <Button type="button" variant="ghost" onClick={() => navigate(backTo)}><ArrowLeft />Volver atrás</Button>
+            <Card>
+                <CardHeader className="border-b">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant={showTask.status === "completed" ? "secondary" : "outline"}>{showTask.status === "completed" ? "Completada" : "Pendiente"}</Badge>
+                        {showTask.task_type && <Badge variant="outline">{showTask.task_type}</Badge>}
                     </div>
-
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        <div>
-                            <h2 className="text-sm font-semibold text-gray-500">
-                                Prioridad
-                            </h2>
-                            <p className="mt-1 font-medium">
-                                {showTask.priority}
-                            </p>
-                        </div>
-
-                        <div>
-                            <h2 className="text-sm font-semibold text-gray-500">
-                                Estado
-                            </h2>
-                            <p className="mt-1 font-medium">
-                                {showTask.status === "completed" ? "Completada" : "Pendiente"}
-                            </p>
-                        </div>
-
-                        <div>
-                            <h2 className="text-sm font-semibold text-gray-500">
-                                Fecha límite
-                            </h2>
-                            <p className="mt-1 font-medium">
-                                {showTask.due_date || "Sin fecha límite"}
-                            </p>
-                        </div>
+                    <CardTitle className="text-xl">{showTask.title}</CardTitle>
+                    <CardDescription>{showTask.description || "Sin descripción"}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="grid gap-4 sm:grid-cols-3">
+                        <div className="rounded-lg border bg-muted/40 p-4"><Flag className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Prioridad</p><p className="mt-1 font-medium">{priorityLabel}</p></div>
+                        <div className="rounded-lg border bg-muted/40 p-4"><ListChecks className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Estado</p><p className="mt-1 font-medium">{showTask.status === "completed" ? "Completada" : "Pendiente"}</p></div>
+                        <div className="rounded-lg border bg-muted/40 p-4"><CalendarDays className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Fecha límite</p><p className="mt-1 font-medium">{showTask.due_date || "Sin fecha límite"}</p></div>
                     </div>
-
-                    {showTask.image_url && (
-                        <img
-                            src={showTask.image_url}
-                            alt={showTask.title}
-                            className="object-cover w-full rounded max-h-80"
-                        />
-                    )}
-                </section>
-
-            </article>
-            <div className="flex justify-end py-3">
-                <button
-                    className="text-sm font-medium text-indigo-500 hover:underline hover:cursor-pointer"
-                    onClick={() => navigate(backTo)}
-                > ← Volver atras</button>
-            </div>
+                    {showTask.image_url && <img src={showTask.image_url} alt={showTask.title} className="max-h-96 w-full rounded-lg object-cover" />}
+                </CardContent>
+            </Card>
         </main>
     )
 }
 
-export default TaskDetailPage;
-
+export default TaskDetailPage
