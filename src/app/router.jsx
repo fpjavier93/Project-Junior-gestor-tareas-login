@@ -12,7 +12,9 @@ import { CreateProjectPage } from "../features/dashboard/pages/CreateProjectPage
 import { ProjectDetailsPage } from "../features/dashboard/pages/ProjectDetailsPage";
 
 
+
 export const router = createBrowserRouter([
+
     { path: "/", element: <LoginPage /> },
     { path: "/register", element: <RegisterPage /> },
 
@@ -30,9 +32,10 @@ export const router = createBrowserRouter([
             { path: "tasks/:taskId", element: <TaskDetailPage /> },
             { path: "project-page", element: <ProjectPage /> },
             { path: "create-project-page", element: <CreateProjectPage /> },
-
             { path: "projects/:projectID", element: <ProjectDetailsPage /> }
 
         ],
+
     },
+
 ]);

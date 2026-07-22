@@ -46,21 +46,21 @@ function DashboardLayout() {
     }
 
     return (
-        <SidebarProvider open={isDrawerOpen} onOpenChange={handleDrawerChange} className="h-svh min-h-0 overflow-hidden">
+        <SidebarProvider open={isDrawerOpen} onOpenChange={handleDrawerChange} className="min-h-0 overflow-hidden h-svh">
             <Sidebar collapsible="offcanvas">
-                <SidebarHeader className="p-4">
-                    <div className="flex items-center gap-3">
-                        <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <SidebarHeader className="flex justify-center h-16 px-4 py-0 border-b bg-background">
+                    <div className="flex items-center gap-3 ">
+                        <div className="flex items-center justify-center rounded-lg size-9 bg-primary text-primary-foreground">
                             <PanelsTopLeft className="size-5" />
                         </div>
                         <div className="min-w-0">
-                            <p className="font-heading font-semibold">TaskFlow</p>
-                            <p className="truncate text-xs text-muted-foreground">Gestor de tareas</p>
+                            <p className="font-semibold font-heading">TaskFlow</p>
+                            <p className="text-xs truncate text-muted-foreground">Gestor de tareas</p>
                         </div>
                     </div>
                 </SidebarHeader>
-                <SidebarSeparator />
-                <SidebarContent>
+
+                <SidebarContent className={"bg-background"}>
                     <SidebarGroup>
                         <SidebarGroupLabel>Navegación</SidebarGroupLabel>
                         <SidebarGroupContent>
@@ -71,7 +71,8 @@ function DashboardLayout() {
                                         <SidebarMenuItem key={link.to}>
                                             <NavLink to={link.to} end={link.end}>
                                                 {({ isActive }) => (
-                                                    <SidebarMenuButton isActive={isActive} tooltip={link.label} asChild>
+                                                    <SidebarMenuButton isActive={isActive} tooltip={link.label} asChild
+                                                        className="data-[active=true]:bg-indigo-500 data-[active=true]:text-white data-[active=true]:hover:bg-indigo-600 data-[active=true]:hover:text-white">
                                                         <span>
                                                             <Icon />
                                                             <span>{link.label}</span>
@@ -87,25 +88,25 @@ function DashboardLayout() {
                     </SidebarGroup>
                 </SidebarContent>
                 <SidebarFooter>
-                    <Button type="button" variant="ghost" className="w-full justify-start" onClick={() => handlesignOut(navigate)}>
+                    <Button type="button" variant="ghost" className="justify-start w-full" onClick={() => handlesignOut(navigate)}>
                         <LogOut data-icon="inline-start" />
                         Cerrar sesión
                     </Button>
                 </SidebarFooter>
                 <SidebarRail />
             </Sidebar>
-            <SidebarInset className="h-svh min-w-0 overflow-hidden">
-                <header className="flex h-16 shrink-0 items-center gap-3 border-b bg-background px-4">
+            <SidebarInset className="min-w-0 overflow-hidden h-svh">
+                <header className="flex items-center h-16 gap-3 px-4 border-b shrink-0 bg-background">
                     <SidebarTrigger />
-                    <Separator orientation="vertical" className="h-5" />
+                    <Separator orientation="vertical" className="h-0" />
                     <div className="min-w-0">
-                        <p className="truncate text-sm font-medium">
+                        <p className="text-sm font-medium truncate">
                             Bienvenido, {user?.user_metadata?.nombre || "Usuario"}
                         </p>
                         <p className="text-xs text-muted-foreground">Gestiona tus tareas y proyectos</p>
                     </div>
                 </header>
-                <section id="dashboard-scroll-container" className="min-h-0 flex-1 overflow-y-auto bg-muted/30">
+                <section id="dashboard-scroll-container" className="flex-1 min-h-0 overflow-y-auto bg-muted/30">
                     <Outlet />
                 </section>
             </SidebarInset>

@@ -48,10 +48,16 @@ export default function RegisterPage() {
     ]
 
     return (
-        <main className="flex min-h-svh items-center justify-center bg-muted/40 px-4 py-10">
-            <Card className="w-full max-w-lg">
+        <main className="relative flex items-center justify-center w-full min-h-screen p-4 overflow-hidden bg-background">
+
+            <div
+                className="absolute inset-0 bg-center bg-no-repeat bg-cover pointer-events-none opacity-40"
+                style={{ backgroundImage: `url('/login-bg.jpg')` }}
+            />
+
+            <Card className="relative z-10 w-full max-w-md border shadow-2xl bg-orange border-white/20">
                 <CardHeader className="text-center">
-                    <div className="mx-auto mb-2 flex size-11 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                    <div className="flex items-center justify-center mx-auto mb-2 rounded-lg size-11 bg-primary text-primary-foreground">
                         <CheckSquare2 className="size-6" />
                     </div>
                     <CardTitle className="text-xl">Crea tu cuenta</CardTitle>
