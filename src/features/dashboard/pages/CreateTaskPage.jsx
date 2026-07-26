@@ -111,7 +111,7 @@ export default function CreateTaskPage() {
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            className="flex flex-col items-center justify-center w-full gap-2 text-sm transition-colors border border-dashed rounded-lg aspect-square text-muted-foreground hover:bg-muted"
+                                            className="flex flex-col items-center justify-center w-full gap-2 text-sm transition-colors border border-dashed rounded-lg h-18 aspect-square text-muted-foreground hover:bg-muted"
                                             onClick={openGetImageDialog}
                                         >
                                             <ImagePlus className="size-6" />

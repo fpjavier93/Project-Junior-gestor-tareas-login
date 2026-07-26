@@ -1,7 +1,7 @@
 import { CalendarClock } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
-export function RisentltyTask({ task, diffInDays }) {
+export function RecentlyTask({ task, diffInDays }) {
     const dueMessage = task.due_date === null || task.status === "completed"
         ? null
         : diffInDays > 3 ? "Fecha límite: " + task.due_date

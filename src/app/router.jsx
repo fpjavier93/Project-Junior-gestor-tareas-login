@@ -10,32 +10,33 @@ import TaskDetailPage from "../features/dashboard/pages/TaskDetailPage";
 import { ProjectPage } from "../features/dashboard/pages/ProjectPage";
 import { CreateProjectPage } from "../features/dashboard/pages/CreateProjectPage";
 import { ProjectDetailsPage } from "../features/dashboard/pages/ProjectDetailsPage";
-
+import AppBackgroundLayout from "@/layouts/AppBackgroundLayout";
 
 
 export const router = createBrowserRouter([
-
-    { path: "/", element: <LoginPage /> },
-    { path: "/register", element: <RegisterPage /> },
-
     {
-        path: "/dashboard",
-        element: (
-            <ProtectedRoute>
-                <DashboardLayout />
-            </ProtectedRoute>
-        ),
+        element: <AppBackgroundLayout />,
         children: [
-            { index: true, element: <Dashboard /> },
-            { path: "create-task", element: <CreateTaskPage /> },
-            { path: "tasks", element: <AllTasksPage /> },
-            { path: "tasks/:taskId", element: <TaskDetailPage /> },
-            { path: "project-page", element: <ProjectPage /> },
-            { path: "create-project-page", element: <CreateProjectPage /> },
-            { path: "projects/:projectID", element: <ProjectDetailsPage /> }
+            { path: "/", element: <LoginPage /> },
+            { path: "/register", element: <RegisterPage /> },
 
+            {
+                path: "/dashboard",
+                element: (
+                    <ProtectedRoute>
+                        <DashboardLayout />
+                    </ProtectedRoute>
+                ),
+                children: [
+                    { index: true, element: <Dashboard /> },
+                    { path: "create-task", element: <CreateTaskPage /> },
+                    { path: "tasks", element: <AllTasksPage /> },
+                    { path: "tasks/:taskId", element: <TaskDetailPage /> },
+                    { path: "project-page", element: <ProjectPage /> },
+                    { path: "create-project-page", element: <CreateProjectPage /> },
+                    { path: "projects/:projectID", element: <ProjectDetailsPage /> },
+                ],
+            },
         ],
-
     },
-
-]);
+])

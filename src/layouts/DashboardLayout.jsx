@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { FolderKanban, FolderPlus, Home, ListPlus, ListTodo, LogOut, PanelsTopLeft } from "lucide-react"
-import { handlesignOut } from "../features/dashboard/services/DashboardServices"
+import { handleSignOut } from "../features/dashboard/services/DashboardServices"
 import { useAuth } from "../features/auth/context/AuthContext"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -22,6 +22,7 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
+
 
 function DashboardLayout() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(() => {
@@ -48,7 +49,7 @@ function DashboardLayout() {
     return (
         <SidebarProvider open={isDrawerOpen} onOpenChange={handleDrawerChange} className="min-h-0 overflow-hidden h-svh">
             <Sidebar collapsible="offcanvas">
-                <SidebarHeader className="flex justify-center h-16 px-4 py-0 border-b bg-background">
+                <SidebarHeader className="flex justify-center h-16 px-4 py-0 bg-white border-b">
                     <div className="flex items-center gap-3 ">
                         <div className="flex items-center justify-center rounded-lg size-9 bg-primary text-primary-foreground">
                             <PanelsTopLeft className="size-5" />
@@ -60,7 +61,7 @@ function DashboardLayout() {
                     </div>
                 </SidebarHeader>
 
-                <SidebarContent className={"bg-background"}>
+                <SidebarContent className="bg-white">
                     <SidebarGroup>
                         <SidebarGroupLabel>Navegación</SidebarGroupLabel>
                         <SidebarGroupContent>
@@ -87,16 +88,17 @@ function DashboardLayout() {
                         </SidebarGroupContent>
                     </SidebarGroup>
                 </SidebarContent>
-                <SidebarFooter>
-                    <Button type="button" variant="ghost" className="justify-start w-full" onClick={() => handlesignOut(navigate)}>
+                <SidebarFooter className={"bg-white"}>
+                    <Button type="button" variant="ghost" className="justify-start w-full" onClick={() => handleSignOut(navigate)}>
                         <LogOut data-icon="inline-start" />
                         Cerrar sesión
                     </Button>
                 </SidebarFooter>
                 <SidebarRail />
             </Sidebar>
-            <SidebarInset className="min-w-0 overflow-hidden h-svh">
-                <header className="flex items-center h-16 gap-3 px-4 border-b shrink-0 bg-background">
+
+            <SidebarInset className="min-w-0 overflow-hidden h-svh bg-background/75 backdrop-blur-sm">
+                <header className="flex items-center h-16 gap-3 px-4 border-b shrink-0 bg-background/75 backdrop-blur-sm">
                     <SidebarTrigger />
                     <Separator orientation="vertical" className="h-0" />
                     <div className="min-w-0">

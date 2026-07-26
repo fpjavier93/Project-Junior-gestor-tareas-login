@@ -41,7 +41,7 @@ function AllTasksPage() {
         submitError,
         setSubmitError,
         taskType,
-        hanldeSearchTypeTask,
+        handleSearchTypeTask,
     } = useTasks()
 
     const {
@@ -123,7 +123,7 @@ function AllTasksPage() {
                     <TaskSearch onSearch={handleSearch} searching={searching} />
                     <TaskFilterPerPriority onPriorityChange={handleTaskPriorityFilterChange} selectedPriority={taskPriorityFilter} />
                     <TaskFilters onStatusChange={handleSelect} select={select} />
-                    <TaskFilterType onselectedType={taskType} onTaskChange={hanldeSearchTypeTask} />
+                    <TaskFilterType onselectedType={taskType} onTaskChange={handleSearchTypeTask} />
                 </CardContent>
             </Card>
 

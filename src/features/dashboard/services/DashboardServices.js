@@ -17,7 +17,7 @@ async function getUserDataId() {
 
 
 
-async function handlesignOut(navigate) {
+async function handleSignOut(navigate) {
     const result = await signOut();
     if (result.success) {
         navigate("/")
@@ -28,4 +28,4 @@ async function handlesignOut(navigate) {
 
 
 
-export { getUserDataId, handlesignOut };
+export { getUserDataId, handleSignOut };

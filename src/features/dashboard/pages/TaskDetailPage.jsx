@@ -41,12 +41,14 @@ function TaskDetailPage() {
     const priorityLabel = showTask.priority === "low" ? "Baja" : showTask.priority === "medium" ? "Media" : "Alta"
 
     return (
-        <main className="mx-auto w-full max-w-4xl space-y-4 px-4 py-8">
+        <main className="w-full max-w-4xl px-4 py-8 mx-auto space-y-4">
             <Button type="button" variant="ghost" onClick={() => navigate(backTo)}><ArrowLeft />Volver atrás</Button>
             <Card>
                 <CardHeader className="border-b">
                     <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant={showTask.status === "completed" ? "secondary" : "outline"}>{showTask.status === "completed" ? "Completada" : "Pendiente"}</Badge>
+                        <Badge
+                            className={showTask.status === "completed" ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-dashed border-amber-500 bg-amber-50 text-amber-700"}
+                            variant={showTask.status === "completed" ? "secondary" : "outline"}>{showTask.status === "completed" ? "Completada" : "Pendiente"}</Badge>
                         {showTask.task_type && <Badge variant="outline">{showTask.task_type}</Badge>}
                     </div>
                     <CardTitle className="text-xl">{showTask.title}</CardTitle>
@@ -54,11 +56,11 @@ function TaskDetailPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="grid gap-4 sm:grid-cols-3">
-                        <div className="rounded-lg border bg-muted/40 p-4"><Flag className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Prioridad</p><p className="mt-1 font-medium">{priorityLabel}</p></div>
-                        <div className="rounded-lg border bg-muted/40 p-4"><ListChecks className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Estado</p><p className="mt-1 font-medium">{showTask.status === "completed" ? "Completada" : "Pendiente"}</p></div>
-                        <div className="rounded-lg border bg-muted/40 p-4"><CalendarDays className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Fecha límite</p><p className="mt-1 font-medium">{showTask.due_date || "Sin fecha límite"}</p></div>
+                        <div className="p-4 border rounded-lg bg-muted/40"><Flag className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Prioridad</p><p className="mt-1 font-medium">{priorityLabel}</p></div>
+                        <div className="p-4 border rounded-lg bg-muted/40"><ListChecks className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Estado</p><p className="mt-1 font-medium">{showTask.status === "completed" ? "Completada" : "Pendiente"}</p></div>
+                        <div className="p-4 border rounded-lg bg-muted/40"><CalendarDays className="mb-3 size-5 text-muted-foreground" /><p className="text-xs font-medium uppercase text-muted-foreground">Fecha límite</p><p className="mt-1 font-medium">{showTask.due_date || "Sin fecha límite"}</p></div>
                     </div>
-                    {showTask.image_url && <img src={showTask.image_url} alt={showTask.title} className="max-h-96 w-full rounded-lg object-cover" />}
+                    {showTask.image_url && <img src={showTask.image_url} alt={showTask.title} className="object-cover w-full rounded-lg max-h-96" />}
                 </CardContent>
             </Card>
         </main>

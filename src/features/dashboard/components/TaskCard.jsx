@@ -30,13 +30,13 @@ export function TaskCard({ task, isEditing, isDeleting, isCompleted, isStatusUpd
                 <div className="grid min-w-0 gap-4 sm:grid-cols-[minmax(0,1fr)_auto]">
                     <div className="min-w-0 space-y-2">
                         {dueMessage && <p className="flex items-center gap-1.5 text-xs font-medium text-destructive"><CalendarClock className="size-4" />{dueMessage}</p>}
-                        <CardTitle className="break-words text-lg">{task.title}</CardTitle>
+                        <CardTitle className="text-lg wrap-break-words">{task.title}</CardTitle>
                         <div className="flex flex-wrap gap-2">
                             <Badge variant="outline" className={priorityClass}>{priorityLabel}</Badge>
                             {taskTypeLabel && <Badge variant="secondary">{taskTypeLabel}</Badge>}
                         </div>
                     </div>
-                    {Image && <img src={Image} alt={task.title} className="aspect-video h-28 w-full rounded-lg object-cover sm:w-44" />}
+                    {Image && <img src={Image} alt={task.title} className="object-cover w-full rounded-lg aspect-video h-28 sm:w-44" />}
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">

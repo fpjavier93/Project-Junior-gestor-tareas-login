@@ -42,11 +42,11 @@ export function useProject() {
         }
     }
 
-    function hanldeProjectSelected(value) {
+    function handleProjectSelected(value) {
         setprojectSelected(value)
     }
 
-    function hanldeDeleteProject(projectToRemove) {
+    function handleDeleteProject(projectToRemove) {
         setDeleteError("")
         setProjectToDelete(projectToRemove)
     }
@@ -94,8 +94,8 @@ export function useProject() {
         setProject,
         handleProjects,
         projectSelected,
-        hanldeProjectSelected,
-        hanldeDeleteProject,
+        handleProjectSelected,
+        handleDeleteProject,
         deleteError,
         setDeleteError,
         projectToDelete,

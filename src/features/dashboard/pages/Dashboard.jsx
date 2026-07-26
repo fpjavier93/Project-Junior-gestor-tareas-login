@@ -2,13 +2,13 @@ import { useNavigate } from "react-router-dom"
 import { ArrowRight, CheckCircle2, CircleDashed, ListTodo } from "lucide-react"
 import { Card } from "../../../components/Card"
 import { useEffect, useState } from "react"
-import { handlesignOut as handleSignOut } from "../services/DashboardServices"
+import { handleSignOut as handleSignOut } from "../services/DashboardServices"
 import { getCurrentUser } from "../../auth/services"
 import ProgressBarDashboard from "../../../components/ProgressBarDashboard"
 import { getTasks } from "../services/tasksApiServices"
 import LoadingSpinner from "../../../components/LoadingSpinner"
 import ErrorMessage from "../../../components/ErrorMessage"
-import { RisentltyTask } from "../components/TaskCardDashboard"
+import { RecentlyTask } from "../components/TaskCardDashboard"
 import { calcDiffInDays } from "../utils/CreateTaskUtils"
 import { Button } from "@/components/ui/button"
 import { Card as ShadcnCard, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -66,7 +66,7 @@ function Dashboard() {
                 <CardContent className="px-0">
                     {userTasks.length === 0
                         ? <p className="px-4 py-10 text-center text-sm text-muted-foreground">Todavía no tienes tareas.</p>
-                        : userTasks.slice(0, 4).map((task) => <RisentltyTask key={task.id} task={task} today={today} diffInDays={calcDiffInDays(task, today)} />)}
+                        : userTasks.slice(0, 4).map((task) => <RecentlyTask key={task.id} task={task} today={today} diffInDays={calcDiffInDays(task, today)} />)}
                 </CardContent>
             </ShadcnCard>
         </main>

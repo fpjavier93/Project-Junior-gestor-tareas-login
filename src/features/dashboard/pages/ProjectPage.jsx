@@ -12,7 +12,7 @@ export function ProjectPage() {
         loading,
         project,
         handleProjects,
-        hanldeDeleteProject,
+        handleDeleteProject,
         deleteError,
         setDeleteError,
         projectToDelete,
@@ -55,7 +55,7 @@ export function ProjectPage() {
                     <p className="mt-1 text-sm text-muted-foreground">Crea uno para agrupar tareas relacionadas.</p>
                 </div>
             ) : (
-                <ProjectCard projects={project} onDelete={hanldeDeleteProject} />
+                <ProjectCard projects={project} onDelete={handleDeleteProject} />
             )}
 
             <DeleteConfirmationDialog

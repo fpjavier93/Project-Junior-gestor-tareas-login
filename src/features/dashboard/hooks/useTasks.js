@@ -192,7 +192,7 @@ export function useTasks() {
     }
 
 
-    async function hanldeSearchTypeTask(value) {
+    async function handleSearchTypeTask(value) {
 
         setTaskType(value);
 
@@ -222,7 +222,7 @@ export function useTasks() {
         searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
         setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
         titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority,
-        updatingStatusId, hanldeSearchTypeTask, setSubmitError
+        updatingStatusId, handleSearchTypeTask, setSubmitError
     };
 
 };

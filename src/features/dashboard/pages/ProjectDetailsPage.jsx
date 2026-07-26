@@ -17,7 +17,7 @@ export function ProjectDetailsPage() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        async function hanldeProjectDetailsPage() {
+        async function handleProjectDetailsPage() {
             try {
                 setloading(true)
                 setProject(await getProjectByID(projectID))
@@ -26,7 +26,7 @@ export function ProjectDetailsPage() {
                 setloading(false)
             }
         }
-        hanldeProjectDetailsPage()
+        handleProjectDetailsPage()
     }, [projectID])
 
     if (loading) return <LoadingSpinner />
