@@ -15,13 +15,15 @@ export function useProject() {
 
         const formData = new FormData(event.target)
         const dataProject = Object.fromEntries(formData.entries())
-        const newDataForm = {
-            user_id: await getUserID(),
-            ...dataProject,
-        }
 
         try {
             setloading(true)
+
+            const newDataForm = {
+                user_id: await getUserID(),
+                ...dataProject,
+            }
+
             await createProject(newDataForm)
             event.target.reset()
         } catch (error) {

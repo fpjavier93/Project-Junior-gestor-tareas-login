@@ -1,16 +1,19 @@
-import { supabase } from "../../../../utils/supabase";
+import { supabase } from "../../../../utils/supabase"
 
-async function getUserID() {
-    const { data, error } = await supabase.auth.getUser();
+async function getUserId() {
+    const { data, error } = await supabase.auth.getUser()
 
     if (error) {
-        return;
+        throw new Error("No se pudo obtener el usuario autenticado.", {
+            cause: error,
+        })
     }
 
-    const userID = data.user.id;
+    if (!data.user) {
+        throw new Error("No hay una sesión activa.")
+    }
 
-    return userID;
-
+    return data.user.id
 }
 
-export default getUserID;
+export default getUserId

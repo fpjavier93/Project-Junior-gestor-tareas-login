@@ -18,25 +18,32 @@ function TaskDetailPage() {
     const location = useLocation()
     const backTo = location.state?.from || "/dashboard/tasks"
 
-    useEffect(() => {
-        async function getTask() {
-            try {
-                setError({ status: false, type: 0 })
-                const task = await getTaskById(taskId)
-                if (!task) throw new Error("Error al traer la tarea")
-                setShowTask(task)
-            } catch (error) {
-                console.error("Error al cargar la tarea:", error)
-                setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
-            } finally {
-                setLoading(false)
+    async function getTask() {
+        try {
+            setLoading(true)
+            setError({ status: false, type: 0 })
+
+            const task = await getTaskById(taskId)
+
+            if (!task) {
+                throw new Error("No se encontró la tarea")
             }
+
+            setShowTask(task)
+        } catch (error) {
+            console.error("Error al cargar la tarea:", error)
+            setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
+        } finally {
+            setLoading(false)
         }
+    }
+
+    useEffect(() => {
         getTask()
     }, [taskId])
 
     if (loading) return <LoadingSpinner />
-    if (error.status) return <ErrorMessage error="No se pudo cargar la tarea" onTryAgain={() => window.location.reload()} onCancel={() => navigate("/dashboard")} />
+    if (error.status) return <ErrorMessage error="No se pudo cargar la tarea" onTryAgain={() => { getTask }} onCancel={() => navigate("/dashboard")} />
 
     const priorityLabel = showTask.priority === "low" ? "Baja" : showTask.priority === "medium" ? "Media" : "Alta"
 

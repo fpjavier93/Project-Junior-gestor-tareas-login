@@ -156,29 +156,26 @@ export function useTasks() {
 
         setIsSubmitting(true)
 
-        const newDataTask = {
-            user_id: await getUserID(),
-            ...data
-        };
-
-        if (!newDataTask.has_due_date || newDataTask.due_date === "") {
-            newDataTask.due_date = null;
-        }
-
-        delete newDataTask.has_due_date;
-
-        if (newDataTask.project_id === "") {
-            newDataTask.project_id = null;
-        }
-
-
-
         try {
+            const newDataTask = {
+                user_id: await getUserID(),
+                ...data
+            };
+
+            if (!newDataTask.has_due_date || newDataTask.due_date === "") {
+                newDataTask.due_date = null;
+            }
+
+            delete newDataTask.has_due_date;
+
+            if (newDataTask.project_id === "") {
+                newDataTask.project_id = null;
+            }
+
             await createTask(newDataTask);
 
             setSelectedImage("");
             reset();
-
 
         } catch (error) {
             console.error("Error al crear la tarea:", error.response?.data || error);

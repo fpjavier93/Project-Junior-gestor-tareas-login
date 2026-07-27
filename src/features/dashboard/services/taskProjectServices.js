@@ -1,24 +1,6 @@
 import { apiClient } from "../../../lib/apiClient";
 import { getSession } from "../../auth/services";
-
-export async function getAccessToken() {
-
-    const result = await getSession();
-
-    if (!result.success) {
-        throw new Error(result.error || "No se pudo obtener la sesion");
-    }
-
-    const accessToken = result.session?.access_token;
-
-    if (!accessToken) {
-        throw new Error("No hay una sesion activa");
-    }
-
-    return accessToken;
-}
-
-
+import { getAccessToken } from "./tasksApiServices";
 
 export async function createProject(project) {
 
