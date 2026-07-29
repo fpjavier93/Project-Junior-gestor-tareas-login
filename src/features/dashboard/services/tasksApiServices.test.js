@@ -1,11 +1,9 @@
 ﻿import { beforeEach, describe, expect, it, vi } from "vitest";
 import { apiClient } from "../../../lib/apiClient";
-import { getSession } from "../../auth/services";
 import {
     createTask,
     deleteTask,
     editTask,
-    getAccessToken,
     getTasks,
     getTasksById,
 } from "./tasksApiServices";
@@ -19,40 +17,12 @@ vi.mock("../../../lib/apiClient", () => ({
     },
 }));
 
-vi.mock("../../auth/services", () => ({
-    getSession: vi.fn(),
-}));
-
-const accessToken = "token-de-prueba";
-
 beforeEach(() => {
     vi.clearAllMocks();
-
-    getSession.mockResolvedValue({
-        success: true,
-        session: {
-            access_token: accessToken,
-        },
-    });
-});
-
-describe("getAccessToken", () => {
-    it("devuelve el token de la sesión activa", async () => {
-        await expect(getAccessToken()).resolves.toBe(accessToken);
-    });
-
-    it("lanza un error si no se puede obtener la sesión", async () => {
-        getSession.mockResolvedValue({
-            success: false,
-            error: "Sesión inválida",
-        });
-
-        await expect(getAccessToken()).rejects.toThrow("Sesión inválida");
-    });
 });
 
 describe("tasksApiServices", () => {
-    it("obtiene tareas con filtros y autorización", async () => {
+    it("obtiene tareas con filtros", async () => {
         const tasks = [{ id: "task-1", title: "Preparar informe" }];
         apiClient.get.mockResolvedValue({ data: tasks });
 
@@ -67,28 +37,19 @@ describe("tasksApiServices", () => {
                 priority: "eq.high",
                 task_type: "eq.work",
             },
-            headers: {
-                Authorization: "Bearer " + accessToken,
-            },
         });
         expect(result).toEqual(tasks);
     });
 
     it("crea una tarea y devuelve la fila creada", async () => {
-        const newTask = {
-            title: "Aprender mocks",
-            description: "Practicar Vitest",
-        };
+        const newTask = { title: "Aprender mocks", description: "Practicar Vitest" };
         const createdTask = { id: "task-2", ...newTask };
         apiClient.post.mockResolvedValue({ data: [createdTask] });
 
         const result = await createTask(newTask);
 
         expect(apiClient.post).toHaveBeenCalledWith("/tasks", newTask, {
-            headers: {
-                Authorization: "Bearer " + accessToken,
-                Prefer: "return=representation",
-            },
+            headers: { Prefer: "return=representation" },
         });
         expect(result).toEqual(createdTask);
     });
@@ -101,29 +62,18 @@ describe("tasksApiServices", () => {
         const result = await editTask("task-3", update);
 
         expect(apiClient.patch).toHaveBeenCalledWith("/tasks", update, {
-            params: {
-                id: "eq.task-3",
-            },
-            headers: {
-                Authorization: "Bearer " + accessToken,
-                Prefer: "return=representation",
-            },
+            params: { id: "eq.task-3" },
+            headers: { Prefer: "return=representation" },
         });
         expect(result).toEqual(updatedTask);
     });
 
     it("elimina una tarea por su id", async () => {
         apiClient.delete.mockResolvedValue({});
-
         await deleteTask("task-4");
 
         expect(apiClient.delete).toHaveBeenCalledWith("/tasks", {
-            params: {
-                id: "eq.task-4",
-            },
-            headers: {
-                Authorization: "Bearer " + accessToken,
-            },
+            params: { id: "eq.task-4" },
         });
     });
 
@@ -138,9 +88,6 @@ describe("tasksApiServices", () => {
                 select: "*",
                 order: "created_at.desc",
                 project_id: "eq.project-1",
-            },
-            headers: {
-                Authorization: "Bearer " + accessToken,
             },
         });
         expect(result).toEqual(tasks);

@@ -1,121 +1,48 @@
-import { apiClient } from "../../../lib/apiClient";
-import { getSession } from "../../auth/services";
-
-export async function getAccessToken() {
-
-    const result = await getSession();
-
-    if (!result.success) {
-        throw new Error(result.error || "No se pudo obtener la sesion");
-    }
-
-    const accessToken = result.session?.access_token;
-
-    if (!accessToken) {
-        throw new Error("No hay una sesion activa");
-    }
-
-    return accessToken;
-}
+﻿import { apiClient } from "../../../lib/apiClient";
 
 async function getTasks(status, title, priority, task_type) {
-
-    const accessToken = await getAccessToken();
-
     const params = {
         select: "*",
         order: "created_at.desc",
     };
 
-    if (status) {
-        params.status = `eq.${status}`;
-    }
+    if (status) params.status = `eq.${status}`;
+    if (title) params.title = `ilike.%${title}%`;
+    if (priority) params.priority = `eq.${priority}`;
+    if (task_type) params.task_type = `eq.${task_type}`;
 
-    if (title) {
-        params.title = `ilike.%${title}%`;
-    }
-
-    if (priority) {
-        params.priority = `eq.${priority}`;
-    }
-
-    if (task_type) {
-        params.task_type = `eq.${task_type}`;
-    }
-
-    const response = await apiClient.get("/tasks", {
-        params,
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
-
+    const response = await apiClient.get("/tasks", { params });
     return response.data;
 }
 
 async function createTask(task) {
-    const accessToken = await getAccessToken();
-
     const response = await apiClient.post("/tasks", task, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            Prefer: "return=representation",
-        },
+        headers: { Prefer: "return=representation" },
     });
-
     return response.data[0];
 }
 
 async function editTask(id, update) {
-    const accessToken = await getAccessToken();
-
     const response = await apiClient.patch("/tasks", update, {
-        params: {
-            id: `eq.${id}`,
-        },
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            Prefer: "return=representation",
-        },
+        params: { id: `eq.${id}` },
+        headers: { Prefer: "return=representation" },
     });
-
     return response.data[0];
 }
 
 async function deleteTask(id) {
-    const accessToken = await getAccessToken();
-
-    await apiClient.delete("/tasks", {
-        params: {
-            id: `eq.${id}`,
-        },
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
+    await apiClient.delete("/tasks", { params: { id: `eq.${id}` } });
 }
 
 async function getTasksById(projectID) {
-
-    const accessToken = await getAccessToken();
-
     const params = {
         select: "*",
         order: "created_at.desc",
-        project_id: `eq.${projectID}`
+        project_id: `eq.${projectID}`,
     };
 
-
-    const response = await apiClient.get("/tasks", {
-        params,
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
-
+    const response = await apiClient.get("/tasks", { params });
     return response.data;
 }
-
-
 
 export { getTasks, createTask, editTask, deleteTask, getTasksById };

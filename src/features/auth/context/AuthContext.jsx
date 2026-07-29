@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { getSession, onAuthStateChange } from "../services";
 
 const AuthContext = createContext();
@@ -37,12 +37,12 @@ export function AuthProvider({ children }) {
 
     }, []);
 
-    const value = {
+    const value = useMemo(() => ({
         session,
         user,
         loading,
-        isAuthenticated: Boolean(user),
-    };
+        isAuthenticated: Boolean(user)
+    }), [session, user, loading])
 
     return (
         <AuthContext.Provider value={value}>
@@ -52,5 +52,13 @@ export function AuthProvider({ children }) {
 }
 
 export function useAuth() {
-    return useContext(AuthContext);
+    const context = useContext(AuthContext);
+
+    if (context === undefined) {
+        throw new Error(
+            'useAuth debe usarse dentro de un AuthProvider'
+        );
+    }
+
+    return context;
 }

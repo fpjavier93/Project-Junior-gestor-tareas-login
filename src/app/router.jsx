@@ -11,6 +11,7 @@ import { ProjectPage } from "../features/dashboard/pages/ProjectPage";
 import { CreateProjectPage } from "../features/dashboard/pages/CreateProjectPage";
 import { ProjectDetailsPage } from "../features/dashboard/pages/ProjectDetailsPage";
 import AppBackgroundLayout from "@/layouts/AppBackgroundLayout";
+import { NotFoundPage } from "@/features/dashboard/pages/NotFoundPage";
 
 
 export const router = createBrowserRouter([
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
                     { path: "project-page", element: <ProjectPage /> },
                     { path: "create-project-page", element: <CreateProjectPage /> },
                     { path: "projects/:projectID", element: <ProjectDetailsPage /> },
+                    { path: "*", element: <NotFoundPage /> }
                 ],
             },
         ],

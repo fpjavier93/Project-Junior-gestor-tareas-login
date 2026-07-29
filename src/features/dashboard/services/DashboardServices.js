@@ -9,5 +9,4 @@ async function handleSignOut(navigate) {
     }
 }
 
-
-export { getUserDataId, handleSignOut };
+export { handleSignOut };
