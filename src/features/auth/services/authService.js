@@ -6,6 +6,7 @@ import { supabase } from '../../../../utils/supabase';
 
 // ============ REGISTRO ============
 export const signUp = async ({ apellidos, email, empresa, nombre, password }) => {
+
   try {
     const { data, error } = await supabase.auth.signUp({
       email,

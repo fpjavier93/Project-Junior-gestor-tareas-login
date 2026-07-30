@@ -214,7 +214,6 @@ El `RegisterPage` reemplaza toda la UI con `<ErrorMessage/>` al fallar, perdiend
 - Agregar `aria-label` a botones de iconos (editar, eliminar, toggle status)
 - Asegurar que todos los inputs tengan `label` asociado
 - Agregar `role="alert"` en mensajes de error
-
 ---
 
 ## 🟢 Ideas para Implementar (Roadmap de Funcionalidades)

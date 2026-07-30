@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { CheckSquare2 } from "lucide-react"
 import { signUp } from "../services"
-import ErrorMessage from "../../../components/ErrorMessage"
 import { useForm } from "react-hook-form"
 import { registerSchema } from "../schemas/registerSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -10,6 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { CircleAlert } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function RegisterPage() {
     const {
@@ -22,21 +23,21 @@ export default function RegisterPage() {
     const [error, setError] = useState(false)
 
     async function onSubmit(data) {
+
+        setError("")
+
         try {
             const response = await signUp(data)
             if (response.success) {
                 navigate("/")
                 return
             }
-            setError(true)
-        } catch {
-            setError(true)
+            setError(response.error || "No se logró completar el registro")
+        } catch (error) {
+            setError("Ocurrió un error inesperado al registrar la cuenta")
         }
     }
 
-    if (error) {
-        return <ErrorMessage error="No se logró completar el registro" onTryAgain={() => setError(false)} />
-    }
 
     const fields = [
         { name: "nombre", label: "Nombre(s)", type: "text", autoComplete: "given-name" },
@@ -48,7 +49,7 @@ export default function RegisterPage() {
     ]
 
     return (
-        <main className="flex w-full min-h-screen items-center justify-center p-4 bg-transparent">
+        <main className="flex items-center justify-center w-full min-h-screen p-4 bg-transparent">
 
 
 
@@ -61,6 +62,14 @@ export default function RegisterPage() {
                     <CardDescription>Empieza a organizar tus tareas y proyectos.</CardDescription>
                 </CardHeader>
                 <CardContent>
+
+                    {error && (
+                        <Alert variant="destructive" role="alert" className="mb-5">
+                            <CircleAlert />
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+
                     <form id="register-form" noValidate onSubmit={handleSubmit(onSubmit)}>
                         <FieldGroup className="grid gap-5 sm:grid-cols-2">
                             {fields.map((field) => (
@@ -84,3 +93,5 @@ export default function RegisterPage() {
         </main>
     )
 }
+
+//{error ? <ErrorMessage error="No se logró completar el registro" onTryAgain={() => setError(false)} /> : ""}
