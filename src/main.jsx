@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client"
 import { RouterProvider } from "react-router-dom"
 import { AuthProvider } from "./features/auth/context/AuthContext"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { Toaster } from "./components/ui/sonner"
 
 import "./index.css"
 import { router } from "./app/router"
@@ -12,6 +13,7 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <TooltipProvider>
         <RouterProvider router={router} />
+        <Toaster />
       </TooltipProvider>
     </AuthProvider>
   </StrictMode>,

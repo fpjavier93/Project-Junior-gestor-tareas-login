@@ -2,6 +2,8 @@ import { useState } from "react";
 import { editTask, getTasks, createTask } from "../services/tasksApiServices";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 import getUserID from "../services/CreateTaskServices";
+import { Toast } from "radix-ui";
+import { toast } from "sonner";
 
 export function useTasks() {
 
@@ -173,6 +175,8 @@ export function useTasks() {
             }
 
             await createTask(newDataTask);
+            toast.success("tarea creada con Exito!")
+
 
             setSelectedImage("");
             reset();
