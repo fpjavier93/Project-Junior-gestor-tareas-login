@@ -22,6 +22,7 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
+import { ThemeToggle } from "@/features/dashboard/components/ThemeToggle"
 
 
 function DashboardLayout() {
@@ -49,7 +50,7 @@ function DashboardLayout() {
     return (
         <SidebarProvider open={isDrawerOpen} onOpenChange={handleDrawerChange} className="min-h-0 overflow-hidden h-svh">
             <Sidebar collapsible="offcanvas">
-                <SidebarHeader className="flex justify-center h-16 px-4 py-0 bg-white border-b">
+                <SidebarHeader className="flex justify-center h-16 px-4 py-0 border-b bg-sidebar">
                     <div className="flex items-center gap-3 ">
                         <div className="flex items-center justify-center rounded-lg size-9 bg-primary text-primary-foreground">
                             <PanelsTopLeft className="size-5" />
@@ -61,7 +62,7 @@ function DashboardLayout() {
                     </div>
                 </SidebarHeader>
 
-                <SidebarContent className="bg-white">
+                <SidebarContent className="bg-sidebar">
                     <SidebarGroup>
                         <SidebarGroupLabel>Navegación</SidebarGroupLabel>
                         <SidebarGroupContent>
@@ -88,7 +89,7 @@ function DashboardLayout() {
                         </SidebarGroupContent>
                     </SidebarGroup>
                 </SidebarContent>
-                <SidebarFooter className={"bg-white"}>
+                <SidebarFooter className={"bg-sidebar"}>
                     <Button type="button" variant="ghost" className="justify-start w-full" onClick={() => handleSignOut(navigate)}>
                         <LogOut data-icon="inline-start" />
                         Cerrar sesión
@@ -100,13 +101,17 @@ function DashboardLayout() {
             <SidebarInset className="min-w-0 overflow-hidden h-svh bg-background/75 backdrop-blur-sm">
                 <header className="flex items-center h-16 gap-3 px-4 border-b shrink-0 bg-background/75 backdrop-blur-sm">
                     <SidebarTrigger />
+
                     <Separator orientation="vertical" className="h-0" />
-                    <div className="min-w-0">
+
+                    <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">
                             Bienvenido, {user?.user_metadata?.nombre || "Usuario"}
                         </p>
+
                         <p className="text-xs text-muted-foreground">Gestiona tus tareas y proyectos</p>
                     </div>
+                    <ThemeToggle />
                 </header>
                 <section id="dashboard-scroll-container" className="flex-1 min-h-0 overflow-y-auto bg-muted/30">
                     <Outlet />
