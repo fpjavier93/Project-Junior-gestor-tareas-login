@@ -11,13 +11,13 @@ import { router } from "./app/router"
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <AuthProvider>
-        <TooltipProvider>
-          <RouterProvider router={router} />
-          <Toaster />
-        </TooltipProvider>
-      </AuthProvider>
-    </ThemeProvider>
+
+    <AuthProvider>
+      <TooltipProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </TooltipProvider>
+    </AuthProvider>
+
   </StrictMode>,
 )

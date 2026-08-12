@@ -12,6 +12,7 @@ import { CreateProjectPage } from "../features/dashboard/pages/CreateProjectPage
 import { ProjectDetailsPage } from "../features/dashboard/pages/ProjectDetailsPage";
 import AppBackgroundLayout from "@/layouts/AppBackgroundLayout";
 import { NotFoundPage } from "@/features/dashboard/pages/NotFoundPage";
+import { ThemeProvider } from "@/features/dashboard/components/ThemeProvider";
 
 
 export const router = createBrowserRouter([
@@ -24,9 +25,11 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard",
                 element: (
-                    <ProtectedRoute>
-                        <DashboardLayout />
-                    </ProtectedRoute>
+                    <ThemeProvider>
+                        <ProtectedRoute>
+                            <DashboardLayout />
+                        </ProtectedRoute>
+                    </ThemeProvider>
                 ),
                 children: [
                     { index: true, element: <Dashboard /> },
@@ -39,6 +42,7 @@ export const router = createBrowserRouter([
                     { path: "*", element: <NotFoundPage /> }
                 ],
             },
+            { path: "*", element: <NotFoundPage /> }
         ],
     },
 ])

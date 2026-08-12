@@ -8,4 +8,4 @@ export function NotFoundPage() {
             </div>
         </main>
     );
-}
+};

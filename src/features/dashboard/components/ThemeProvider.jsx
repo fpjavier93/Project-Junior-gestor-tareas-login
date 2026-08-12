@@ -21,6 +21,10 @@ export function ThemeProvider({ children }) {
 
         localStorage.setItem("taskflow-theme", theme)
 
+        return () => {
+            html.classList.remove("light", "dark");
+        }
+
     }, [theme]);
 
     return (
