@@ -40,6 +40,7 @@ function Dashboard() {
         }
     }
 
+
     const completedTasks = userTasks.filter((task) => task.status === "completed").length
     const progress = userTasks.length > 0 ? (completedTasks * 100) / userTasks.length : 0
 
@@ -47,7 +48,7 @@ function Dashboard() {
     if (error) return <ErrorMessage error="Error al cargar la página" onTryAgain={handleTasks} onCancel={() => handleSignOut(navigate)} />
 
     return (
-        <main className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8">
+        <main className="w-full max-w-6xl px-4 py-8 mx-auto space-y-6">
             <header>
                 <h1 className="text-2xl font-semibold tracking-tight">Hola, {userName}</h1>
                 <p className="mt-1 text-sm text-muted-foreground">Este es el resumen actual de tus tareas.</p>
@@ -65,7 +66,7 @@ function Dashboard() {
                 </CardHeader>
                 <CardContent className="px-0">
                     {userTasks.length === 0
-                        ? <p className="px-4 py-10 text-center text-sm text-muted-foreground">Todavía no tienes tareas.</p>
+                        ? <p className="px-4 py-10 text-sm text-center text-muted-foreground">Todavía no tienes tareas.</p>
                         : userTasks.slice(0, 4).map((task) => <RecentlyTask key={task.id} task={task} today={today} diffInDays={calcDiffInDays(task, today)} />)}
                 </CardContent>
             </ShadcnCard>

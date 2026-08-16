@@ -13,7 +13,7 @@ export function useTasks() {
     const [select, setSelect] = useState("todas");
     const [searching, setSearching] = useState("");
     const [createTaskPriority, setCreateTaskPriority] = useState("");
-    const [editTaskPriority, setEditTaskPriority] = useState("")
+    const [editTaskPriority, setEditTaskPriority] = useState("");
     const [taskPriorityFilter, setTaskPriorityFilter] = useState("");
     const [submitError, setSubmitError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,8 +35,19 @@ export function useTasks() {
             setUpdatingStatusId(task.id);
 
             const nextStatus = task.status === "completed" ? "pending" : "completed";
-            const updatedTaskFromApi = await editTask(task.id, { status: nextStatus });
-            const updatedTask = updatedTaskFromApi || { ...task, status: nextStatus };
+
+            const updatedTaskFromApi = await editTask(task.id, {
+                status: nextStatus,
+                completed_at: nextStatus === "completed"
+                    ? new Date().toISOString()
+                    : null
+            });
+
+            const updatedTask = updatedTaskFromApi || {
+                ...task,
+                status: nextStatus,
+                completed_at: completedAt,
+            };
 
             setUserTasks((currentTasks) => {
                 if (select !== "todas" && updatedTask.status !== select) {
