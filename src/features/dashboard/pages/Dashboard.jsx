@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowRight, CheckCircle2, CircleDashed, ListTodo } from "lucide-react"
 import { Card } from "../../../components/Card"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { handleSignOut as handleSignOut } from "../services/DashboardServices"
 import { getCurrentUser } from "../../auth/services"
 import ProgressBarDashboard from "../../../components/ProgressBarDashboard"
@@ -12,6 +12,8 @@ import { RecentlyTask } from "../components/TaskCardDashboard"
 import { calcDiffInDays } from "../utils/CreateTaskUtils"
 import { Button } from "@/components/ui/button"
 import { Card as ShadcnCard, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { buildProductivityData } from "../utils/productivityChartUtils";
+import { ProductivityChart } from "../components/ProductivityChart";
 
 function Dashboard() {
     const today = new Date().toISOString().split("T")[0]
@@ -44,6 +46,10 @@ function Dashboard() {
     const completedTasks = userTasks.filter((task) => task.status === "completed").length
     const progress = userTasks.length > 0 ? (completedTasks * 100) / userTasks.length : 0
 
+    const productivityData = useMemo(() => {
+        return buildProductivityData(userTasks);
+    }, [userTasks]);
+
     if (loading) return <LoadingSpinner />
     if (error) return <ErrorMessage error="Error al cargar la página" onTryAgain={handleTasks} onCancel={() => handleSignOut(navigate)} />
 
@@ -58,7 +64,11 @@ function Dashboard() {
                 <div className="relative"><CircleDashed className="absolute right-4 top-4 size-5 text-amber-600" /><Card name="Pendientes" value={userTasks.length - completedTasks} /></div>
                 <div className="relative"><CheckCircle2 className="absolute right-4 top-4 size-5 text-emerald-600" /><Card name="Completadas" value={completedTasks} /></div>
             </section>
+
             <ProgressBarDashboard progress={progress} />
+
+            <ProductivityChart data={productivityData} />
+
             <ShadcnCard>
                 <CardHeader className="flex-row items-center justify-between border-b">
                     <CardTitle>Tareas recientes</CardTitle>

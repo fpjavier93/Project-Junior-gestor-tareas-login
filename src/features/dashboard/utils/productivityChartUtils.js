@@ -1,4 +1,5 @@
 export function buildProductivityData(tasks, days = 7, now = new Date()) {
+
     const completedPerDay = new Map();
 
     for (const task of tasks) {

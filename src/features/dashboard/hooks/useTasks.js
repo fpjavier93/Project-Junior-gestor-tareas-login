@@ -36,6 +36,11 @@ export function useTasks() {
 
             const nextStatus = task.status === "completed" ? "pending" : "completed";
 
+            const completedAt =
+                nextStatus === "completed"
+                    ? new Date().toISOString()
+                    : null;
+
             const updatedTaskFromApi = await editTask(task.id, {
                 status: nextStatus,
                 completed_at: nextStatus === "completed"
