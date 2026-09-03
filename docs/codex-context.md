@@ -22,3 +22,5 @@ Estoy aprendiendo React, se JavaScript, y un poco de HTML, poco de CSS, pero uso
 -Mi objetivo inmediato es llegar a ser programador Junior, pero aun asi aprender practicas de Senior.
 -Cuando pregunte como programar algo siempre asume q es dentro de React, con codigo JavaScript al no ser q te lo especifique..
 
+Enseñame que es, como funciona, a utilizarlo, quiero aprenderlo paso a paso
+SI es necesario no me des todos los pasos de una, divide el aprendizaje en pasos, para q la ventana del chat no quede tan larga y asi poder ir por partes, si necesito aprender o copiar alguna teoria me dices si consideras importante q debe hacerlo un buen programador

@@ -29,8 +29,15 @@ Cómo evitar repetir navegación en cada página.
 max-w-max  “El ancho máximo será el tamaño del contenido”
 shrink-0   “No reduzcas mi ancho aunque el contenido del lado derecho sea grande”.
 
+Tu siguiente mini-proyecto de ingeniería será: hacer que el contrato de una tarea sea coherente también dentro de PostgreSQL, no solo en React.
+Lo que vamos a implementar, en este orden:
+1. Nueva migración para agregar completed_at.
+2. Regla de coherencia entre status y completed_at.
+3. Regla de creación: una tarea manual nace pendiente.
+4. Revisar qué validaciones de Zod también merecen existir en PostgreSQL.
+5. Aplicar y verificar la migración localmente.
+6. Probar casos válidos e inválidos desde la app/API.
 
-
-
+No añadiremos triggers, importaciones ni arquitectura compleja todavía. No sería proporcional a lo que necesitas aprender ahora.
 
 
