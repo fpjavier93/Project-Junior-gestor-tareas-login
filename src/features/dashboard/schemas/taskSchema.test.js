@@ -65,6 +65,15 @@ describe("taskSchema", () => {
         expect(result.success).toBe(false);
     });
 
+    it("acepta una tarea sin tipo", () => {
+        const result = taskSchema.safeParse(
+            createValidTask({ task_type: "" })
+        );
+
+        expect(result.success).toBe(true);
+    });
+
+
     it("rechaza un proyecto con id inválido", () => {
         const result = taskSchema.safeParse(
             createValidTask({ project_id: "no-es-un-uuid" })
@@ -94,4 +103,22 @@ describe("taskSchema", () => {
 
         expect(result.success).toBe(false);
     });
+
+    it("aceta una tarea sin descripcion", () => {
+        const result = taskSchema.safeParse(
+            createValidTask({ description: "" })
+        );
+        expect(result.success).toBe(true);
+    })
+
+    it("rechaza una descripción con espacios consecutivos", () => {
+        const result = taskSchema.safeParse(
+            createValidTask({
+                description: "Practicar  pruebas con Vitest",
+            })
+        );
+
+        expect(result.success).toBe(false);
+    });
+
 });

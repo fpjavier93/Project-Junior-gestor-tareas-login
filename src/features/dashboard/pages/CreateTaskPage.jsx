@@ -49,7 +49,7 @@ export default function CreateTaskPage() {
             title: "",
             description: "",
             priority: "medium",
-            task_type: "study",
+            task_type: "",
             project_id: "",
             has_due_date: false,
             due_date: "",
@@ -153,7 +153,7 @@ export default function CreateTaskPage() {
                                         name="task_type"
                                         control={control}
                                         render={({ field }) => (
-                                            <Select value={field.value} onValueChange={field.onChange}>
+                                            <Select value={field.value || "none"} onValueChange={(value) => field.onChange(value === "none" ? "" : value)}>
                                                 <SelectTrigger id="task_type" className="w-full" aria-invalid={Boolean(errors.task_type)}>
                                                     <SelectValue />
                                                 </SelectTrigger>
@@ -162,6 +162,7 @@ export default function CreateTaskPage() {
                                                     side="bottom"
                                                     align="start"
                                                     sideOffset={4}>
+                                                    <SelectItem value="none">Sin tipo</SelectItem>
                                                     <SelectItem value="study">Estudio</SelectItem>
                                                     <SelectItem value="work">Trabajo</SelectItem>
                                                     <SelectItem value="personal">Personal</SelectItem>

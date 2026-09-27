@@ -10,8 +10,11 @@ export const taskSchema = z.object({
     description: z
         .string()
         .trim()
-        .min(1, "Inserta una descripcion a la tarea")
-        .max(1000, "La descripcion no debe pasar de 1000 caracteres"),
+        .max(1000, "La descripcion no debe pasar de 1000 caracteres")
+        .refine(
+            (value) => value === "" || /^[^\s]+(?: [^\s]+)*$/.test(value),
+            "La descripcion solo puede usar un espacio entre palabras"
+        ),
 
     priority: z.enum(["low", "medium", "high"], {
         message: "Selecciona una prioridad valida",
@@ -19,7 +22,7 @@ export const taskSchema = z.object({
 
     task_type: z.enum(["study", "work", "personal"], {
         message: "Selecciona un tipo de tarea valido",
-    }),
+    }).or(z.literal("")),
 
     due_date: z.string().optional(),
 

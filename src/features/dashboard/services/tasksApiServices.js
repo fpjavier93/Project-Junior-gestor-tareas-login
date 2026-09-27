@@ -1,6 +1,10 @@
 ﻿import { apiClient } from "../../../lib/apiClient";
 
-async function getTasks(status, title, priority, task_type) {
+async function getTasks(status, title, priority, task_type, page = 0, pageSize = 10) {
+
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
     const params = {
         select: "*",
         order: "created_at.desc",
@@ -11,8 +15,22 @@ async function getTasks(status, title, priority, task_type) {
     if (priority) params.priority = `eq.${priority}`;
     if (task_type) params.task_type = `eq.${task_type}`;
 
-    const response = await apiClient.get("/tasks", { params });
-    return response.data;
+    const response = await apiClient.get("/tasks", {
+        params,
+        headers: {
+            Range: `${from}-${to}`,
+            Prefer: "count=exact",
+        },
+    });
+
+    const totalFromHeader = Number(
+        response.headers["content-range"]?.split("/")[1] ?? 0
+    );
+
+    return {
+        tasks: response.data,
+        total: Number.isFinite(totalFromHeader) ? totalFromHeader : 0,
+    };
 }
 
 async function createTask(task) {

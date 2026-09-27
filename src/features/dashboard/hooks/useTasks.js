@@ -184,6 +184,10 @@ export function useTasks() {
                 newDataTask.due_date = null;
             }
 
+            if (newDataTask.task_type === "") {
+                newDataTask.task_type = null;
+            }
+
             delete newDataTask.has_due_date;
 
             if (newDataTask.project_id === "") {

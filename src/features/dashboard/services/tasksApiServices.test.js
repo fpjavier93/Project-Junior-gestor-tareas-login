@@ -24,9 +24,23 @@ beforeEach(() => {
 describe("tasksApiServices", () => {
     it("obtiene tareas con filtros", async () => {
         const tasks = [{ id: "task-1", title: "Preparar informe" }];
-        apiClient.get.mockResolvedValue({ data: tasks });
 
-        const result = await getTasks("completed", "informe", "high", "work");
+        apiClient.get.mockResolvedValue({
+            data: tasks,
+            headers: {
+                "content-range": "0-0/1",
+            }
+
+        });
+
+        const result = await getTasks(
+            "completed",
+            "informe",
+            "high",
+            "work",
+            0,
+            10
+        );
 
         expect(apiClient.get).toHaveBeenCalledWith("/tasks", {
             params: {
@@ -37,8 +51,15 @@ describe("tasksApiServices", () => {
                 priority: "eq.high",
                 task_type: "eq.work",
             },
+            headers: {
+                Range: "0-9", // “De todas las tareas que puedes devolverme, envíame únicamente las posiciones 0 hasta 9”.
+                Prefer: "count=exact", //“Además de las filas, indícame el total exacto”.
+            },
         });
-        expect(result).toEqual(tasks);
+        expect(result).toEqual({
+            tasks,
+            total: 1,
+        });
     });
 
     it("crea una tarea y devuelve la fila creada", async () => {
