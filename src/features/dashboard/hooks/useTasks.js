@@ -5,9 +5,13 @@ import getUserID from "../services/CreateTaskServices";
 import { Toast } from "radix-ui";
 import { toast } from "sonner";
 
+const TASKS_PER_PAGE = 10;
+
 export function useTasks() {
 
     const [userTasks, setUserTasks] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalTasks, setTotalTasks] = useState(0);
     const [error, setError] = useState({ status: false, type: 0 });
     const [loading, setLoading] = useState(true);
     const [select, setSelect] = useState("todas");
@@ -17,9 +21,9 @@ export function useTasks() {
     const [taskPriorityFilter, setTaskPriorityFilter] = useState("");
     const [submitError, setSubmitError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [updatingStatusId, setUpdatingStatusId] = useState(null);
     const [titleEditTask, setTitleEditTask] = useState("");
     const [descriptionEditTask, setDescriptionEditTask] = useState("");
+    const [updatingStatusId, setUpdatingStatusId] = useState(null)
     const [taskType, setTaskType] = useState("");
 
 
@@ -78,9 +82,17 @@ export function useTasks() {
 
         try {
 
-            const getUserTasks = await getTasks();
+            const { tasks, total } = await getTasks(
+                getStatusFilter(select),
+                searching,
+                taskPriorityFilter,
+                taskType,
+                currentPage,
+                TASKS_PER_PAGE
+            );
 
-            setUserTasks(getUserTasks);
+            setUserTasks(tasks);
+            setTotalTasks(total);
         }
         catch (error) {
             console.error("Error al cargar las tareas:", error.response?.data || error);
@@ -98,14 +110,18 @@ export function useTasks() {
 
         try {
 
-            const task = await getTasks(
+            const { tasks, total } = await getTasks(
                 getStatusFilter(value),
                 searching,
                 taskPriorityFilter,
-                taskType
+                taskType,
+                0,
+                TASKS_PER_PAGE
             );
 
-            setUserTasks(task);
+            setUserTasks(tasks);
+            setTotalTasks(total);
+            setCurrentPage(0);
 
 
         } catch (error) {
@@ -121,15 +137,18 @@ export function useTasks() {
 
             setSearching(value)
 
-
-            const tasks = await getTasks(
+            const { tasks, total } = await getTasks(
                 getStatusFilter(select),
                 value,
                 taskPriorityFilter,
-                taskType
+                taskType,
+                0,
+                TASKS_PER_PAGE
             );
 
-            setUserTasks(tasks)
+            setUserTasks(tasks);
+            setTotalTasks(total);
+            setCurrentPage(0);
 
         } catch (error) {
             console.error("Error al buscar tareas:", error.response?.data || error);
@@ -153,13 +172,18 @@ export function useTasks() {
 
             setTaskPriorityFilter(value);
 
-            const priorityTask = await getTasks(
+            const { tasks, total } = await getTasks(
                 getStatusFilter(select),
                 searching,
                 value,
-                taskType)
+                taskType,
+                0,
+                TASKS_PER_PAGE
+            );
 
-            setUserTasks(priorityTask);
+            setUserTasks(tasks);
+            setTotalTasks(total);
+            setCurrentPage(0);
 
         } catch (error) {
             console.error("Error al filtrar tareas por prioridad:", error.response?.data || error);
@@ -218,15 +242,19 @@ export function useTasks() {
         setTaskType(value);
 
         try {
-
-            const typeTask = await getTasks(
+            const { tasks, total } = await getTasks(
                 getStatusFilter(select),
                 searching,
                 taskPriorityFilter,
-                value
-            )
+                value,
+                0,
+                TASKS_PER_PAGE
+            );
 
-            setUserTasks(typeTask)
+            setUserTasks(tasks);
+            setTotalTasks(total);
+            setCurrentPage(0);
+
         } catch (error) {
             console.error("Error al filtrar tareas por tipo:", error.response?.data || error);
             setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
@@ -235,15 +263,12 @@ export function useTasks() {
 
     }
 
-
-
-
     return {
         userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select,
         searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
         setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
         titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority,
-        updatingStatusId, handleSearchTypeTask, setSubmitError
+        updatingStatusId, handleSearchTypeTask, taskType, setSubmitError
     };
 
 };
