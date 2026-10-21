@@ -26,6 +26,10 @@ export function useTasks() {
     const [updatingStatusId, setUpdatingStatusId] = useState(null)
     const [taskType, setTaskType] = useState("");
 
+    const totalPages = Math.ceil(totalTasks / TASKS_PER_PAGE); //Math.ceil() redondea hacia arriba:
+
+    const hasPreviousPage = currentPage > 0;
+    const hasNextPage = currentPage + 1 < totalPages;
 
 
     function getStatusFilter(status) {
@@ -165,7 +169,6 @@ export function useTasks() {
 
     };
 
-
     async function handleTaskPriorityFilterChange(value) {
 
         try {
@@ -260,7 +263,35 @@ export function useTasks() {
             setError({ status: true, type: TASK_ERROR_TYPES.LOAD })
 
         }
+    }
 
+    async function handlePageChange(nextPage) {
+
+        if (nextPage < 0 || nextPage >= totalPages) return;
+        setError({ status: false, type: 0 })
+
+        try {
+
+            const { tasks, total } = await getTasks(
+                getStatusFilter(select),
+                searching,
+                taskPriorityFilter,
+                taskType,
+                nextPage,
+                TASKS_PER_PAGE
+            );
+
+            setUserTasks(tasks);
+            setTotalTasks(total);
+            setCurrentPage(nextPage);
+
+        } catch (error) {
+            console.error(
+                "Error al cargar la página de tareas:",
+                error.response?.data || error
+            );
+            setError({ status: true, type: TASK_ERROR_TYPES.LOAD });
+        }
     }
 
     return {
@@ -268,7 +299,7 @@ export function useTasks() {
         searching, handleSearch, handleCreateTaskPriorityChange, createTaskPriority, taskPriorityFilter,
         setCreateTaskPriority, handleTaskPriorityFilterChange, handleSubmitCreateTaskForm, isSubmitting, submitError,
         titleEditTask, descriptionEditTask, setTitleEditTask, setDescriptionEditTask, editTaskPriority, setEditTaskPriority,
-        updatingStatusId, handleSearchTypeTask, taskType, setSubmitError
+        updatingStatusId, handleSearchTypeTask, taskType, setSubmitError, currentPage, totalTasks, totalPages, hasPreviousPage, hasNextPage, handlePageChange
     };
 
 };

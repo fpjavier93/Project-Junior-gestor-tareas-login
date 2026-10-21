@@ -21,27 +21,13 @@ import { TaskFilterType } from "../components/TaskType"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { TaskPagination } from "../components/TaskPagination"
 
 function AllTasksPage() {
     const {
-        userTasks,
-        setUserTasks,
-        error,
-        setError,
-        handleTaskStatusChange,
-        loadTasks,
-        loading,
-        handleSelect,
-        select,
-        searching,
-        handleSearch,
-        taskPriorityFilter,
-        handleTaskPriorityFilterChange,
-        updatingStatusId,
-        submitError,
-        setSubmitError,
-        taskType,
-        handleSearchTypeTask,
+        userTasks, setUserTasks, error, setError, handleTaskStatusChange, loadTasks, loading, handleSelect, select, searching,
+        handleSearch, taskPriorityFilter, handleTaskPriorityFilterChange, updatingStatusId, submitError, setSubmitError, taskType,
+        handleSearchTypeTask, currentPage, totalTasks, totalPages, hasPreviousPage, hasNextPage, handlePageChange
     } = useTasks()
 
     const {
@@ -52,7 +38,7 @@ function AllTasksPage() {
         confirmEraseTask,
     } = useEraseTasks({ setUserTasks, setError })
 
-    const { taskToEdit, openEditDialog, isEditDialogOpen, closeEditDialog, onSave } = useEditTasks({ setUserTasks, setError })
+    const { taskToEdit, openEditDialog, isEditDialogOpen, closeEditDialog, onSave } = useEditTasks({ setError, loadTasks })
     const today = new Date().toISOString().split("T")[0]
     const navigate = useNavigate()
 
@@ -140,6 +126,14 @@ function AllTasksPage() {
 
             <section className="flex flex-col gap-5">{renderTaskListContent()}</section>
 
+            <TaskPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                hasPreviousPage={hasPreviousPage}
+                hasNextPage={hasNextPage}
+                onPageChange={handlePageChange}
+            />
+
             <EditTaskDialog isOpen={isEditDialogOpen} task={taskToEdit} onClose={closeEditDialog} onSave={onSave} />
 
             <DeleteConfirmationDialog
@@ -150,6 +144,8 @@ function AllTasksPage() {
                 onCancel={closeDeleteDialog}
                 onConfirm={confirmEraseTask}
             />
+
+
         </main>
     )
 }

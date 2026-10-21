@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Card as ShadcnCard, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { buildProductivityData } from "../utils/productivityChartUtils";
 import { ProductivityChart } from "../components/ProductivityChart";
+import { getDashboardTasks } from "../services/tasksApiServices";
 
 function Dashboard() {
     const today = new Date().toISOString().split("T")[0]
@@ -34,7 +35,8 @@ function Dashboard() {
             const currentUser = await getCurrentUser()
             if (!currentUser.success || !currentUser.user) throw new Error(currentUser.error || "No se pudo obtener el usuario actual")
             setUserName(currentUser.user.user_metadata?.nombre || currentUser.user.email || "Usuario")
-            setUserTasks(await getTasks())
+            setUserTasks(await getDashboardTasks());
+
         } catch {
             setError(true)
         } finally {

@@ -1,12 +1,13 @@
 ﻿import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
-import { editTask, getTasks } from "../services/tasksApiServices";
+import { editTask } from "../services/tasksApiServices";
 import { useEditTasks } from "./useEditTasks";
+
+
 
 vi.mock("../services/tasksApiServices", () => ({
     editTask: vi.fn(),
-    getTasks: vi.fn(),
 }));
 
 const task = {
@@ -24,19 +25,19 @@ const editedTask = {
 
 function renderUseEditTasks() {
     const setError = vi.fn();
-    const setUserTasks = vi.fn();
+    const loadTasks = vi.fn();
 
     const hook = renderHook(() =>
         useEditTasks({
             setError,
-            setUserTasks,
+            loadTasks,
         })
     );
 
     return {
         ...hook,
         setError,
-        setUserTasks,
+        loadTasks,
     };
 }
 
@@ -64,11 +65,9 @@ describe("useEditTasks", () => {
     });
 
     it("guarda la edición, actualiza la lista y cierra el diálogo", async () => {
-        const updatedTasks = [{ ...task, ...editedTask }];
-        editTask.mockResolvedValue(updatedTasks[0]);
-        getTasks.mockResolvedValue(updatedTasks);
+        editTask.mockResolvedValue({ ...task, ...editedTask });
 
-        const { result, setUserTasks } = renderUseEditTasks();
+        const { result, loadTasks } = renderUseEditTasks();
 
         act(() => {
             result.current.openEditDialog(task);
@@ -79,8 +78,7 @@ describe("useEditTasks", () => {
         });
 
         expect(editTask).toHaveBeenCalledWith(task.id, editedTask);
-        expect(getTasks).toHaveBeenCalledTimes(1);
-        expect(setUserTasks).toHaveBeenCalledWith(updatedTasks);
+        expect(loadTasks).toHaveBeenCalledTimes(1);
         expect(result.current.isEditDialogOpen).toBe(false);
         expect(result.current.taskToEdit).toBeNull();
     });
@@ -88,9 +86,9 @@ describe("useEditTasks", () => {
     it("mantiene abierto el diálogo y comunica el error si falla la edición", async () => {
         const apiError = new Error("No se pudo editar");
         editTask.mockRejectedValue(apiError);
-        const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+        const consoleError = vi.spyOn(console, "error").mockImplementation(() => { });
 
-        const { result, setError, setUserTasks } = renderUseEditTasks();
+        const { result, setError, loadTasks } = renderUseEditTasks();
 
         act(() => {
             result.current.openEditDialog(task);
@@ -111,7 +109,7 @@ describe("useEditTasks", () => {
             status: true,
             type: TASK_ERROR_TYPES.EDIT,
         });
-        expect(setUserTasks).not.toHaveBeenCalled();
+        expect(loadTasks).not.toHaveBeenCalled();
         expect(result.current.isEditDialogOpen).toBe(true);
         expect(result.current.taskToEdit).toEqual(task);
 
@@ -126,6 +124,5 @@ describe("useEditTasks", () => {
         });
 
         expect(editTask).not.toHaveBeenCalled();
-        expect(getTasks).not.toHaveBeenCalled();
     });
 });

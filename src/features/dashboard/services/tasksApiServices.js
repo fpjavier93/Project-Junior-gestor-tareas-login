@@ -33,6 +33,16 @@ async function getTasks(status, title, priority, task_type, page = 0, pageSize =
     };
 }
 
+async function getDashboardTasks() {
+    const response = await apiClient.get("/tasks", {
+        params: {
+            select: "*",
+            order: "created_at.desc",
+        },
+    });
+    return response.data;
+}
+
 async function createTask(task) {
     const response = await apiClient.post("/tasks", task, {
         headers: { Prefer: "return=representation" },
@@ -63,4 +73,4 @@ async function getTasksById(projectID) {
     return response.data;
 }
 
-export { getTasks, createTask, editTask, deleteTask, getTasksById };
+export { getTasks, createTask, editTask, deleteTask, getTasksById, getDashboardTasks };

@@ -1,11 +1,8 @@
 import { useState } from "react";
-import { getTasks, editTask } from "../services/tasksApiServices";
+import { editTask } from "../services/tasksApiServices";
 import { TASK_ERROR_TYPES } from "../constants/taskErrorTypes";
 
-
-
-
-export function useEditTasks({ setError, setUserTasks }) {
+export function useEditTasks({ setError, loadTasks }) {
 
     const [taskToEdit, setTaskToEdit] = useState(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -32,9 +29,7 @@ export function useEditTasks({ setError, setUserTasks }) {
 
             await editTask(taskToEdit.id, editedTask)
 
-            const getUserTasks = await getTasks();
-
-            setUserTasks(getUserTasks);
+            await loadTasks();
 
             setIsEditDialogOpen(false)
             setTaskToEdit(null)
@@ -46,12 +41,10 @@ export function useEditTasks({ setError, setUserTasks }) {
 
             throw error;
 
-
         }
 
     }
 
     return { openEditDialog, taskToEdit, setTaskToEdit, isEditDialogOpen, setIsEditDialogOpen, closeEditDialog, onSave };
-
 
 }
